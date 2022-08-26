@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<company>
+	<Institution id="ORBL">
+		<noofbin>3</noofbin>
+		<bin_1>432281</bin_1>
+		<bin_2>464829</bin_2>
+	</Institution>
+	<Institution id="ORIENT">
+		<noofbin>2</noofbin>
+		<bin_1>432284</bin_1>
+		<bin_2>432285</bin_2>
+	</Institution>
+</company>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+
+<tiles-definitions> 
+  
+    <definition name="wait" extends="baseLayout">
+  	   <put-attribute name="title"  value="Wait"/> 
+  	   <put-attribute name="body"  value="/jsp/wait.jsp"/>
+  </definition>
+  
+  
+  <definition name="instantorder_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card Order"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/InstCardOrder.jsp"/>
+  </definition>
+  
+  <definition name="instauthorder_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant  Order Authorization "/> 
+  	   <put-attribute name="body"  value="/jsp/instant/InstAuthOrder_home.jsp"/> 
+  </definition> 
+  
+    <definition name="instauthorder_view" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Authorize Order View "/> 
+  	   <put-attribute name="body"  value="/jsp/instant/InstAuthOrder.jsp"/> 
+  </definition>
+
+    <definition name="instvieworder_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Order View "/> 
+  	   <put-attribute name="body"  value="/jsp/instant/InstViewOrder_home.jsp"/> 
+  </definition>  
+ 
+   <definition name="instvieworder_list" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Order View "/> 
+  	   <put-attribute name="body"  value="/jsp/instant/InstViewOrder_list.jsp"/> 
+  </definition> 
+  
+  <definition name="instcardgen_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card Generation"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/instcardgen_home.jsp"/> 
+  </definition>  
+  
+    <definition name="instcardgen_list" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card Generation"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/instcardgen_list.jsp"/> 
+  </definition> 
+  
+  <definition name="instcardauth_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card Authorization"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/instcardauth_home.jsp"/> 
+  </definition>  
+  
+  <definition name="instcardauth_list" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card Authorization"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/instcardauth_list.jsp"/> 
+  </definition>
+  
+  <definition name="instcardpin_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card CVV Generation"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/instcardpin_home.jsp"/> 
+  </definition>   
+  
+    <definition name="instcardpin_list" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card CVV Generation"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/instcardpin_list.jsp"/> 
+  </definition>   
+ 
+     <definition name="instpinauth_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card CVV Authorization"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/instpinauth_home.jsp"/> 
+  </definition>   
+ 
+  <definition name="instauthdpin_list" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card CVV Authorization"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/instauthdpin_list.jsp"/> 
+  </definition>    
+  
+  <definition name="instpreorder_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card PRE Generation"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/instpreorder_home.jsp"/> 
+  </definition>
+
+  <definition name="instcardpre_list" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card PRE Generation"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/instcardpre_list.jsp"/> 
+  </definition> 
+
+  <definition name="instpreauth_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card PRE Authorization"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/instpreauth_home.jsp"/> 
+  </definition>
+
+  <definition name="instpreauth_list" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card PRE Authorization"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/instpreauth_list.jsp"/> 
+  </definition>
+
+  <definition name="instpredown_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card PRE Download"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/instpredown_home.jsp"/> 
+  </definition>
+
+  <definition name="insrecvcard_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card Receive"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/insrecvcard_home.jsp"/> 
+  </definition>
+  
+  <definition name="insrecvcard_list" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card Receive"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/insrecvcard_list.jsp"/> 
+  </definition>
+
+  <definition name="insrecvcardauth_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card Receive Authorization"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/insrecvcardauth_home.jsp"/> 
+  </definition>
+ 
+   <definition name="insrecvcardauth_list" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card Receive Authorization"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/insrecvcardauth_list.jsp"/> 
+  </definition>
+
+   <definition name="insregcard_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card Customer Registration"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/insregcard_home.jsp"/> 
+  </definition>
+
+   <definition name="inscustomer_entry" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card Customer Registration"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/inscustomer_entry.jsp"/> 
+  </definition> 
+  
+  <definition name="inscustomer_auth" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card Customer Authorization"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/inscustomer_auth.jsp"/> 
+  </definition> 
+  
+  <definition name="inscustomer_auth_list" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card Customer Authorization"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/inscustomer_auth_list.jsp"/> 
+  </definition>  
+
+  <definition name="insactivatecard_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card Customer Activation"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/insactivatecard_home.jsp"/> 
+  </definition>  
+
+  <definition name="insactivatecard_list" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card Customer Activation"/> 
+  	   <put-attribute name="body"  value="/jsp/instant/insactivatecard_list.jsp"/> 
+  </definition>  
+  
+</tiles-definitions>

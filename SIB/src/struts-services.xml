@@ -1,0 +1,55 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+		
+	<struts>
+		<constant name="struts.action.excludePattern" value=".*unfiltered.*,.*\\.nofilter"/>
+		<constant name="struts.action.extension" value="do" />
+		<constant name="struts.ui.theme" value="simple" /> 
+		<constant name="struts.devMode" value="false" />
+		<package name="webservices" extends="struts-default">
+		<result-types>
+					<result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult" />
+		</result-types>
+		<interceptors>
+    			<interceptor name="mylogging" class="com.ifp.util.SessionInterceptor"></interceptor>
+   		 	    <interceptor name="loggerinterceptor" class="com.ifp.util.LoggerInterceptor"></interceptor> 
+   		 	    <interceptor name="NewInter" class="com.ifp.util.NewInter"></interceptor>
+      
+      		        <interceptor-stack name="loggingStack">
+        			<interceptor-ref name="mylogging"/>
+        			<interceptor-ref name="loggerinterceptor"/>
+        			<interceptor-ref name="NewInter"/>
+        			<interceptor-ref name="defaultStack"/>
+    		        </interceptor-stack>
+		
+			    <interceptor-stack name="loadingstack">
+        		<interceptor-ref name="basicStack"></interceptor-ref> 
+        		 <interceptor-ref name="completeStack"/>  
+				<interceptor-ref name="execAndWait">
+			 	<param name="delay">1000</param>
+		       	<param name="delaySleepInterval">500</param>
+			 	</interceptor-ref> 
+    		   </interceptor-stack>
+    	
+		</interceptors>
+		 
+		 <global-results>
+    		<!-- <result name="session" type="redirectAction">logoutAction1</result> --> 
+    		<result name="session" type="tiles">logout</result>
+    		<result name="required_home" type="tiles">required_home</result>	
+    	</global-results>
+
+    	<action name="*WebSerivce" class="com.ifp.services.CardToCard"  method="{1}" > 
+    		<interceptor-ref name="NewInter"/>
+		 	<result name="success" type="tiles">success</result> 
+		</action>
+	     
+	     <action name="*SaleService" class="com.ifp.services.MerchantSale"  method="{1}" > 
+	     	<interceptor-ref name="NewInter"/>
+		 	<result name="success" type="tiles">success</result> 
+		</action>
+		 
+		</package>
+	</struts>

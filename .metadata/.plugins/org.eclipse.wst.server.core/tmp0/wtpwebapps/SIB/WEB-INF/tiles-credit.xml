@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+
+<tiles-definitions>	
+	<definition name="cr_customeradd_home" extends="baseLayout">
+		<put-attribute name="title" value="Add Customer"/>
+		<put-attribute name="body" value="/jsp/creditcard/customer/customeraddhome.jsp"/>
+	</definition>
+	
+	<definition name="customerentry_form" extends="baseLayout">
+		<put-attribute name="title" value="Customer Registeration"/>
+		<put-attribute name="body" value="/jsp/creditcard/customer/customerentry_form.jsp"/>
+	</definition>
+	
+	<definition name="customer_search_home" extends="baseLayout">
+		<put-attribute name="title" value="Search"/>
+		<put-attribute name="body" value="/jsp/creditcard/customer/customer_search_home.jsp"/>
+	</definition>
+
+	 <definition name="customerentry_view" extends="baseLayout">
+		<put-attribute name="title" value="Customer View "/>
+		<put-attribute name="body" value="/jsp/creditcard/customer/customerentry_view.jsp"/>
+	</definition>  
+	
+	<definition name="assignproduct_home" extends="baseLayout">
+		<put-attribute name="title" value="Assign Product "/>
+		<put-attribute name="body" value="/jsp/creditcard/assignproduct/assignproduct_home.jsp"/>
+	</definition>  
+	
+	<definition name="assignproduct_view" extends="baseLayout">
+		<put-attribute name="title" value="Assign Product "/>
+		<put-attribute name="body" value="/jsp/creditcard/assignproduct/assignproduct_view.jsp"/>
+	</definition>  
+	
+	<definition name="assignproduct_edithome" extends="baseLayout">
+		<put-attribute name="title" value="Edit Assigned Product "/>
+		<put-attribute name="body" value="/jsp/creditcard/assignproduct/assignproduct_edithome.jsp"/>
+	</definition> 
+	
+	<definition name="asignproduct_editview" extends="baseLayout">
+		<put-attribute name="title" value="Edit Assigned Product "/>
+		<put-attribute name="body" value="/jsp/creditcard/assignproduct/asignproduct_editview.jsp"/>
+	</definition> 
+
+	<definition name="assignedproduct_authhome" extends="baseLayout">
+		<put-attribute name="title" value="Authorize Assigned Product "/>
+		<put-attribute name="body" value="/jsp/creditcard/assignproduct/assignedproduct_authhome.jsp"/>
+	</definition> 
+	
+	<definition name="asignproduct_authview" extends="baseLayout">
+		<put-attribute name="title" value="Authorize Assigned Product "/>
+		<put-attribute name="body" value="/jsp/creditcard/assignproduct/asignproduct_authview.jsp"/>
+	</definition> 
+	
+	<definition name="assignedproduct_viewhome" extends="baseLayout">
+		<put-attribute name="title" value="View Assigned Product "/>
+		<put-attribute name="body" value="/jsp/creditcard/assignproduct/assignedproduct_authhome.jsp"/>
+	</definition> 
+	
+	<definition name="asignproduct_view" extends="asignproduct_authview">
+		<put-attribute name="title" value="View Assigned Product "/> 
+	</definition> 
+	
+	<definition name="creditissuance_home" extends="baseLayout">
+		<put-attribute name="title" value="Card Issuance"/>
+		<put-attribute name="body" value="/jsp/creditcard/issuance/creditissuance_home.jsp"/>
+	</definition> 
+ 
+	<definition name="creditissuance_list" extends="baseLayout">
+		<put-attribute name="title" value="Card Issuance"/>
+		<put-attribute name="body" value="/jsp/creditcard/issuance/creditissuance_list.jsp"/>
+	</definition> 
+
+	<definition name="creditissuance_view" extends="baseLayout">
+		<put-attribute name="title" value="Card Issuance"/>
+		<put-attribute name="body" value="/jsp/creditcard/issuance/creditissuance_view.jsp"/>
+	</definition> 	
+	
+	<definition name="creditissuance_authlist" extends="creditissuance_list">
+		<put-attribute name="title" value="Card Issuance Authorization"/> 
+	</definition> 
+	
+	<definition name="creditissuance_authview" extends="creditissuance_view">
+		<put-attribute name="title" value="Card Issuance Authrozation"/>	 
+	</definition>
+	
+	
+</tiles-definitions>

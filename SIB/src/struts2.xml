@@ -1,0 +1,210 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.ui.theme" value="simple" /> 
+	<constant name="struts.devMode" value="false" />	
+	<constant name="struts.multipart.maxSize" value="10485760" />
+	<package name="strur2-package"  extends="struts-default">
+	
+	
+	<result-types>
+					<result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult" />
+	</result-types>
+	
+	<interceptors>
+    		<interceptor name="session_interceptor" class="com.ifp.util.SessionInterceptor"></interceptor>
+    		<interceptor name="NewInter" class="com.ifp.util.NewInter"></interceptor>
+   		 	<interceptor-stack name="loggingStack">
+        			<interceptor-ref name="session_interceptor"/>
+        			<interceptor-ref name="NewInter"/>
+        			<interceptor-ref name="defaultStack"/>
+    		</interceptor-stack> 
+    		
+	</interceptors>
+	
+	<default-interceptor-ref name="session_interceptor"/> 
+ 
+	<global-results>
+    		<!-- <result name="session" type="redirectAction">logoutAction1</result> --> 
+    		<result name="session" type="tiles">logout</result>
+    		<result name="required_home" type="tiles">required_home</result>	
+    </global-results>
+    	
+	<action name="*LnkBinAction" class="com.ifp.Action.LnkBinAction" method="{1}">
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+		<interceptor-ref name="NewInter"/>
+		<result name="redirecting" type="redirectAction">inputLnkBinAction</result>
+		<result name="input" type="tiles">LnkBinAction_input</result>
+	</action>
+	
+	
+	
+	
+	
+	<action name="*SchemeConfigAction" class="com.ifp.Action.SchemeAction"  method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<interceptor-ref name="NewInter"/>
+			<result name="addnewfeeconfig" type="tiles">SchemeAction</result> 
+			<result name="schemelist" type="tiles">schemelist</result>
+			<result name="schemestatusupdated" type="redirectAction">viewSchemeSchemeConfigAction.do</result>
+			<result name="viewfeestructure" type="tiles">viewfeestructure</result> 
+			<result name="schemeedit" type="tiles">schemeedit</result>
+			<result name="viewScheme" type="tiles">viewScheme</result> 
+			<result name="feeConfighome" type="tiles">feeConfighome</result> 
+	        <result name="addnewfeeconfig" type="tiles">SchemeAction</result> 
+	        <result name="getViewDetails" type="tiles">getViewDetails</result>
+	</action>	
+
+	<action name="SchemeConfig" class="com.ifp.Action.SchemeAction" method="configScheme">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<interceptor-ref name="NewInter"/>
+			<result name="success" type="tiles">SchemeAction</result> 
+	</action>
+	
+	<action name="viewSchemeFeeStruct" class="com.ifp.Action.SchemeAction" method="viewSchemeFeeStruct">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<interceptor-ref name="NewInter"/>
+			<result name="success" >/jsp/viewSchemeFeeStruct.jsp</result> 
+	</action>
+	
+	<action name="schemeManage" class="com.ifp.Action.SchemeAction" method="schemeManage">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<interceptor-ref name="NewInter"/>
+			<result name="schemelist" type="tiles">schemelist</result> 
+	</action>
+	
+	<action name="schemeEdit" class="com.ifp.Action.SchemeAction" method="schemeEdit">
+	<interceptor-ref name="NewInter"/>	
+			<result name="success" type="tiles">SchemeAction</result> 
+	</action>
+	<action name="*LimitConfig"  class="com.ifp.Action.limitConfigAction" method="{1}">	
+	<interceptor-ref name="NewInter"/>
+		<result name="success" type="tiles">SchemeAction</result> 
+	</action>
+	
+	<action name="saveTxnAction"  class="com.ifp.Action.limitConfigAction" method="saveTxnLimit">	
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+		<interceptor-ref name="NewInter"/>
+		<result name="success" type="tiles">SchemeAction</result> 
+	</action>
+	
+	<action name="*DaybiginAction"  class="com.ifp.Action.dayBiginAction" method="{1}">	
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+		<interceptor-ref name="NewInter"/>
+		<result name="success" type="tiles">daybigins</result> 
+		<result name="dayend" type="tiles">dayend</result> 
+	</action> 
+	
+	<action name="*EODAction"  class="com.ifp.acct.EODAction" method="{1}">	
+	<interceptor-ref name="NewInter"/>
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+		<result name="eod_home" type="tiles">eod_home</result>  
+		<result name="eod_mismatch_home" type="tiles">eod_mismatch_home</result>
+		<result name="eod_mismatch_list" type="tiles">eod_mismatch_list</result>
+		<result name="set_businessdate" type="tiles">set_businessdate</result>
+	</action>
+	
+	<action name="*DBencryptionAction*" class="com.ifp.util.DBencryptionAction" method="{1}">
+	<interceptor-ref name="NewInter"/>
+	<interceptor-ref name="loggingStack"></interceptor-ref>
+	<result name="encrypthomepage" type="tiles">encrypthomepage</result>
+	<result name="decrypthomepage" type="tiles">decrypthomepage</result>
+	</action>
+	
+	<action name="*CardDecryption*" class="com.ifp.util.CardDecryption" method="{1}">
+	<interceptor-ref name="NewInter"/>
+	<interceptor-ref name="loggingStack"></interceptor-ref>
+	<result name="encryptchnhomepage" type="tiles">encryptchnhomepage</result>
+	<result name="decryptchnhomepage" type="tiles">decryptchnhomepage</result>
+	</action>
+	
+	<action name="*MsgTranslationAction*"  class="com.ifp.Action.MsgTranslationAction" method="{1}">
+	<interceptor-ref name="NewInter"/>
+		<interceptor-ref name="loggingStack"></interceptor-ref>	
+		<result name="redirectAddMsgTranslation" type="redirectAction">entrypageMsgTranslationAction</result> 
+		<result name="input" type="tiles">MsgTranslationEntryPage</result>
+		<result name="view" type="tiles">MsgTranslationViewPage</result>
+	</action>
+	
+	<action name="*AuthProcessListAction"  class="com.ifp.Action.AuthProcessListAction" method="{1}">	
+	<interceptor-ref name="NewInter"/>
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+		<result name="redirectAddAuthProcessListAction" type="redirectAction">entrypageAuthProcessListAction</result>
+		<result name="input" type="tiles">AuthProcessListActionEntryPage</result>
+		<result name="view" type="tiles">AuthProcessListViewPage</result>
+		<result name="deleteSucess" type="redirectAction">viewAuthProcessListAction</result>
+	</action>
+	
+	<action name="*AuthParamAction"  class="com.ifp.Action.AuthParamAction" method="{1}">	
+	<interceptor-ref name="NewInter"/>
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+		<result name="input" type="tiles">AuthParamActionEntryPage</result>
+		<result name="saveData" type="redirectAction">entrypageAuthParamAction</result>
+		
+		<result name="view" type="tiles">AuthParamActionViewPage</result>
+		<result name="deleteSucess" type="redirectAction">viewAuthProcessListAction</result>
+		<result name="decriptlog_home" type="tiles">decriptlog_home</result>
+	</action>
+	
+	<action name="decriptLogAction" class="com.ifp.Action.AuthParamAction" method="decriptLogAction">
+	<interceptor-ref name="NewInter"/>
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+	    <interceptor-ref name="exception"/>
+            <interceptor-ref name="i18n"/>
+            <interceptor-ref name="fileUpload">
+       		<!-- <param name="allowedTypes">text/plain</param> -->
+       		<param name="maximumSize">10240</param>
+  	    </interceptor-ref> 
+            <interceptor-ref name="params">
+                <param name="excludeParams">dojo\..*,^struts\..*</param>
+            </interceptor-ref>
+            <interceptor-ref name="validation">
+                <param name="excludeMethods">input,back,cancel,browse</param>
+            </interceptor-ref>
+            <interceptor-ref name="workflow">
+                <param name="excludeMethods">input,back,cancel,browse</param>
+            </interceptor-ref>
+ 		
+ 		<result name="input" type="tiles">decriptlog_home</result>
+ 		<result name="success" type="stream">
+				<param name="contentType">application/octet-stream</param>
+ 				 <param name="inputName">fileinpustr</param>
+ 				 <param name="contentDisposition">filename=%{prefilename_new}</param>
+ 				 <param name="bufferSize">1024</param>
+		</result> 
+	    <result name="decriptlog_home" type="tiles">decriptlog_home</result>
+ 
+	</action>
+	
+	<action name="*FindcardAction*"  class="com.ifp.util.FindcardAction" method="{1}">	
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+		<interceptor-ref name="NewInter"/>
+		<result name="findcard" type="tiles">findcard</result>
+		<result name="findcardnext" type="tiles">findcardnext</result>
+		<result name="findcardview" type="tiles">findcardview</result>
+	</action>
+
+
+	<action name="*TopupAction*" class="com.ifp.personalize.TopupAction" method="{1}">
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+		<interceptor-ref name="NewInter"/>
+		<result name="cardtopuphome" type="tiles">cardtopuphome</result>
+		<result name="topupaccounts" type="tiles">topupaccounts</result>
+		
+	</action>
+
+	<action name="*CourierConfig*" class="com.ifp.Action.CourierConfig" method="{1}">
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+		<interceptor-ref name="NewInter"/>
+		<result name="courier_add_home" type="tiles">courier_add_home</result> 
+		<result name="viewcourier_list" type="tiles">viewcourier_list</result>
+	</action>
+
+
+
+
+
+</package>
+ 
+</struts>

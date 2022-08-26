@@ -1,0 +1,1359 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+
+<tiles-definitions>
+
+	<definition name="baseLayoutmain" template="/tiles/baseLayoutmain.jsp">
+      <put-attribute name="title"  value="IFPrepaid System"/>
+      <put-attribute name="header" value="/tiles/header.jsp"/>
+      <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+      <put-attribute name="top"   value="/tiles/top.jsp"/>
+      <put-attribute name="body"   value="/tiles/body.jsp"/>
+      <put-attribute name="footer"   value="/tiles/footer.jsp"/>
+  </definition>
+
+  <definition name="baseLayout" template="/tiles/baseLayout.jsp">
+      <put-attribute name="title"  value="IFPrepaid System"/>
+      <put-attribute name="header" value="/tiles/header.jsp"/>
+      <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+      <put-attribute name="top"   value="/tiles/top.jsp"/>
+      <put-attribute name="body"   value="/tiles/body.jsp"/>
+      <put-attribute name="footer"   value="/tiles/footer.jsp"/>
+  </definition>
+  
+    
+    <definition name="baseLayouttemplate" template="/tiles/baseLayouttemplate.jsp">
+      <put-attribute name="title"  value="IFPrepaid System"/>
+      <put-attribute name="header" value="/tiles/header.jsp"/>
+      <put-attribute name="body"   value="/tiles/body.jsp"/>
+  </definition>
+  
+  
+   <definition name="view_balance_page" extends="baseLayout">
+  	   <put-attribute name="title"  value="Balance Sheet"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/view_balance_page.jsp"/> 
+  	</definition> 
+  
+  
+  <definition name="schemelist" extends="baseLayout">
+  	   <put-attribute name="title"  value="Fee List"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/SchemeList.jsp"/> 
+  	</definition>  
+  	
+  	<definition name="viewschemefeestruct" extends="baseLayout">
+  	   <put-attribute name="title"  value="Scheme Fee Structure"/> 
+  	   <put-attribute name="body"  value="/jsp/viewSchemeFeeStruct.jsp"/> 
+  	</definition> 
+  	 
+  	 <definition name="authdeauthfee_home" extends="baseLayout">
+  	    <put-attribute name="title"  value="Fee Configuration"/> 
+  		<put-attribute name="body"  value="/jsp/configuration/fee/authdeauthfee_home.jsp"/> 
+  	</definition> 
+  	
+  
+  
+  <definition name="userchangepassword" extends="baseLayout">
+  	   	<put-attribute name="title"  value="Change Password"/>
+  	   	<put-attribute name="menu" value=""/>
+  	    <put-attribute name="body"  value="/jsp/userchangepassword.jsp"/>      
+  </definition>
+  
+  <definition name="userchngpswresult" extends="baseLayout">
+  	   	<put-attribute name="title"  value="Change Password"/>
+  	    <put-attribute name="body"  value="/jsp/userchngpswresult.jsp"/>      
+  </definition>
+  
+   <definition name="unlockuserEntrypage" extends="baseLayout">
+  	   	<put-attribute name="title"  value="User Unlock"/>
+   		<put-attribute name="menu"   value=""/> 
+      	<put-attribute name="top"   value=""/>
+  	    <put-attribute name="body"  value="/jsp/unlockuserEntrypage.jsp"/>      
+  </definition>
+  
+  <definition name="unlockresult" extends="baseLayout">
+  	   	<put-attribute name="title"  value="User Unlock"/>
+   		<put-attribute name="menu"   value=""/> 
+      	<put-attribute name="top"   value=""/>
+  	    <put-attribute name="body"  value="/jsp/unlockresult.jsp"/>      
+  </definition>
+   
+   
+  <definition name="inst_deleteauthhome" extends="baseLayout">
+  	   	<put-attribute name="title"  value="Delete User Authroziation "/>
+   		<put-attribute name="menu"   value=""/> 
+      	<put-attribute name="top"   value=""/>
+  	    <put-attribute name="body"  value="/jsp/configuration/usermgmt/inst_deleteauthhome.jsp"/>      
+  </definition>
+  
+  <definition name="deleteuser_authhome" extends="baseLayout">
+  	   	<put-attribute name="title"  value="Delete User Authroziation "/>
+   		<put-attribute name="menu"   value=""/> 
+      	<put-attribute name="top"   value=""/>
+  	    <put-attribute name="body"  value="/jsp/configuration/usermgmt/deleteuser_authhome.jsp"/>      
+  </definition>
+  
+  <definition name="userdetails_deleteview_auth" extends="baseLayout">
+  	   	<put-attribute name="title"  value="Delete User Authroziation "/>
+   		<put-attribute name="menu"   value=""/> 
+      	<put-attribute name="top"   value=""/>
+  	    <put-attribute name="body"  value="/jsp/configuration/usermgmt/userdetails_deleteview_auth.jsp"/>      
+  </definition>
+    
+  <definition name="report_error" extends="baseLayout">
+  	   <put-attribute name="title"  value="Report Error"/>
+  	   <put-attribute name="menu"   value=""/> 
+       <put-attribute name="top"   value=""/>
+  	   <put-attribute name="body"  value="/jsp/report_error.jsp"/>      
+  </definition>
+  
+  
+  <definition name="AdminProfileview" extends="baseLayout">
+  	   <put-attribute name="title"  value="Admin Profile"/>
+  	    <put-attribute name="body"  value="/jsp/AdminProfileview.jsp"/>      
+  </definition>
+  
+  <definition name="SuperAdminAddProfPrev" extends="baseLayout">
+  	   <put-attribute name="title"  value="Profile Add"/>
+  	    <put-attribute name="body"  value="/jsp/SuperAdminAddProfPrev.jsp"/>      
+  </definition>
+  
+  
+  
+  <definition name="sucess" extends="baseLayoutmain">
+       <put-attribute name="body"  value="/jsp/success.jsp"/> 
+       <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  </definition>
+  
+  <definition name="changepasswordpage" extends="baseLayout">
+ 	<put-attribute name="title"  value="Change Password"/>
+  	<put-attribute name="menu"   value=""/> 
+  	<put-attribute name="top"   value=""/> 
+  	<put-attribute name="body"  value="/jsp/changepasswordpage.jsp"/> 
+ </definition>
+ 
+ <definition name="forcepasswordpage" extends="baseLayout">
+  	<put-attribute name="menu"   value=""/> 
+  	<put-attribute name="top"   value=""/> 
+  	<put-attribute name="body"  value="/jsp/forcepasswordchangepage.jsp"/> 
+ </definition>
+ 
+ <definition name="forcepasswordsucess" extends="baseLayout">
+  	<put-attribute name="menu"   value=""/> 
+  	<put-attribute name="top"   value=""/> 
+  	<put-attribute name="body"  value="/jsp/forcepasswordsucess.jsp"/> 
+ </definition>
+ 
+ <definition name="pswexppage" extends="baseLayout">
+	<put-attribute name="body"  value="/jsp/pswexpiarypage.jsp"/> 
+ </definition>
+ 
+  <definition name="Redirectto" extends="baseLayout">
+  	<put-attribute name="menu"   value="/tiles/menu.jsp"/> 
+    <put-attribute name="body"  value="/jsp/Reditect.jsp"/> 
+  </definition>
+
+
+     
+  <definition name="fail" extends="baseLayout">
+      <put-attribute name="title"  value="Login fail"/> 
+      <put-attribute name="menu"   value=""/> 
+      <put-attribute name="top"   value=""/>
+      <put-attribute name="body"   value="/jsp/fail.jsp"/>      
+  </definition>
+  
+  
+  <definition name="login">
+      <put-attribute name="title"  value=""/>
+      <put-attribute name="header" value=""/>
+      <put-attribute name="menu"   value=""/> 
+      <put-attribute name="top"   value=""/>
+      <put-attribute name="body"   value="/jsp/login.jsp"/>     
+      <put-attribute name="footer"   value=""/> 
+  </definition>
+  <definition name="Loginlicencefail" extends="baseLayout">
+      <put-attribute name="title"  value=""/>
+      <put-attribute name="header" value=""/>
+      <put-attribute name="menu"   value=""/> 
+      <put-attribute name="top"   value=""/>
+      <put-attribute name="body"   value="/jsp/Loginlicencefail.jsp"/>     
+      <put-attribute name="footer"   value=""/> 
+  </definition>  
+  
+  
+  
+  <definition name="invaliduser">
+      <put-attribute name="title"  value="INAVLID USER"/>
+      <put-attribute name="menu"   value=""/> 
+      <put-attribute name="top"   value=""/>
+      <put-attribute name="body"   value="/jsp/login.jsp"/>      
+  </definition>
+  
+  <definition name="logout" extends="baseLayout">
+      <put-attribute name="title"  value="Logout"/>
+      <put-attribute name="menu"   value=""/> 
+      <put-attribute name="top"   value=""/>
+      <put-attribute name="body"   value="/jsp/logout.jsp"/>      
+  </definition>
+  
+  <definition name="Addprofile" extends="sucess">
+      <put-attribute name="title"  value="Add Profile "/>
+      <put-attribute name="menu"   value=""/>
+      <put-attribute name="body"   value="/jsp/AddProfile.jsp"/>      
+  </definition>
+  
+  <definition name="AddPrivilages" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Privilages"/>
+  	   <put-attribute name="body"  value="/jsp/AddPriviledges.jsp"/>      
+  </definition>  
+  
+  <definition name="Exception" extends="baseLayout">
+      <put-attribute name="title"  value="Exception Occoured"/> 
+      <put-attribute name="body"   value="/jsp/Exception.jsp"/>      
+  </definition>
+  
+
+  
+  <definition name="MakerCheckerMenu" extends="baseLayout">
+  	   <put-attribute name="title"  value="Maker Checker Configuration"/>
+  	   <put-attribute name="menu"   value=""/>
+       <put-attribute name="body"  value="/jsp/MakerCheckerMenu.jsp"/>      
+  </definition>  
+  
+  <definition name="AddLimit" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Limit"/>
+	  <put-attribute name="body"  value="/jsp/AddLimitAction.jsp"/>      
+  </definition>  
+
+	
+	
+	
+	<definition name="SaveProduct" extends="baseLayout">
+		   <put-attribute name="title"  value="Add Main Product"/>
+		   <put-attribute name="menu"   value=""/>
+	   <put-attribute name="body"  value="/jsp/addmainproduct.jsp"/>      
+	</definition> 
+	
+	<definition name="CheckData" extends="baseLayout">
+	   <put-attribute name="title"  value="Add Main Product"/>
+	   <put-attribute name="menu"   value=""/>
+	   <put-attribute name="body"  value="/jsp/ViewProduct.jsp"/>      
+	</definition> 
+	
+	
+	
+	
+	<definition name="savelimit" extends="baseLayout">
+	    <put-attribute name="title"  value="Add Limit"/> 
+		<put-attribute name="body"  value="/jsp/AddLimitAction.jsp"/>      
+	</definition>
+	 
+	
+	<definition name="deletproduct" extends="baseLayout">
+		<put-attribute name="body"  value="/jsp/ViewMainProduct.jsp"/>      
+	</definition>  
+	
+	<definition name="editproduct" extends="baseLayout">
+		<put-attribute name="body"  value="/jsp/mainproduct/ViewEditProduct.jsp"/>      
+	</definition>  
+	
+	<definition name="saveeditproduct" extends="baseLayout">
+		<put-attribute name="body"  value="/jsp/mainproduct/ViewEditProduct.jsp"/>      
+	</definition>  
+	
+	<definition name="viewsubproduct" extends="baseLayout">
+		<put-attribute name="body"  value="/jsp/ViewSubProduct.jsp"/>      
+	</definition>  
+	
+	<definition name="editsubproduct" extends="baseLayout">
+		<put-attribute name="body"  value="/jsp/ViewEditSubProduct.jsp"/>      
+	</definition>  
+	
+	
+	 
+  <definition name="SuperAdminAddProfile" extends="baseLayout">
+	   <put-attribute name="title"  value="Add Profile"/>
+	   <put-attribute name="body"  value="/jsp/SuperAdminAddProfile.jsp"/>      
+  </definition>
+  
+  
+  <definition name="profileview" extends="baseLayout">
+  	<put-attribute name="title"  value="Add Profile"/>
+  	<put-attribute name="body"  value="/jsp/AddProfileDetails.jsp"/>      
+  </definition>
+  
+  <definition name="adduserdet" extends="baseLayout">
+	<put-attribute name="title"  value="Add User"/>
+	<put-attribute name="body"  value="/jsp/AddUserDetails.jsp"/>      
+  </definition>
+  
+  <definition name="SaveAdminUserDet" extends="baseLayout">
+	<put-attribute name="title"  value="Add User"/>
+	<put-attribute name="body"  value="/jsp/SaveAdminUserDet.jsp"/>      
+  </definition>
+
+
+	<definition name="EditAdminUserDet" extends="baseLayout">
+		<put-attribute name="title"  value="Edit User"/>
+		<put-attribute name="body"  value="/jsp/EditAdminUserDet.jsp"/>     
+	</definition>
+
+
+	<definition name="adduserdetails" extends="baseLayout">
+		<put-attribute name="title"  value="Add User"/>
+		<put-attribute name="body"  value="/jsp/AddProfiledet.jsp"/>      
+	</definition>
+		
+	<definition name="profilesuccess" extends="baseLayout">
+		<put-attribute name="title"  value="Add User"/>
+		<put-attribute name="body"  value="/jsp/AddProfileDetails.jsp"/>      
+	</definition>
+	
+	<definition name="saveuserdet" extends="baseLayout">
+		<put-attribute name="title"  value="Add User"/>
+		<put-attribute name="body"  value="/jsp/AddUserDetails.jsp"/>      
+	</definition>
+	
+	<definition name="changepsw" extends="baseLayout">
+	   <put-attribute name="title"  value="Change Password"/>
+	   <put-attribute name="menu"  value=""/>
+	   <put-attribute name="top"  value=""/>
+	   <put-attribute name="body"  value="/jsp/changepassword.jsp"/>      
+  </definition>
+  
+  <definition name="makerchecker" extends="baseLayout">
+  	<put-attribute name="title"  value="Add User"/>
+  	<put-attribute name="body"  value="/jsp/makercheckerconfig.jsp"/>      
+  </definition>
+  
+  <definition name="insmkrchkr" extends="baseLayout">
+  	<put-attribute name="title"  value="Add User"/>
+  	<put-attribute name="body"  value="/jsp/insmkrchkr.jsp"/>      
+  </definition>
+  
+  <definition name="viewuser" extends="baseLayout">
+	<put-attribute name="title"  value="View User"/>
+	<put-attribute name="body"  value="/jsp/viwuser.jsp"/>      
+  </definition>
+
+  
+  <definition name="deleteinstadminuser" extends="baseLayout">
+	<put-attribute name="title"  value="Delete User"/>
+	<put-attribute name="body"  value="/jsp/deleteuser.jsp"/>   
+  </definition>
+  
+ <definition name="deluser" extends="baseLayout">
+	<put-attribute name="title"  value="Delete User"/>
+	<put-attribute name="body"  value="/jsp/deleteuser.jsp"/>     
+  </definition>
+  
+  <definition name="getadmininstuser" extends="baseLayout">
+	<put-attribute name="title"  value="Delete User"/>
+	<put-attribute name="body"  value="/jsp/instuser.jsp"/>     
+ </definition>
+ 
+ 	<definition name="getinstadminuserdetail" extends="baseLayout">
+		<put-attribute name="title"  value="Delete User"/>
+		<put-attribute name="body"  value="/jsp/userdetail.jsp"/>     
+	</definition>
+
+  	<definition name="getinstuser" extends="baseLayout">
+		<put-attribute name="title"  value="Delete User"/>
+		<put-attribute name="menu"   value=""/>
+		<put-attribute name="body"  value="/jsp/instuser.jsp"/>     
+ 	</definition>
+ 	
+	<definition name="edituserdet" extends="baseLayout">
+		<put-attribute name="title"  value="Edit User"/>
+		<put-attribute name="menu"   value=""/>
+		<put-attribute name="body"  value="/jsp/edituserdet.jsp"/>     
+	</definition>
+		
+	<definition name="editinstuser" extends="baseLayout">
+		<put-attribute name="title"  value="Edit User"/>
+		<put-attribute name="body"  value="/jsp/editinstuser.jsp"/>     
+	</definition>
+	
+	<definition name="getusereditdetails" extends="baseLayout">
+		<put-attribute name="title"  value="Edit User"/>
+		<put-attribute name="body"  value="/jsp/getuseredit.jsp"/>     
+   </definition>
+
+   <definition name="edituserdetails" extends="baseLayout">
+	<put-attribute name="title"  value="Edit User"/>
+	<put-attribute name="body"  value="/jsp/usereditcomplt.jsp"/>     
+  </definition>
+  
+  <definition name="editInstuserSucess" extends="baseLayout">
+	<put-attribute name="title"  value="Edit User"/>
+	<put-attribute name="body"  value="/jsp/editInstuserSucess.jsp"/>     
+  </definition>
+  
+ 
+  
+  	<definition name="viewprofile" extends="baseLayout">
+  		<put-attribute name="title"  value="Authorize Profile"/>
+  		<put-attribute name="body"  value="/jsp/viewprofile.jsp"/>     
+	</definition>
+	
+	<definition name="getviewprofile" extends="baseLayout">
+		<put-attribute name="title"  value="Authorize Profile"/>
+		<put-attribute name="body"  value="/jsp/viewprofiledetails.jsp"/>     
+   </definition>
+	
+   <definition name="editprofile" extends="baseLayout">
+		<put-attribute name="title"  value="Edit Profile"/>
+		<put-attribute name="body"  value="/jsp/editprofiledetails.jsp"/>     
+   </definition>
+  
+  
+  <definition name="AdminEditProfile" extends="baseLayout">
+		<put-attribute name="title"  value="Edit Profile"/>
+		<put-attribute name="body"  value="/jsp/AdminEditProfile.jsp"/>     
+   </definition>
+  
+  <definition name="adminsaveedit" extends="baseLayout">
+		<put-attribute name="title"  value="Edit Profile"/>
+		<put-attribute name="body"  value="/jsp/adminsaveedit.jsp"/>     
+  </definition>
+  
+   <definition name="saveedit" extends="baseLayout">
+		<put-attribute name="title"  value="Edit Profile"/>
+		<put-attribute name="body"  value="/jsp/saveedit.jsp"/>     
+  </definition>
+  
+  <definition name="saveeditdetails" extends="baseLayout">
+	<put-attribute name="title"  value="Edit Profile"/>
+	<put-attribute name="body"  value="/jsp/saveeditdetails.jsp"/>     
+ </definition>
+ 
+ <definition name="AdminSaveEditDetails" extends="baseLayout">
+	<put-attribute name="title"  value="Edit Profile"/>
+	<put-attribute name="body"  value="/jsp/AdminSaveEditDetails.jsp"/>     
+ </definition>
+ 
+ <definition name="InstAdminSaveEditDetails" extends="baseLayout">
+	<put-attribute name="title"  value="Edit Profile"/>
+	<put-attribute name="body"  value="/jsp/InstAdminSaveEditDetails.jsp"/>     
+ </definition>
+ 
+ 
+ <definition name="deluserdet" extends="baseLayout">
+	<put-attribute name="title"  value="Delete User"/>
+	<put-attribute name="body"  value="/jsp/deluserdet.jsp"/>     
+ </definition>
+ 
+  <definition name="unblockuser" extends="baseLayout">
+	<put-attribute name="title"  value="Unblock User"/>
+	<put-attribute name="body"  value="/jsp/unblockuser.jsp"/>     
+ </definition>
+ 
+ <definition name="unblckeduserdetail" extends="baseLayout">
+	<put-attribute name="title"  value="Unblock User"/>
+	<put-attribute name="menu"   value=""/>
+	<put-attribute name="body"  value="/jsp/unblckeduserdetail.jsp"/>     
+</definition>
+
+  <definition name="error" extends="baseLayout">
+  	   <put-attribute name="title"  value="Error Occoured"/>
+  	   <put-attribute name="body"  value="/jsp/error.jsp"/>      
+  </definition> 
+  
+  <definition name="loginerror" extends="baseLayout">
+  		<put-attribute name="menu"   value=""/>
+  		<put-attribute name="top"   value=""/>
+  	   <put-attribute name="title"  value="Error Occoured"/>
+  	   <put-attribute name="body"  value="/jsp/error.jsp"/>      
+  </definition> 
+  
+   <definition name="diplayinst" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Institution"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/institution/addInstitution.jsp"/>      
+  </definition> 
+  
+  <definition name="viewInst" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Institution"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/institution/viewInst.jsp"/>      
+  </definition>
+  
+  <definition name="instdetals" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Institution Details"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/institution/instdetals.jsp"/>      
+  </definition>
+  
+   <definition name="LnkBinAction_input" extends="baseLayout">
+  	   <put-attribute name="title"  value="Linking Bin"/>
+  	   <put-attribute name="body"  value="/jsp/LnkBinAction_input.jsp"/>      
+  </definition>
+  
+    
+  
+  
+  <definition name="dispeditsubprod" extends="baseLayout">
+  	   <put-attribute name="title"  value="Edit Subproducts"/>
+  	   <put-attribute name="body"  value="/jsp/dispeditsubprod.jsp"/>      
+  </definition>
+  
+  <definition name="editsubprod" extends="baseLayout">
+  	   <put-attribute name="title"  value="Edit Subproducts"/>
+  	   <put-attribute name="body"  value="/jsp/editsubprod.jsp"/>      
+  </definition>
+  
+  <definition name="dispdelsubprod" extends="baseLayout">
+  	   <put-attribute name="title"  value="Delete Subproducts"/>
+  	   <put-attribute name="body"  value="/jsp/dispdelsubprod.jsp"/>      
+  </definition>
+  
+   <definition name="addHsm" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add HSM Configuration"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/hsm/addHsm.jsp"/>      
+  </definition>
+
+  <definition name="displayHSM" extends="baseLayout">
+  	   <put-attribute name="title"  value="View/Edit HSM Configuration"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/hsm/displayHSM.jsp"/>      
+  </definition>
+
+  <definition name="viewHsm" extends="baseLayout">
+  	   <put-attribute name="title"  value="View/Edit HSM Configuration"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/hsm/viewHsm.jsp"/>      
+  </definition>
+   <definition name="editHsm" extends="baseLayout">
+  	   <put-attribute name="title"  value="View/Edit HSM Configuration"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/hsm/editHsm.jsp"/>      
+  </definition>
+  <definition name="authdeauthHSM" extends="baseLayout">
+  	   <put-attribute name="title"  value="Authorize HSM Configuration"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/hsm/authdeauthHSM.jsp"/>      
+  </definition>
+    <definition name="viewAuth" extends="baseLayout">
+  	   <put-attribute name="title"  value="Authorize HSM Configuration"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/hsm/viewAuthHSM.jsp"/>      
+  </definition>
+  
+  
+  
+  
+  <definition name="viewEncrypt" extends="baseLayout">
+  	   <put-attribute name="title"  value="Encrypt the License File"/>
+  	   <put-attribute name="body"  value="/jsp/viewEncrypt.jsp"/>      
+  </definition>
+
+   <definition name="sucessLicense" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Branch"/>
+  	   <put-attribute name="body"  value="/jsp/sucessLicense.jsp"/>      
+  </definition>
+  
+ 
+  <definition name="pinmailer" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add PIN Mailer Configuration"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/addpinmailer.jsp"/>      
+  </definition>
+  
+  <definition name="pinmailer_viewhome" extends="baseLayout">
+  	   <put-attribute name="title"  value="View PIN Mailer Configuration"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/pinmailer/pinmailer_viewhome.jsp"/>      
+  </definition>
+  
+   <definition name="pinmailer_viewdata" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Pin Mailer"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/pinmailer/pinmailer_view.jsp"/>      
+  </definition>
+  
+   <definition name="pinmailer_authhome" extends="baseLayout">
+  	   <put-attribute name="title"  value="Authorize Pin Mailer"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/pinmailer/pinmailer_authhome.jsp"/>      
+  </definition>
+  
+  <definition name="pinmailerauthdetails" extends="baseLayout">
+  		<put-attribute name="title" value="Authorize Pin Mailer"/>
+  		<put-attribute name="menu" value="/tiles/menu.jsp"/>
+  		 <put-attribute name="body"  value="/jsp/pinmailer/pinmailer_authdata.jsp"/>      
+  </definition>
+  
+  <definition name="pinmailer_edithome" extends="baseLayout">
+  		<put-attribute name="title" value="Edit PIN Mailer Configuration"/>
+  		<put-attribute name="menu" value="/tiles/menu.jsp"/>
+  		 <put-attribute name="body"  value="/jsp/pinmailer/pinmailer_edithome.jsp"/>      
+  </definition>
+  
+   <definition name="PinmailerEditDetails" extends="baseLayout">
+  		<put-attribute name="title" value="Edit Pin Mailer"/>
+  		<put-attribute name="menu" value="/tiles/menu.jsp"/>
+  		<put-attribute name="body" value="/jsp/PinmailerEditDetails.jsp"/>
+  </definition>
+  
+  <definition name="userReportproperty" extends="baseLayout">
+  	   <put-attribute name="title"  value="User Reports"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/reports/Report_users.jsp"/>      
+	</definition>
+  
+	<definition name="cardReportproperty" extends="baseLayout">
+  	   <put-attribute name="title"  value="Card Reports"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/Report_cards.jsp"/>      
+	</definition> 
+	<definition name="txnReportproperty" extends="baseLayout">
+  	   <put-attribute name="title"  value="Transaction Reports"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/Report_txns.jsp"/>      
+	</definition> 
+	
+	<definition name="SchemeAction" extends="baseLayout">
+  	   <put-attribute name="title"  value="Fee Configuration"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/SchemeConfig.jsp"/>      
+	</definition>
+	
+	<definition name="schemelist" extends="baseLayout">
+  	   <put-attribute name="title"  value="Fee List"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/SchemeList.jsp"/> 
+  	</definition>  
+  	
+  	<definition name="viewschemefeestruct" extends="baseLayout">
+  	   <put-attribute name="title"  value="Scheme Fee Structure"/> 
+  	   <put-attribute name="body"  value="/jsp/viewSchemeFeeStruct.jsp"/> 
+  	</definition> 
+  	 
+  	<definition name="error_balance_sheet_report" extends="baseLayout">
+  	   <put-attribute name="title"  value="Error Generating Balance Sheet"/> 
+  	   <put-attribute name="body"  value="/jsp/error_balance_sheet_report.jsp"/> 
+  	</definition> 
+
+  	
+	<definition name="daybigins" extends="baseLayout">
+  	   <put-attribute name="title"  value="Day Bigins"/> 
+  	   <put-attribute name="body"  value="/jsp/dayBigins.jsp"/>
+  	</definition>
+  	 
+	<definition name="eod_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Day End"/> 
+  	   <put-attribute name="body"  value="/jsp/acct/eod/eod_home.jsp"/>
+  	</definition>
+  	
+  	<definition name="eod_mismatch_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Day End Records Mis-Match Analysis"/> 
+  	   <put-attribute name="body"  value="/jsp/acct/eod/eod_mismatch_home.jsp"/>
+  	</definition>
+
+  	<definition name="eod_mismatch_list" extends="baseLayout">
+  	   <put-attribute name="title"  value="Day End Records Mis-Match Analysis"/> 
+  	   <put-attribute name="body"  value="/jsp/acct/eod/eod_mismatch_list.jsp"/>
+  	</definition>
+
+  	<definition name="set_businessdate" extends="baseLayout">
+  	   <put-attribute name="title"  value="Set Business Date"/> 
+  	   <put-attribute name="body"  value="/jsp/acct/eod/businessdate_home.jsp"/>
+  	</definition>
+  	
+  	<definition name="MsgTranslationEntryPage" extends="baseLayout">
+  	   <put-attribute name="title"  value="Message Translation Configuration"/> 
+  	   <put-attribute name="body"  value="/jsp/MsgTranslationEntryPage.jsp"/>
+  	</definition>
+  	
+  	<definition name="MsgTranslationViewPage" extends="baseLayout">
+  	   <put-attribute name="title"  value="Message Translation View"/> 
+  	   <put-attribute name="body"  value="/jsp/MsgTranslationViewPage.jsp"/>
+  	</definition>
+  	
+  	<definition name="AuthProcessListActionEntryPage" extends="baseLayout">
+  	   <put-attribute name="title"  value="Auth Process List Configuration"/> 
+  	   <put-attribute name="body"  value="/jsp/AuthProcessListActionEntryPage.jsp"/>
+  	</definition>
+  	
+  	<definition name="AuthProcessListViewPage" extends="baseLayout">
+  	   <put-attribute name="title"  value="Message Translation View"/> 
+  	   <put-attribute name="body"  value="/jsp/AuthProcessListViewPage.jsp"/>
+  	</definition>
+  	
+  	<definition name="AuthParamActionEntryPage" extends="baseLayout">
+  	   <put-attribute name="title"  value="Auth Param Configuration"/> 
+  	   <put-attribute name="body"  value="/jsp/AuthParamActionEntryPage.jsp"/>
+  	</definition>
+  	
+	<definition name="AuthParamActionViewPage" extends="baseLayout">
+  	   <put-attribute name="title"  value="Auth Param View"/> 
+  	   <put-attribute name="body"  value="/jsp/AuthParamActionViewPage.jsp"/>
+  	</definition>
+
+ <definition name="currencyadd_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Currency"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/currency/currencyadd_home.jsp"/>      
+  </definition>  		
+  
+  <definition name="currencyview" extends="baseLayout">
+  	   <put-attribute name="title"  value="Currency Configuration View"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/currency/currencyview.jsp"/>      
+  </definition>
+  
+  <definition name="editcurrencydetails" extends="baseLayout">
+  	   <put-attribute name="title"  value="Currency Configuration Edit"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/currency/updatecurrency_home.jsp"/>      
+  </definition>
+  
+  <definition name="currencyviewall" extends="baseLayout">
+  	   <put-attribute name="title"  value="Currency Configuration View"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/currency/currencyview.jsp"/>      
+  </definition>  
+   <definition name="viewCurrencyDetail" extends="baseLayout">
+  	   <put-attribute name="title"  value="Currency Configuration View"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/currency/viewCurrencyDetail.jsp"/>   
+  </definition>
+
+  <definition name="currencyview" extends="baseLayout">
+  	   <put-attribute name="title"  value="Currency Configuration View"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/currency/viewallCurrency.jsp"/>      
+  </definition>
+   <definition name="authorizeCurrency" extends="baseLayout">
+  	   <put-attribute name="title"  value="Currency Configuration View"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/currency/authorizeCurrency.jsp"/>      
+  </definition> 
+ 
+  
+  <definition name="viewsettings" extends="baseLayout">
+  	   	<put-attribute name="title"  value="Settings"/>
+  	    <put-attribute name="body"  value="/jsp/viewsettings.jsp"/>      
+  </definition>
+  
+	<definition name="findcard" extends="baseLayout">
+  	   	<put-attribute name="title"  value="Findcard"/>
+  	    <put-attribute name="body"  value="/jsp/findcard.jsp"/>      
+	</definition>  
+	<definition name="findcardnext" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Card Status Report"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/findcardnext.jsp"/>
+   </definition>  
+  
+   <definition name="findcardview" extends="baseLayout">
+  	   	<put-attribute name="title"  value="Card Details"/>
+  	    <put-attribute name="body"  value="/jsp/findcardview.jsp"/>      
+	</definition>
+  
+  	<definition name="forgetpasswordhome" extends="baseLayout">
+  	   <put-attribute name="title"  value="Forgot Password"/> 
+  	   <put-attribute name="body"  value="/jsp/forgetpasswordhome.jsp"/>
+  	</definition>
+
+    <definition name="glgrouophome" extends="baseLayout">
+  	   <put-attribute name="title"  value="GL Group"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/gl/gl_grouop_home.jsp"/>
+  	</definition>
+  	
+    <definition name="gl_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="GL Configuration"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/gl/gl_home.jsp"/>
+  	</definition> 
+  	
+    <definition name="required_home" extends="baseLayout">
+  	   <put-attribute name="title"  value=""/> 
+  	   <put-attribute name="body"  value="/jsp/required_home.jsp"/>
+  	</definition>
+
+    <definition name="gl_scheme_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="GL Scheme Configuration"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/gl/gl_scheme_home.jsp"/>
+  	</definition> 
+   
+    <definition name="gl_map_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="GL Mapping Configuration"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/gl/gl_map_home.jsp"/>
+  	</definition>  
+  	
+    <definition name="gl_mapping_config" extends="baseLayout">
+  	   <put-attribute name="title"  value="GL Mapping Configuration"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/gl/gl_mapping_config.jsp"/>
+  	</definition> 
+  	 
+  	 <definition name="glgroupview" extends="baseLayout">
+  	   	<put-attribute name="title"  value="GLgroupview"/>
+  	    <put-attribute name="body"  value="/jsp/configuration/gl/glgroupview.jsp"/>      
+  	</definition> 
+  	
+  	 <definition name="groupglview" extends="baseLayout">
+  	   	<put-attribute name="title"  value="GLgroupview"/>
+  	    <put-attribute name="body"  value="/jsp/configuration/gl/groupglview.jsp"/>      
+  	</definition>
+
+	<definition name="glgrpdetails" extends="baseLayout">
+  	   <put-attribute name="title"  value="View GlGroup"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/gl/glgrpdetails.jsp"/>      
+  	</definition>
+  	
+  	<definition name="glgroupedit" extends="baseLayout">
+  	   <put-attribute name="title"  value="Edit GlGroup"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/gl/glgroupedit.jsp"/>      
+  	</definition>
+
+  	<definition name="insthsmmap_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Institution HSM Mapping"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/institution/insthsmmap_home.jsp"/>      
+  	</definition> 
+  	
+  	
+    <definition name="gl_auth_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="GL  Authorization"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/gl/gl_auth_home.jsp"/>
+  	</definition> 
+
+	<definition name="gl_group_auth_home" extends="baseLayout">
+		<put-attribute name="title" value="GL GROUP Authorization"/>
+		<put-attribute name="body" value="/jsp/configuration/gl/gl_group_auth_home.jsp"/>
+	</definition>
+
+    	
+  <definition name="proddetails" extends="baseLayout">
+  	   <put-attribute name="title"  value="Product Detail"/>
+  	   <put-attribute name="body"  value="/jsp/mainproduct/proddetails.jsp"/>      
+  </definition>
+
+
+    <definition name="ajaxlimit" extends="baseLayout">
+  	   <put-attribute name="title"  value="view Limit Detail"/>
+  	   <put-attribute name="body"  value="/jsp/limitdetails.jsp"/>      
+  </definition>
+  
+  <definition name="limit" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Branch"/>
+  	   <put-attribute name="body"  value="/jsp/AddLimitAction.jsp"/>      
+  </definition>
+
+    <definition name="hostconfig_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Configure Host"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/host/config.jsp"/>   
+  	</definition> 
+
+    <definition name="hostmoniter_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Monitoring Host"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/host/hostmoniter_home.jsp"/>   
+  	</definition> 
+  	
+	<definition name="dashbord" extends="baseLayout">
+		<put-attribute name="title" value="Dashboard"/>
+		<put-attribute name="body" value="/jsp/dashbord.jsp"/>
+	</definition>
+
+	<definition name="frauddashboard" extends="baseLayout">
+		<put-attribute name="title" value="Dashboard"/>
+		<put-attribute name="body" value="/jsp/dashboard/john.jsp"/> <!-- /jsp/frauddashboard.jsp -->
+	</definition>
+
+	<definition name="viewfeestructure" extends="baseLayout">
+  	   <put-attribute name="title"  value="Monitoring Host"/> 
+  	   <put-attribute name="body"  value="/jsp/viewSchemeFeeStruct.jsp"/>   
+  	</definition>
+  	 
+    <definition name="schemeedit" extends="baseLayout">
+  	   <put-attribute name="title"  value="Fee Configuration Edit"/> 
+  	   <put-attribute name="body"  value="/jsp/schemeedit.jsp"/>   
+  	</definition>
+
+  	<definition name="viewScheme" extends="baseLayout">
+  	   <put-attribute name="title"  value="Fee Configuration Edit"/> 
+  	   <put-attribute name="body"  value="/jsp/viewScheme.jsp"/>   
+  	</definition> 
+  	
+  	<definition name="acctrule_home" extends="baseLayout">
+		<put-attribute name="title" value="Acct Rule Config"/>
+		<put-attribute name="body" value="/jsp/acct/acctrule_home.jsp"/>
+	</definition> 
+  
+  <definition name="viewsubproductdetails" extends="baseLayout">
+  	<put-attribute name="title" value="View Subproduct Details"/>
+  	<put-attribute name="body" value="/jsp/configuration/sub_product/viewsubproductdetails.jsp"/>
+  </definition>
+  
+ 
+
+  <definition name="editglgroup" extends="baseLayout">
+  	<put-attribute name="title" value="GL VIEW / EDIT "/>
+  	<put-attribute name="body" value="/jsp/configuration/gl/editglgroup.jsp"/>
+  </definition>
+  
+  <definition name="glcardview" extends="baseLayout">
+  	<put-attribute name="title" value="GL GROUP"/>
+  	<put-attribute name="body" value="/jsp/configuration/gl/glcardview.jsp"/>
+  </definition>
+  
+   <definition name="glcard_viewdetails" extends="baseLayout">
+  	<put-attribute name="title" value="GL GROUP"/>
+  	<put-attribute name="body" value="/jsp/configuration/gl/glcard_viewdetails.jsp"/>
+  </definition>
+  
+  <definition name="editgrpgl" extends="baseLayout">
+  	<put-attribute name="title" value="GL GROUP"/>
+  	<put-attribute name="body" value="/jsp/configuration/gl/editgrpgl.jsp"/>
+  </definition>
+  
+  <definition name="glschemeview" extends="baseLayout">
+  	<put-attribute name="title" value="GL SCHEME"/>
+  	<put-attribute name="body" value="/jsp/configuration/gl/glschemeview.jsp"/>
+  </definition>
+  
+  <definition name="viewscheme" extends="baseLayout">
+  	<put-attribute name="title" value="GL SCHEME"/>
+  	<put-attribute name="body" value="/jsp/configuration/gl/viewscheme.jsp"/>
+  </definition>
+  
+  <definition name="editscheme" extends="baseLayout">
+  	<put-attribute name="title" value="GL SCHEME"/>
+  	<put-attribute name="body" value="/jsp/configuration/gl/editscheme.jsp"/>
+  </definition>
+  
+   <definition name="view_acctrule_home" extends="baseLayout">
+  	<put-attribute name="title" value="ACC RULE"/>
+  	<put-attribute name="body" value="/jsp/acct/view_acctrule_home.jsp"/>
+  </definition>
+  
+  <definition name="view_acctrule_data" extends="baseLayout">
+  	<put-attribute name="title" value="ACC RULE"/>
+  	<put-attribute name="body" value="/jsp/acct/view_acctrule_data.jsp"/>
+  </definition>
+  
+  <definition name="editacctrule" extends="baseLayout">
+  	<put-attribute name="title" value="ACC RULE"/>
+  	<put-attribute name="body" value="/jsp/acct/editacctrule.jsp"/>
+  </definition>
+  
+  	<definition name="cardReportStatus" extends="baseLayout">
+  	   <put-attribute name="title"  value="Personalized Card Status Report "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/reports/PersonalCardStatus.jsp"/>      
+	</definition>
+	
+	<definition name="InstcardReportStatus" extends="baseLayout">
+  	   <put-attribute name="title"  value="Instant Card Status Report "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/reports/InstCardStatus.jsp"/>      
+	</definition>  
+  
+
+
+  <definition name="decriptlog_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Decript log "/>
+  	   <put-attribute name="body"  value="/jsp/configuration/decriptlog/decriptlog_home.jsp"/>      
+  </definition>   
+    
+  <definition name="addmailactin" extends="baseLayout">
+  	<put-attribute name="title" value="MAIL ALERT"/>
+  	<put-attribute name="body" value="/jsp/alerts/AddMailActin.jsp"/>
+  </definition>
+  
+   <definition name="addmailaddress" extends="baseLayout">
+  	<put-attribute name="title" value="MAIL ALERT"/>
+  	<put-attribute name="body" value="/jsp/alerts/AddMailAddress.jsp"/>
+  </definition>
+  
+  <definition name="addmailcontent" extends="baseLayout">
+  	<put-attribute name="title" value="MAIL ALERT"/>
+  	<put-attribute name="body" value="/jsp/alerts/AddMailContent.jsp"/>
+  </definition>
+ 
+  <definition name="addmailcontentconfig" extends="baseLayout">
+  	<put-attribute name="title" value="MAIL ALERT"/>
+  	<put-attribute name="body" value="/jsp/alerts/Addmailcontentconfig.jsp"/>
+  </definition>
+  
+  <definition name="display" extends="baseLayout">
+  	<put-attribute name="title" value="MAIL ALERT"/>
+  	<put-attribute name="body" value="/jsp/alerts/Addmailcontenterror.jsp"/>
+  </definition>
+  
+  <definition name="editmailcontentconfig" extends="baseLayout">
+  	<put-attribute name="title" value="EDIT MAIL ALERT"/>
+  	<put-attribute name="body" value="/jsp/alerts/Editmailcontentconfig.jsp"/>
+  </definition>
+  
+  <definition name="editmailcontentdetails" extends="baseLayout">
+  	<put-attribute name="title" value="EDIT MAIL ALERT"/>
+  	<put-attribute name="body" value="/jsp/alerts/Editmailcontentdetails.jsp"/>
+  </definition>
+  
+   <definition name="smsurl_home" extends="baseLayout">
+  	<put-attribute name="title" value="SMS ALERT CONFIGURATION"/>
+  	<put-attribute name="body" value="/jsp/alerts/smsurl_home.jsp"/>
+  </definition>
+  
+    <definition name="FraudmgmtReportHome" extends="baseLayout">
+  	   <put-attribute name="title"  value="Personalized Card Status Report "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/reports/fraudmgmtreporthome.jsp"/>      
+	</definition>
+	
+	  <definition name="viewMerchDiscount" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Merchant Discount"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/merchant/viewMerchDiscount.jsp"/>      
+	</definition>
+	
+	<definition name="displayviewCommission" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Commission"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/displayviewCommission.jsp"/>
+  	 </definition>
+  	 
+  	 <definition name="viewMerchCommission" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Commission"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/viewMerchCommission.jsp"/>
+  	 </definition>
+  	 
+  	 <definition name="FraudmgmtReportHome" extends="baseLayout">
+   		<put-attribute name="title"  value="View Fraud Magement Report "/>
+   		<put-attribute name="body"  value="/jsp/reports/fraudmgmtreporthome.jsp"/>      
+	</definition>
+
+	<definition name="FraudMgmt_reportview" extends="baseLayout">
+   		<put-attribute name="title"  value=""/> 
+   		<put-attribute name="body"  value="/jsp/reports/fraudmgmt_reportview.jsp"/>
+	</definition>
+
+	
+	
+	<definition name="cbs_glhome" extends="baseLayout">
+   		<put-attribute name="title"  value="Entity GL Mapping"/> 
+   		<put-attribute name="body"  value="/jsp/configuration/gl/cbs_glhome.jsp"/>
+	</definition>
+
+	<definition name="entitymap_viewhome" extends="baseLayout">
+   		<put-attribute name="title"  value="Entity GL Mapping View"/> 
+   		<put-attribute name="body"  value="/jsp/configuration/gl/entitymap_viewhome.jsp"/>
+	</definition>
+
+	<definition name="entitymap_viewlist" extends="baseLayout">
+   		<put-attribute name="title"  value="Entity GL Mapping View List"/> 
+   		<put-attribute name="body"  value="/jsp/configuration/gl/entitymap_viewlist.jsp"/>
+	</definition>
+		
+	
+	
+	
+ 
+	
+	<definition name="SchemeAction" extends="baseLayout">
+  	   <put-attribute name="title"  value="Fee Configuration"/>
+  	   <put-attribute name="body"  value="/jsp/SchemeConfig.jsp"/>      
+	</definition>
+
+	<definition name="getViewDetails" extends="baseLayout">
+		   <put-attribute name="title"  value=""/> 
+		   <put-attribute name="body"  value="/jsp/getViewDetails.jsp"/>
+	</definition>
+	
+	 <definition name="expiry_warning" extends="baseLayout">
+  	    <put-attribute name="title"  value=""/> 
+  		<put-attribute name="body"  value="/jsp/expired/expiry_warning.jsp"/> 
+  	</definition>
+  
+	<definition name="expired" extends="baseLayout">
+  	    <put-attribute name="title"  value=""/> 
+  		<put-attribute name="body"  value="/jsp/expired/expired.jsp"/> 
+  	</definition>
+
+	
+  	
+  	<definition name="transactionstatus" extends="baseLayout">
+		   <put-attribute name="title"  value="CARD TRANSACTION STATUS RPORT"/> 
+	   	   <put-attribute name="body"  value="/jsp/reports/transactionstatus.jsp"/>
+	</definition>
+	
+	<definition name="cashScrollReportHome" extends="baseLayout">
+  	   <put-attribute name="title"  value=" CARD SCROLL SUMMARY REPORT "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/reports/cardScrollReportHome.jsp"/>      
+	</definition>
+	
+	<definition name="cardStatisticReportHome" extends="baseLayout">
+  	   <put-attribute name="title"  value=" CARD STATISTIC REPORT "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/reports/cardStatisticReportHome.jsp"/>      
+	</definition>
+	 
+	<definition name="NetworkReport" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Network Report"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/reports/NFSReport.jsp"/>      
+	</definition>
+	<definition name="customerstmthome" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Customer Statement Report"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/reports/customerstmthome.jsp"/>      
+	</definition>
+	<definition name="resetforgotpassword" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Reset Forgot Password "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/resetforgotpassword.jsp"/>      
+	</definition>
+
+	<definition name="glview_list" extends="baseLayout">
+  	   <put-attribute name="title"  value="GL Report"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/reports/glview_report_home.jsp"/>      
+	</definition>
+
+	<definition name="glview_report" extends="baseLayout">
+  	   <put-attribute name="title"  value="GL Report"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/reports/glview_report_records.jsp"/>      
+	</definition>
+
+	<definition name="merchantdizereport" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Merchant Wise Report"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/reports/prepaid/merchantdizereport.jsp"/>      
+	</definition>
+	<definition name="txnfailerhome" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Transaction Failure Report"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/reports/txnfailerhome.jsp"/>      
+	</definition>	
+	<definition name="cardmaintainstatus" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Card Status Report"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/reports/cardstatushome.jsp"/>      
+	</definition>
+	
+	<definition name="cardactivation" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Card Activation Report"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/reports/cardactivation.jsp"/>      
+	</definition>
+	
+	 <definition name="feereportstatus" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Fee Status Report"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/reports/feereportstatus.jsp"/>      
+	</definition>
+	
+	
+	<definition name="adminsaveview" extends="baseLayout">
+		<put-attribute name="title"  value="Authorize Profile"/>
+		<put-attribute name="body"  value="/jsp/adminsaveview.jsp"/>     
+  </definition>
+  <definition name="AdminSaveViewDetails" extends="baseLayout">
+	<put-attribute name="title"  value="Authorize Profile"/>
+	<put-attribute name="body"  value="/jsp/AdminSaveViewDetails.jsp"/>     
+ </definition>     
+  <definition name="InstAdminSaveViewDetails" extends="baseLayout">
+	<put-attribute name="title"  value="Authorize Profile"/>
+	<put-attribute name="body"  value="/jsp/InstAdminSaveViewDetails.jsp"/>     
+ </definition>
+ 
+  <!-- PRITO -->
+  <definition name="userauth_home" extends="baseLayout">
+	<put-attribute name="title"  value="Authorize User"/>
+	<put-attribute name="body"  value="/jsp/configuration/usermgmt/userauth_home.jsp"/>     
+ </definition>
+  
+ <definition name="userauth_data" extends="baseLayout">
+	<put-attribute name="title"  value="Authorize User"/>
+	<put-attribute name="body"  value="/jsp/configuration/usermgmt/auth_userdata.jsp"/>     
+ </definition>
+  
+  <!-- pavithra -->
+  <definition name="AdminSaveViewDetails" extends="baseLayout">
+	<put-attribute name="title"  value="Authorize Profile"/>
+	<put-attribute name="body"  value="/jsp/AdminSaveViewDetails.jsp"/>     
+ </definition>
+ 
+   <definition name="editInst" extends="baseLayout">
+	<put-attribute name="title"  value="Edit Institution"/>
+	<put-attribute name="body"  value="/jsp/configuration/institution/editInst.jsp"/>     
+ </definition>
+ 
+  <definition name="editinstdetals" extends="baseLayout">
+	<put-attribute name="title"  value="Edit Institution"/>
+	<put-attribute name="body"  value="/jsp/configuration/institution/editinstdetals.jsp"/>     
+ </definition>
+ 
+   <definition name="authinstdetals" extends="baseLayout">
+	<put-attribute name="title"  value="Authorize Institution"/>
+	<put-attribute name="body"  value="/jsp/configuration/institution/authinstdetals.jsp"/>     
+ </definition>
+ 
+   <definition name="authorizeCurrency" extends="baseLayout">
+  	   <put-attribute name="title"  value=" View Currency"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/currency/authorizeCurrency.jsp"/>      
+  </definition> 
+  
+  <definition name="InstAdminSaveViewDetails" extends="baseLayout">
+	<put-attribute name="title"  value="Authorize Profile"/>
+	<put-attribute name="body"  value="/jsp/InstAdminSaveViewDetails.jsp"/>     
+ </definition>
+ 
+  <definition name="editsubproductdetails" extends="baseLayout">
+  	<put-attribute name="title" value="Edit Subproduct Details"/>
+  	<put-attribute name="body" value="/jsp/configuration/sub_product/editsubproductdetails.jsp"/>
+  </definition>
+    
+  	<definition name="authdeauthfee_home" extends="baseLayout">
+  	    <put-attribute name="title"  value="Fee Configuration"/> 
+  		<put-attribute name="body"  value="/jsp/configuration/fee/authdeauthfee_home.jsp"/> 
+  	</definition> 
+  	
+  <definition name="authdeauthHSM" extends="baseLayout">
+  	   <put-attribute name="title"  value="Authorize HSM Configuration"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/hsm/authdeauthHSM.jsp"/>      
+  </definition>
+  
+    <definition name="viewAuth" extends="baseLayout">
+  	   <put-attribute name="title"  value="Authorize HSM Configuration"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/hsm/viewAuthHSM.jsp"/>      
+  </definition>
+  
+   <definition name="currencyedit_home" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Edit Currency "/>
+  	   <put-attribute name="body"  value="/jsp/configuration/currency/currencyadd_home.jsp"/>      
+  </definition> 
+  
+ 
+ 
+  <definition name="padssConfigHome" extends="baseLayout">
+  	   <put-attribute name="title"  value=" PADSS Key Config "/>
+  	   <put-attribute name="body"  value="/jsp/configuration/padss/padssConfig_home.jsp"/>      
+  </definition> 
+  
+<definition name="savepadssConfigHome" extends="baseLayout">
+  	   <put-attribute name="title"  value=" PADSS Key Config "/>
+  	   <put-attribute name="body"  value="/jsp/required_home.jsp"/>      
+  </definition> 
+  
+  <definition name="padssConfigAuthorizeHome" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Authorize PADSS Key Config "/>
+  	   <put-attribute name="body"  value="/jsp/configuration/padss/padssConfigAuthorizeHome.jsp"/>      
+  </definition> 
+  
+   <definition name="viewAuthpadssConfig" extends="baseLayout">
+  	   <put-attribute name="title"  value=" View PADSS Key Config "/>
+  	   <put-attribute name="body"  value="/jsp/configuration/padss/viewAuthpadssConfig.jsp"/>      
+  </definition> 
+  
+  <definition name="padssConfigViewHome" extends="baseLayout">
+  	   <put-attribute name="title"  value=" View PADSS Key Config "/>
+  	   <put-attribute name="body"  value="/jsp/configuration/padss/padssConfigViewHome.jsp"/>      
+  </definition>
+  
+  
+  
+  
+  
+	
+	
+	
+	<definition name="deletesubprod_home" extends="viewsubprod">
+		<put-attribute name="title"  value="Delete Sub-Product"/>	         
+	</definition>  
+	
+	<definition name="deletesubproduct_view" extends="viewsubproductdetails">
+		<put-attribute name="title"  value="Delete Sub-Product"/>	         
+	</definition>  
+	
+	<definition name="deletesubprod_authhome" extends="viewsubprod">
+		<put-attribute name="title"  value="Delete Sub-Product Authorization"/>	       
+		 <put-attribute name="body" value="/jsp/configuration/sub_product/viewdeleted_subproduct.jsp"/>         
+	</definition> 
+	
+	<definition name="savesucess" extends="viewsubprod">
+		<put-attribute name="title"  value="Delete Sub-Product Authorization"/>	       
+		 <put-attribute name="body" value="/jsp/configuration/sub_product/viewdeleted_subproduct.jsp"/>         
+	</definition>  
+	
+	
+
+	<definition name="deletesubproduct_authview" extends="viewsubproductdetails">
+		<put-attribute name="title"  value="Delete Sub-Product Authorization"/>	         
+	</definition> 
+	
+	 <definition name="viewprofile_view" extends="viewprofile">
+  		<put-attribute name="title"  value="View Profile"/>  	 
+	</definition>
+	
+	 <definition name="adminsaveview_view" extends="adminsaveview">
+  		<put-attribute name="title"  value="View Profile"/>  	 
+	</definition>
+	
+	 
+   <!--  delete -->
+   <definition name="AdminSaveViewDetails_del" extends="AdminSaveViewDetails">
+		<put-attribute name="title"  value="Delete Profile"/> 
+ 	</definition>
+ 	
+ 	 <definition name="viewprofile_del" extends="viewprofile">
+  		<put-attribute name="title"  value="Delete Profile"/>  	 
+	</definition>
+	
+	 <definition name="adminsaveview_del" extends="adminsaveview">
+  		<put-attribute name="title"  value="Delete Profile"/>  	 
+	</definition>
+	
+	<definition name="InstAdminSaveViewDetails_del" extends="InstAdminSaveViewDetails">
+		<put-attribute name="title"  value="Delete Profile"/> 
+ 	</definition>
+ 	
+ 	 
+ 
+   <definition name="AdminSaveViewDetails_del" extends="AdminSaveViewDetails">
+		<put-attribute name="title"  value="Delete Profile"/> 
+ 	</definition>
+ 	
+ 	  <!--  delete auth-->
+   <definition name="AdminSaveViewDetails_delauth" extends="AdminSaveViewDetails">
+		<put-attribute name="title"  value="Delete Profile Authorization"/> 
+ 	</definition>
+ 	
+ 	 <definition name="viewprofile_delauth" extends="viewprofile">
+  		<put-attribute name="title"  value="Delete Profile Authorization"/>  	 
+	</definition>
+	
+	 <definition name="adminsaveview_delauth" extends="adminsaveview">
+  		<put-attribute name="title"  value="Delete Profile Authorization" />  	 
+	</definition>
+	
+	<definition name="InstAdminSaveViewDetails_delauth" extends="InstAdminSaveViewDetails">
+		<put-attribute name="title"  value="Delete Profile"/> 
+ 	</definition>
+ 
+   <definition name="AdminSaveViewDetails_delauth" extends="AdminSaveViewDetails">
+		<put-attribute name="title"  value="Delete Profile Authorization"/> 
+ 	</definition>
+ 	
+  <definition name="InstAdminSaveViewDetails_view" extends="baseLayout">
+		<put-attribute name="title"  value="View Profile"/> 
+		<put-attribute name="body"  value="/jsp/InstAdminSaveViewDetails.jsp"/>     
+ </definition>
+ 
+  <definition name="AdminSaveViewDetails_view" extends="AdminSaveViewDetails">
+		<put-attribute name="title"  value="View Profile"/> 
+ </definition>
+ 
+ <!-- -branch -->
+   
+  <definition name="viewallBranches_edithome" extends="viewallBranches">
+  	   <put-attribute name="title"  value="Edit Branch"/> 
+  </definition>
+  
+  <definition name="displayBranch_edit" extends="displayBranch">
+  	   <put-attribute name="title"  value="Edit Branch"/> 
+  </definition>
+  
+  <definition name="courier_add_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Courier Details"/> 
+  	    <put-attribute name="body" value="/jsp/configuration/courier/addcourier.jsp"/>         
+  </definition>
+  <definition name="viewcourier_list" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Courier Details"/> 
+  	    <put-attribute name="body" value="/jsp/configuration/courier/viewcourier_list.jsp"/>         
+  </definition>
+  
+  
+  
+</tiles-definitions>

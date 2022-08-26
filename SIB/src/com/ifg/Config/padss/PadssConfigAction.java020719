@@ -1,0 +1,384 @@
+package com.ifg.Config.padss;
+
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+
+import com.ifp.Action.BaseAction;
+import com.ifp.beans.AuditBeans;
+import com.ifp.util.CommonDesc_2502199;
+import com.ifp.util.IfpTransObj;
+
+public class PadssConfigAction extends BaseAction {
+	PadssSecurity sec = new PadssSecurity();
+	CommonDesc_2502199 commondesc = new CommonDesc_2502199();
+
+	AuditBeans auditbean = new AuditBeans();
+	private PlatformTransactionManager txManager = new DataSourceTransactionManager();
+
+	PadssConfigActionDAO dao = new PadssConfigActionDAO();
+
+	private List keylist;
+
+	JdbcTemplate jdbctemplate = new JdbcTemplate();
+
+	public JdbcTemplate getJdbctemplate() {
+		return jdbctemplate;
+	}
+
+	public void setJdbctemplate(JdbcTemplate jdbctemplate) {
+		this.jdbctemplate = jdbctemplate;
+	}
+
+	public String comInstId(HttpSession session) {
+		String instid = (String) session.getAttribute("Instname");
+		return instid;
+	}
+
+	public String comAdminUserCode(HttpSession session) {
+		// HttpSession session = getRequest().getSession();
+		String instid = (String) session.getAttribute("SS_USERNAME");
+		return instid;
+	}
+
+	public String padssConfigHome() {
+		trace("padssConfigHome method called....");
+		return "padssConfigHome";
+	}
+
+	public void getdatacheckdigit() throws Exception {
+
+		String comp1value = getRequest().getParameter("comp1value");
+		String comp2value = getRequest().getParameter("comp2value");
+		String comp3value = getRequest().getParameter("comp3value");
+		trace("comp1value:" + comp1value);
+		trace("comp2value:" + comp2value);
+		trace("comp3value:" + comp3value);
+		String DMK_KVC = null;
+		try {
+			String ClearDMK = sec.getFormattedKey(comp1value, comp2value, comp3value);
+			trace("ClearDMK--->" + ClearDMK);
+
+			DMK_KVC = sec.getCheckDigit(ClearDMK);
+			trace("DMK KCV--->" + DMK_KVC); // For Display & Store in DB
+
+			DMK_KVC = DMK_KVC.substring(0, 6);
+		} catch (Exception e) {
+			getResponse().getWriter().write("Exception in getting DMK Check Digit");
+		}
+		getResponse().getWriter().write(DMK_KVC);
+
+	}
+
+	public void getpincheckdigit() throws Exception {
+
+		String comppin1value = getRequest().getParameter("comppin1value");
+		String comppin2value = getRequest().getParameter("comppin2value");
+		trace("comppin1value:" + comppin1value);
+		trace("comppin2value:" + comppin2value);
+		String DPK_KVC = null;
+		try {
+			String ClearDPK = sec.getFormattedKey(comppin1value, comppin2value);
+			trace("ClearDPK--->" + ClearDPK);
+
+			DPK_KVC = sec.getCheckDigit(ClearDPK);
+			trace("DPK KCV--->" + DPK_KVC); // For Display & Store in DB
+			DPK_KVC = DPK_KVC.substring(0, 6);
+
+		} catch (Exception e) {
+			getResponse().getWriter().write("Exception in getting DPK_KVC Check Digit");
+		}
+		getResponse().getWriter().write(DPK_KVC);
+
+	}
+
+	public String savesecurityKey() {
+		trace("savesecurityKey method called.............");
+		HttpSession session = getRequest().getSession();
+
+		IfpTransObj transact = commondesc.myTranObject("SAVESEQKEY", txManager);
+		String KEYDESC = getRequest().getParameter("keyname");
+
+		String usercode = comAdminUserCode(session);
+
+		String SALT_KEY = "ORBL";
+		String KEY_LENGTH = "32";
+		String comp1value = getRequest().getParameter("comp1value");
+		String comp2value = getRequest().getParameter("comp2value");
+		String comp3value = getRequest().getParameter("comp3value");
+		// trace("comp1value:" + comp1value);
+		// trace("comp2value:" + comp2value);
+		// trace("comp3value:" + comp3value);
+
+		String comppin1value = getRequest().getParameter("comppin1value");
+		String comppin2value = getRequest().getParameter("comppin2value");
+		// trace("comppin1value:" + comppin1value);
+		// trace("comppin2value:" + comppin2value);
+
+		String ClearDMK = null;
+		String DMK_KVC = null;
+		String EDMK = null;
+
+		try {
+			KEYDESC = getRequest().getParameter("keyname");
+			trace("KEYDESC::" + KEYDESC);
+			SALT_KEY = "ORBL";
+			ClearDMK = sec.getFormattedKey(comp1value, comp2value, comp3value);
+			// trace("ClearDMK--->" + ClearDMK);
+
+			DMK_KVC = sec.getCheckDigit(ClearDMK);
+			// trace("DMK KCV--->" + DMK_KVC); // For Display & Store in DB
+
+			EDMK = sec.getEDMK(ClearDMK);
+			// trace("Encrpted DMK--->" + EDMK);// Store in DB
+
+			String DPK_KVC = null;
+			String ClearDPK = null;
+			String EDPK = null;
+			ClearDPK = sec.getFormattedKey(comppin1value, comppin2value);
+			// trace("ClearDPK--->" + ClearDPK);
+
+			DPK_KVC = sec.getCheckDigit(ClearDPK);
+			// trace("DPK KCV--->" + DPK_KVC); // For Display & Store in DB
+
+			EDPK = sec.getEDPK(EDMK, ClearDPK);
+
+			// trace("Encrpted DPK--->" + EDPK);// Store in DB
+
+			trace("Getting exist getMaxSecKeyName count.. ");
+			int save_key = secKeyNameExist(KEYDESC, jdbctemplate);
+			int keyid = 0;
+			trace("Got getMaxSecKeyName count .. " + save_key);
+			if (save_key > 0) {
+				trace("getMaxSecKeyName count greater than zero.. ");
+				addActionError("SECURITY KEY With Name '" + KEYDESC + "' Already Exists");
+				trace("SECURITY KEY '" + KEYDESC + "' Already Exists");
+				return "padssConfigHome";
+			} else {
+				trace("Getting Max Key ID count .. ");
+				keyid = getMaxSecKeyID(jdbctemplate);
+				trace("Got Max SEQ keyid count .. " + keyid);
+				if (keyid == 0) {
+					keyid = 1;
+				} else {
+					keyid = keyid + 1;
+				}
+			}
+
+			StringBuilder padsskey = new StringBuilder();
+			padsskey.append(
+					"INSERT INTO PADSSKEY(KEYID, KEYDESC, DMK, DMK_KVC, DPK, DPK_KVC, SALT_KEY, KEY_LENGTH,AUTH_CODE, AUTH_DATE, AUTH_BY, ADDED_BY, ADDED_DATE, REMARKS) ");
+			padsskey.append("VALUES ");
+			padsskey.append("('" + keyid + "', '" + KEYDESC + "', '" + ClearDMK + "', '" + null + "', '" + null + "', '"
+					+ null + "', '" + SALT_KEY + "', '" + KEY_LENGTH + "','0','','','" + usercode + "',sysdate,'') ");
+			//enctrace("padsskey ----->" + padsskey.toString());
+
+			// Writing encryption dpk value into CommonDesc.properties
+			System.out.println("Writing encryption dpk into properties file value--->  " + EDPK);
+			writeDPK(EDPK);
+			System.out.println("encryption --->  " + EDPK);
+
+			int insertpadsskey = commondesc.executeTransaction(padsskey.toString(), jdbctemplate);
+
+			// int updateacctsubtype = commondesc.executeTransaction("update
+			// SEQUENCE_MASTER set PADSSSEQ=PADSSSEQ+1 where
+			// INST_ID='"+instid+"'", jdbctemplate);
+
+			trace("---------" + insertpadsskey);
+			if (insertpadsskey == 1) {
+				transact.txManager.commit(transact.status);
+				addActionMessage(
+						"Security Key \"" + KEYDESC + "\" Added Successfully and Waiting For Authorization ....");
+				trace("Security Key Added Successfully");
+
+				auditbean.setUsercode(usercode);
+				auditbean.setActmsg("PADSS KEY  ADDED  SUCCESSFULLY BY THE USER " + usercode);
+				auditbean.setAuditactcode("01336");
+
+				commondesc.insertAuditTrailPendingCommit("BIC", usercode, auditbean, jdbctemplate, txManager);
+				trace("audit logs insertion done");
+				return "required_home";
+			} else {
+				transact.txManager.rollback(transact.status);
+				addActionMessage("Security Key Not Added .....");
+				trace("Security Key Not Added .....");
+			}
+
+		} catch (Exception e) {
+			transact.txManager.rollback(transact.status);
+			addActionError("Security Key Not Added .....");
+			trace("Security Key Not Added ....." + e);
+		}
+
+		trace("........................savesecurityKey method ended");
+
+		return "padssConfigHome";
+	}
+
+	public String padssConfigAuthorizeHome() {
+		trace("*************** padssConfigAuthorizeHome **********");
+		enctrace("*************** padssConfigAuthorizeHome  **********");
+		HttpSession session = getRequest().getSession();
+		String usercode = comAdminUserCode(session);
+		try {
+			List keydetailslist = dao.getPadssConfigByUsername(usercode, jdbctemplate);
+			System.out.println("keylist" + keydetailslist.size());
+			if (keydetailslist.isEmpty()) {
+				trace("No records found..");
+				addActionError(" No records found.. ");
+				return "required_home";
+
+			} else {
+				setKeylist(keydetailslist);
+			}
+		} catch (Exception e) {
+			addActionError("Exception : While Getting padssConfig Details ");
+
+			trace("Exception : While Getting Key Details " + e.getMessage());
+		}
+		trace("*************** padssConfigAuthorizeHome Ends **********");
+		enctrace("*************** padssConfigAuthorizeHome Ends **********");
+		trace("\n\n");
+		enctrace("\n\n");
+		return "padssConfigAuthorizeHome";
+	}
+
+	public String viewAuthpadssConfig() {
+		trace("*************** Viewing viewAuthpadssConfig **********");
+		enctrace("*************** Viewing viewAuthpadssConfig **********");
+		HttpSession session = getRequest().getSession();
+		String keyid = getRequest().getParameter("keyid");
+		String keydesc = getRequest().getParameter("keydesc");
+		try {
+			trace("Got keyid ID .." + keyid);
+			List keydetail = dao.getPadssConfigByKEYID(keyid, jdbctemplate);
+			setKeylist(keydetail);
+			trace("Getting keydetail List .. " + keydetail);
+			if (!(keydetail.isEmpty())) {
+				setKeylist(keydetail);
+			} else {
+				addActionError(" No Key details found ..");
+				trace(" No Key details found ..");
+				return "required_home";
+			}
+		} catch (Exception e) {
+			addActionError("Exception While Fetching Key Detail " + keydesc + " ");
+			trace("Exception While Fetching Key Detaill '" + keydesc + "' :::" + e);
+		}
+		trace("*************** Viewing viewAuthpadssConfig **********");
+		enctrace("*************** Viewing viewAuthpadssConfig **********");
+		return "viewAuthpadssConfig";
+	}
+
+	public String authorizedeauthorize() {
+		trace("************* KEY authorization *****************");
+		enctrace("************* KEY authorization *****************");
+		IfpTransObj transact1 = commondesc.myTranObject("AUTHKEY", txManager);
+		HttpSession session = getRequest().getSession();
+		String statusmsg = "";
+		try {
+			String userid = comAdminUserCode(session);
+			String keyid = getRequest().getParameter("keyid").trim();
+			String auth = getRequest().getParameter("auth");
+			int update_authdeauth;
+			if (auth.equals("Authorize")) {
+				trace("AUTHORIZE...........");
+				statusmsg = " Authorized ";
+				trace("Updating Authoze status ..");
+				update_authdeauth = dao.updateAuthKey(userid, keyid, jdbctemplate);
+				trace("Got result .. " + update_authdeauth);
+				auditbean.setUsercode(userid);
+				auditbean.setActmsg("PADSS KEY  Autorization BY THE USER " + userid);
+				auditbean.setAuditactcode("01337");
+
+				commondesc.insertAuditTrailPendingCommit("BIC", userid, auditbean, jdbctemplate, txManager);
+				trace("audit logs authorization done");
+
+			} else {
+				statusmsg = " De-Authorized ";
+				String remarks = getRequest().getParameter("remarks");
+				System.out.println(" ---- remarks --- " + remarks);
+				update_authdeauth = dao.updateDeAuthKey(userid, remarks, keyid, jdbctemplate);
+				auditbean.setUsercode(userid);
+				auditbean.setActmsg("PADSS KEY  De Autorization BY THE USER " + userid);
+				auditbean.setAuditactcode("01338");
+
+				commondesc.insertAuditTrailPendingCommit("BIC", userid, auditbean, jdbctemplate, txManager);
+				trace("audit logs authorization done");
+
+			}
+			if (update_authdeauth > 0) {
+				txManager.commit(transact1.status);
+				addActionMessage("Key " + statusmsg + " Sucessfully..");
+				trace("key " + statusmsg + " Sucessfully");
+				return "required_home";
+			} else {
+				txManager.rollback(transact1.status);
+				addActionError("could not " + statusmsg + "");
+				trace("could not " + statusmsg + "");
+				return "required_home";
+			}
+
+		} catch (Exception e) {
+			txManager.rollback(transact1.status);
+			session.setAttribute("curerr", "E");
+			session.setAttribute("curmsg", " Exception while " + statusmsg + " the Key ");
+			trace("Error while " + statusmsg + " the Key " + e.getMessage());
+		}
+		return "required_home";
+	}
+
+	public String padssConfigViewHome() {
+		trace("padssConfigViewHome called..");
+
+		List keydetails = dao.getPadssConfig(jdbctemplate);
+		setKeylist(keydetails);
+
+		return "padssConfigViewHome";
+	}
+
+	public int secKeyNameExist(String keyname, JdbcTemplate jdbctemplate) {
+		int x = -1;
+		String secKeyNameExist = "select count(*) from PADSSKEY where KEYDESC='" + keyname.toUpperCase() + "' ";
+		enctrace("secKeyNameExist ..." + secKeyNameExist);
+		x = jdbctemplate.queryForInt(secKeyNameExist);
+		return x;
+	}
+
+	public int getMaxSecKeyID(JdbcTemplate jdbctemplate) {
+		int keyid;
+		String max_id_query = "select max(to_number(KEYID)) from PADSSKEY";
+		enctrace("Getting getMaxSecKeyID .." + max_id_query);
+		keyid = jdbctemplate.queryForInt(max_id_query);
+		return keyid;
+	}
+
+	public int sequencePADSSsequence(String inst_id, JdbcTemplate jdbctemplate) {
+		int x = -1;
+		String sequencePADSSsequence = "SELECT PADSSSEQ FROM SEQUENCE_MASTER WHERE INST_ID='" + inst_id + "'";
+		enctrace("sequencePADSSsequence::" + sequencePADSSsequence);
+		x = jdbctemplate.queryForInt(sequencePADSSsequence);
+		return x;
+	}
+
+	public PlatformTransactionManager getTxManager() {
+		return txManager;
+	}
+
+	public void setTxManager(PlatformTransactionManager txManager) {
+		this.txManager = txManager;
+	}
+
+	public List getKeylist() {
+		return keylist;
+	}
+
+	public void setKeylist(List keylist) {
+		this.keylist = keylist;
+	}
+
+}

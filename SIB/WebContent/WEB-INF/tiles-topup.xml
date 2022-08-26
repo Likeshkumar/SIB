@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+
+<tiles-definitions>
+
+	<definition name="cardtopuphome" extends="baseLayout">
+		<put-attribute name="title" value="Top Up Card"/>
+		<put-attribute name="body" value="/jsp/topup/topuphome.jsp"/>
+	</definition>
+	
+	<definition name="topupaccounts" extends="baseLayout">
+		<put-attribute name="title" value="Top Up Card"/>
+		<put-attribute name="body" value="/jsp/topup/topupaccounts.jsp"/>
+	</definition>	  
+  
+</tiles-definitions>

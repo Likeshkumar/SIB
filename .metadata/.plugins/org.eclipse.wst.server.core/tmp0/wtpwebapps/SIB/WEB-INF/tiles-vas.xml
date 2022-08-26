@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+
+<tiles-definitions>
+
+	<definition name="wait" extends="baseLayout">
+		<put-attribute name="title" value="Wait" />
+		<put-attribute name="body" value="/jsp/wait.jsp" />
+	</definition>
+
+	<definition name="agentinfo_home" extends="baseLayout">
+		<put-attribute name="title" value="Agent config" />
+		<put-attribute name="body" value="/jsp/vas/agent/agentinfo_home.jsp" />
+	</definition>
+	
+	<definition name="denominfo_home" extends="baseLayout">
+		<put-attribute name="title" value="Denom config" />
+		<put-attribute name="body" value="/jsp/vas/agent/denominfo_home.jsp" />
+	</definition>
+	
+	<definition name="airtimefileupload_home" extends="baseLayout">
+		<put-attribute name="title" value="Airtime file upload " />
+		<put-attribute name="body" value="/jsp/vas/agent/airtimefileupload_home.jsp" />
+	</definition>
+			
+	<definition name="serviceprovider_home" extends="baseLayout">
+		<put-attribute name="title" value="Service provider" />
+		<put-attribute name="body" value="/jsp/vas/agent/serviceprovider_home.jsp" />
+	</definition>
+
+	<definition name="walletupload_home" extends="baseLayout">
+		<put-attribute name="title" value="Deposit Merchant Account" />
+		<put-attribute name="body" value="/jsp/vas/wallet/walletupload_home.jsp" />
+	</definition>
+
+	<definition name="walletauthorize_home" extends="baseLayout">
+		<put-attribute name="title" value="Authorize wallet " />
+		<put-attribute name="body" value="/jsp/vas/wallet/walletauthorize_home.jsp" />
+	</definition> 
+	
+	<definition name="walletauthorize_list" extends="baseLayout">
+		<put-attribute name="title" value="Authorize wallet Merchant List " />
+		<put-attribute name="body" value="/jsp/vas/wallet/walletauthorize_list.jsp" />
+	</definition> 
+</tiles-definitions>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="gen_txn_report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b274fea0-e0d6-4dfa-884d-7d11f4ea2932">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="CHN" class="java.lang.String"/>
+	<field name="AMOUNT" class="java.lang.String"/>
+	<field name="TXNTYPE" class="java.lang.String"/>
+	<field name="TXNCODE" class="java.lang.Integer"/>
+	<field name="TERMINALID" class="java.lang.String"/>
+	<field name="TRACENO" class="java.lang.Integer"/>
+	<field name="TRANDATE" class="java.util.Date"/>
+	<field name="TRANTIME" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="04168957-2a0c-4ca7-bdd0-4bb86eaabded" x="365" y="0" width="190" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="df819432-bb26-41b5-a028-ed77f47d0757" x="111" y="36" width="257" height="20"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[GENERAL TRANSACTION REPORT]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="19" splitType="Stretch">
+			<line>
+				<reportElement uuid="9bfb7bc1-071a-4c3f-aff2-ab587293cc5d" x="2" y="18" width="519" height="1"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="b294f180-6361-4967-95ed-f21af2e0dfaf" x="2" y="0" width="95" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CHN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8666487d-f1a1-46c0-8477-80ff52ba21b3" x="100" y="0" width="86" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[AMOUNT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5674285b-8b47-4bea-82c2-3dd233e9dcc3" x="186" y="0" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TXNTYPE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ccbd675b-dc7a-4d05-b6a0-27a033afe043" x="246" y="0" width="75" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TXNCODE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4e17881e-e26f-40d0-b994-a7ddc54af8a6" x="386" y="0" width="73" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TERMINALID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9486c875-f2e4-4ea1-93bd-6ec322e0455d" x="459" y="0" width="69" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TRACENO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7f004235-52f4-4012-8c12-e475d3b1f77b" x="321" y="0" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TRANDATE]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="18f22efa-db25-41d2-8109-b523efcc33e9" x="3" y="26" width="525" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement uuid="9f66e87b-6517-45a9-a0b3-e4be948a341c" x="2" y="0" width="95" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{CHN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="426777f6-43b9-43b6-8b67-14ae2735e816" x="100" y="0" width="86" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{AMOUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8b0062c5-d478-477d-9312-0fa52580e3af" x="186" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{TXNTYPE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement uuid="dc3f304f-9317-4a48-80c9-48ecf907ec41" x="246" y="0" width="75" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{TXNCODE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="bd61c14e-c005-472d-a5ed-993438454fae" x="386" y="0" width="73" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{TERMINALID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a9d13a91-98ee-4f4f-801c-6a56541e9fc0" x="459" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{TRACENO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yy">
+				<reportElement uuid="5ee1787a-4a6b-4128-ad1d-26d6647f023b" x="321" y="1" width="65" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{TRANDATE}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="06a2867a-9990-43b8-ac38-6934ba4fd72d" x="3" y="18" width="528" height="1"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement uuid="504c9b96-f06e-483a-87a1-2459f76d6b89" x="97" y="23" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="83e40a36-4754-4367-bfd0-a6152fb948e2" x="26" y="23" width="58" height="20"/>
+				<textElement/>
+				<text><![CDATA[PAGE NO]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

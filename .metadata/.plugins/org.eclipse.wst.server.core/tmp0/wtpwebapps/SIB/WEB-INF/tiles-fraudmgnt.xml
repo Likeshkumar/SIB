@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+
+<tiles-definitions> 
+  
+  
+  <!-- Pavithra Starts -->
+	   <definition name="customergroup" extends="baseLayout">
+	  	   <put-attribute name="title"  value="Customer Group"/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/customergroup.jsp"/>
+	  </definition>
+	   <definition name="customerinfo" extends="baseLayout">
+	  	   <put-attribute name="title"  value="Customer Info"/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/customerinfo.jsp"/>
+	  </definition>
+	    <definition name="terminalinfo" extends="baseLayout">
+	  	   <put-attribute name="title"  value="Terminal Info"/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/terminalinfo.jsp"/>
+	  </definition>
+	  
+	  <definition name="cardlist" extends="baseLayout">
+	  	   <put-attribute name="title"  value="Card List"/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/cardlist.jsp"/>
+	  </definition>
+	  <definition name="cardgrp" extends="baseLayout">
+	  	   <put-attribute name="title"  value="Card Group"/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/cardgrp.jsp"/>
+	  </definition>
+<!-- Pavithra Ends -->	
+
+<!-- Rajagury Starts -->
+
+  <definition name="addMerchantGrp" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Merchant Group "/> 
+  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/addMerchantGrp.jsp"/>
+  </definition>
+  <definition name="addMerchantgrpdetails" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Merchant"/> 
+  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/addMerchantgrpdetails.jsp"/>
+  </definition>
+  <definition name="addMerchScheme_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Scheme"/> 
+  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/addScheme.jsp"/>
+  </definition>
+
+<!-- Rajagury Ends -->
+
+
+<!-- Sankar Starts -->
+
+	   <definition name="smsgrouphome" extends="baseLayout">
+	  	   <put-attribute name="title"  value=" Add SMS Group "/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/smsgrouphome.jsp"/>
+	  </definition>
+
+	   <definition name="addmobilenumberhome" extends="baseLayout">
+	  	   <put-attribute name="title"  value=" Add SMS Group "/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/addmobilenumber.jsp"/>
+	  </definition>	  
+
+	   <definition name="mailgrouphome" extends="baseLayout">
+	  	   <put-attribute name="title"  value=" Add Mail Group "/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/mailgrouphome.jsp"/>
+	  </definition>
+	  		  
+	   <definition name="addmailidhome" extends="baseLayout">
+	  	   <put-attribute name="title"  value=" Add Mail Group "/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/addmailid.jsp"/>
+	  </definition>	
+<!-- Sankar Ends -->
+
+<!--  prito begins -->
+	   <definition name="addsecurity_home" extends="baseLayout">
+	  	   <put-attribute name="title"  value="ADD CUSTOMER FRAUD RULE "/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/addsecurity_home.jsp"/>
+	  </definition>	  
+	  
+	  	   <definition name="addmerchantsecurity_home" extends="baseLayout">
+	  	   <put-attribute name="title"  value="ADD MERCHANT FRAUD RULE "/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/addmerchantsecurity_home.jsp"/>
+	  </definition>	   
+	  
+	  <definition name="limit_exceedhome" extends="baseLayout">
+	  	   <put-attribute name="title"  value="Limit Exceeded Report "/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/limit_exceedhome.jsp"/>
+	  </definition>	    
+
+	  <definition name="limitexceed_view" extends="baseLayout">
+	  	   <put-attribute name="title"  value="Limit Exceeded Report "/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/limitexceed_view.jsp"/>
+	  </definition>	  
+
+	  <definition name="hotcard_txnhome" extends="baseLayout">
+	  	   <put-attribute name="title"  value="HOT CARD FRAUD TRANSACTION "/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/reports/hotcard_txnhome.jsp"/>
+	  </definition>	  
+
+	  <definition name="hotcard_txnview" extends="baseLayout">
+	  	   <put-attribute name="title"  value="HOT CARD FRAUD VIEW "/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/reports/hotcard_txnview.jsp"/>
+	  </definition>	   
+	  
+	  <definition name="warmcard_txnhome" extends="baseLayout">
+	  	   <put-attribute name="title"  value="WARM CARD  FRAUD TRANSACTION "/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/reports/warmcard_txnhome.jsp"/>
+	  </definition>	  
+	  
+	    <definition name="warmcard_txnview" extends="baseLayout">
+	  	   <put-attribute name="title"  value="WARM CARD FRAUD VIEW "/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/reports/warmcard_txnview.jsp"/>
+	  </definition>	   
+	  
+
+	  <definition name="inactivecard_txnhome" extends="baseLayout">
+	  	   <put-attribute name="title"  value="INACTIVE CARD FRAUD TRANSACTION "/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/reports/inactivecard_txnhome.jsp"/>
+	  </definition>	  
+	  
+
+	    <definition name="inactivecard_txnview" extends="baseLayout">
+	  	   <put-attribute name="title"  value="INACTIVE CARD FRAUD VIEW "/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/reports/inactivecard_txnview.jsp"/>
+	  </definition>	   
+
+	    <definition name="txnvolume_home" extends="baseLayout">
+	  	   <put-attribute name="title"  value="TXN VOLUME REPORT "/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/reports/txnvolume_home.jsp"/>
+      </definition>	   
+ 
+	    <definition name="txnvolume_view" extends="baseLayout">
+	  	   <put-attribute name="title"  value="TXN VOLUME REPORT "/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/reports/txnvolume_view.jsp"/>  
+	  </definition>	   
+
+	   <definition name="withdraw_exceedhome" extends="baseLayout">
+	  	   <put-attribute name="title"  value="WITHDRAWAL EXCEEDED REPORT  "/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/reports/withdraw_exceedhome.jsp"/>  
+	  </definition>	
+
+	   <definition name="withdraw_exceedview" extends="baseLayout">
+	  	   <put-attribute name="title"  value="WITHDRAWAL EXCEEDED REPORT VIEW"/> 
+	  	   <put-attribute name="body"  value="/jsp/fraud_mgmnt/reports/withdraw_exceedview.jsp"/>  
+	  </definition>	 
+	  
+<!-- prito end  -->
+  
+ </tiles-definitions>

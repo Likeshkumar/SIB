@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%> 
+<%@taglib uri="/struts-tags" prefix="s" %> 
+
+ 
+<script type="text/javascript" src="js/script.js"></script> 
+<script type="text/javascript" src="jsp/instant/script/ordervalidation.js"></script> 
+  
+
+<jsp:include page="/displayresult.jsp"></jsp:include>
+
+<%
+	String instid = (String)session.getAttribute("Instname");
+	String branch = (String)session.getAttribute("BRANCHCODE");
+	String usertype = (String)session.getAttribute("USERTYPE");
+	String branchname = (String)session.getAttribute("BRANCH_DESC");
+	 
+%>
+<div align="center"> 
+<s:form action="deleteinstorderInstCardorderAction.do"  name="orderform"  autocomplete = "off"  namespace="/">
+	<table width="90%" cellpadding="0"  border="0"  cellspacing="0"  class="formtable"  > 
+					<input type="hidden" name="prodcode" value="<%= request.getParameter("cardtype") %>"/>
+					<input type="hidden" name="branchcode" value="<%= request.getParameter("branchcode") %>" />			 
+					<tr>
+						<th> Sl no </th> 
+						<th>  <input type='checkbox' onclick="checkedAll(this.form)"  id="checkall"/> </th>
+						<th> Order Ref No </th>
+						<th>No.of Cards</th>
+						<th> Emb Name </th> 
+						<th> Product </th>
+						<th> Branch </th>
+						<th> Status </th>
+						<th> Ordered Date </th>
+						<th> Ordered by </th>
+					</tr>
+				<% int rowcnt = 0; Boolean alt=true; %> 
+				<s:iterator value="deleteviewlist">
+					<tr
+					<% if (alt) { out.println( "class='alt'" );alt=false;}else{ alt=true;}  int rowcount = ++rowcnt; %>
+					>
+						<td> <%= rowcount %> </td> 
+						<td> <input type="checkbox" name="instorderrefnum"  id="orderrefnum<%=rowcount%>"  value="${ORDER_REF_NO}"/>  </td>
+						<td> ${ORDER_REF_NO}  </td>
+						<td> ${CARD_QUANTITY}  </td>
+						<td> ${EMBOSSING_NAME} </td> 
+						<td> ${ PRODBINDESC }  </td>
+						<td> ${ BRANCHDESC }  </td>
+						<td>  
+							<s:set name="org" >${MKCK_STATUS}</s:set>
+							<s:if test='%{#org=="D"}'>Rejected</s:if>
+							<s:elseif test='%{#org=="P"}'> Authorized </s:elseif>
+							<s:else>Waiting for Auth</s:else>
+							
+						 </td>
+						<td> ${ ORDERED_DATE }</td> 
+					    <td> ${ USERNAME }</td> 
+					</tr> 
+			 	</s:iterator> 
+			 		<tr>
+						<td colspan="8">
+							<s:submit value="Delete" name="submit" id="submit" onclick="return selectallvalidation();"/>					 
+							<input type="button" name="cancel" id="cancel" class="cancelbtn" value="Cancel" onclick="return confirmCancel()"/>
+						</td>
+					</tr>
+	 	</table> 
+ </s:form>
+ 
+</div>
+ 

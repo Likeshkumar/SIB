@@ -1,0 +1,256 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.action.excludePattern" value=".*unfiltered.*,.*\\.nofilter"/>
+		<constant name="struts.action.extension" value="do" />
+		<constant name="struts.ui.theme" value="simple" /> 
+		<constant name="struts.devMode" value="false" />		
+	<package name="maintain" extends="struts-default">
+		<result-types>
+					<result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult" />
+		</result-types>
+		<interceptors>
+    		<interceptor name="mylogging" class="com.ifp.util.SessionInterceptor">
+   		</interceptor>
+   		 	<interceptor name="NewInter" class="com.ifp.util.NewInter"></interceptor>
+   		<interceptor name="loggerinterceptor" class="com.ifp.util.LoggerInterceptor">
+   		</interceptor>
+   			<interceptor name="clickInterceptor" class="com.ifp.util.ClickJackInterceptor">
+			</interceptor>
+				<interceptor name="xssInterceptor" class="com.ifp.util.XSSInterceptor">
+			</interceptor>
+			
+
+			<interceptor name="browserCacheInterceptor"  class="com.ifp.util.BrowserClearCacheInterceptor">
+			</interceptor>
+   		
+   		 
+    	<interceptor-stack name="loggingStack">
+        			<interceptor-ref name="mylogging"/>
+        			<interceptor-ref name="NewInter"/>
+        			<interceptor-ref name="loggerinterceptor"/>
+        				<interceptor-ref name="clickInterceptor" />
+			        	<interceptor-ref name="browserCacheInterceptor" />
+			        	     	<interceptor-ref name="xssInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+    			</interceptor-stack>
+		</interceptors>
+		
+		 <global-results>
+    		<!-- <result name="session" type="redirectAction">logoutAction1</result> --> 
+    		<result name="session" type="tiles">logout</result>
+    		<result name="required_home" type="tiles">required_home</result>	
+    		<!-- 	<result name="required_home1" type="tiles">required_home1</result> -->
+    	</global-results>
+		
+		<action name="*CardMaintainAction" class="com.ifp.maintain.CardMaintainAction"  method="{1}" >
+	<!-- 	<interceptor-ref name="NewInter"/> -->
+			<interceptor-ref name="loggingStack"></interceptor-ref> 
+			<interceptor-ref name="clickInterceptor" />
+			        	<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+				<result name="serach_home" type="tiles">serach_home</result>
+				<result name="maintain_home" type="tiles">maintain_home</result>	
+				<result name="instantrepin_home" type="tiles">instantrepin_home</result> 	
+				<result name="instantrepin_view" type="tiles">instantrepin_view</result>				
+				<result name="personalizereissue_home" type="tiles">personalizereissue_home</result>
+				<result name="instantreissue_home" type="tiles">instantreissue_home</result> 	
+				<result name="instantreissue_view" type="tiles">instantreissue_view</result> 				
+				<result name="instantdamage_home" type="tiles">instantdamage_home</result> 				
+				<result name="viewserach_home" type="tiles">viewserach_home</result>
+				<result name="viewmaintain_home" type="tiles">viewmaintain_home</result>
+		</action> 
+		
+		<action name="*LateralRegister" class="com.ifp.maintain.LateralRegister"  method="{1}" >
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="loggingStack"></interceptor-ref>  
+			<interceptor-ref name="clickInterceptor" />
+			        	<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<result name="lateral_reg_home" type="tiles">lateral_reg_home</result> 
+			<result name="customer_entry" type="tiles">customer_entry</result>
+			
+		</action> 
+		
+		<action name="*TopUpCard" class="com.ifp.maintain.TopUpCard"  method="{1}" >
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="loggingStack"></interceptor-ref>  
+			<interceptor-ref name="clickInterceptor" />
+			        	<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<result name="topup_home" type="tiles">topup_home</result>  
+			<result name="topup_auth_home" type="tiles">topup_auth_home</result>   
+			<result name="topup_auth_list" type="tiles">topup_auth_list</result>
+			<result name="topupverify_home" type="tiles">topupverify_home</result>
+			<result name="topup_verify_list" type="tiles">topup_verify_list</result>
+			<result name="topup_view_home" type="tiles">topup_view_home</result>
+			<result name="topup_view_list" type="tiles">topup_view_list</result> 
+		</action> 
+
+		<action name="*CbsAccount*" class="com.ifp.maintain.CbsAccount"  method="{1}" >
+	<!-- 	<interceptor-ref name="NewInter"/> -->
+			<interceptor-ref name="loggingStack"></interceptor-ref>  
+			<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="xssInterceptor" />
+			        <interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			 <result name="addcbsacct_home" type="tiles">addcbsacct_home</result>			 
+			 <result name="editcbsacct_home" type="tiles">editcbsacct_home</result> 
+			 <result name="viewcbsacct_home" type="tiles">viewcbsacct_home</result>
+			 <result name="authcbsacct_home" type="tiles">authcbsacct_home</result>
+			 <result name="autheditacctlinkdetails" type="tiles">autheditacctlinkdetails</result>
+			 <result name="authacctlistorders" type="tiles">authacctlistorders</result>
+			 <result name="removecbsaccthome" type="tiles">removecbsaccthome</result>
+			 
+		</action> 
+		
+		<action name="*chnageCbsPrimary*" class="com.ifp.maintain.chnageCbsPrimary"  method="{1}" >
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="loggingStack"></interceptor-ref>  
+			<interceptor-ref name="clickInterceptor" />
+			        	<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			 <result name="chnageCbsPrimaryHome" type="tiles">chnageCbsPrimaryHome</result>
+		</action> 
+		
+		<action name="BulkRenualHomeBulkRenual" class="com.ifp.maintain.BulkRenual"  method="BulkRenualHome" >
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="loggingStack"></interceptor-ref>  
+			<interceptor-ref name="clickInterceptor" />
+			        	<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			 <result name="bulkrenual_home" type="tiles">bulkrenual_home</result>   
+		</action> 
+		
+		<action name="*RenewalMaintainAction" class="com.ifp.maintain.RenewalMaintainAction"  method="{1}" >
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="loggingStack"></interceptor-ref> 
+			<interceptor-ref name="clickInterceptor" />
+			        	<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+				<result name="renewalsearch_home" type="tiles">renewalsearch_home</result>
+		</action> 
+		
+		
+		
+		<!-- <action name="singleRenewalBulkRenual" class="com.ifp.maintain.BulkRenual"  method="singleRenewal" >
+			<interceptor-ref name="loggingStack"></interceptor-ref>  
+			 <result name="singlerenewalhome" type="tiles">singlerenewalhome</result>   
+		</action>  -->
+		
+		
+		<action name="*BulkRenual" class="com.ifp.maintain.BulkRenual"  method="{1}" >
+			<interceptor-ref name="loggingStack"></interceptor-ref> 
+			<interceptor-ref name="clickInterceptor" />
+			        	<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/> 
+			 <result name="singlerenewalhome" type="tiles">singlerenewalhome</result>   
+		</action> 
+		
+		<action name="bulkrenualListBulkRenual" class="com.ifp.maintain.BulkRenual"  method="bulkrenualList" >
+			<interceptor-ref name="loggingStack"></interceptor-ref>  
+			<interceptor-ref name="clickInterceptor" />
+			        	<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<result name="bulkrenualList" type="tiles">bulkrenualList</result> 	
+		</action> 
+		<action name="changeCardRenualBulkRenual" class="com.ifp.maintain.BulkRenual"  method="changeCardRenual" >
+			<interceptor-ref name="loggingStack"></interceptor-ref>  
+			<interceptor-ref name="clickInterceptor" />
+			        	<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<result name="changeCardRenual" type="tiles">changeCardRenual</result> 	
+		</action>
+	
+		       
+
+		<action name="*SearchTxn" class="com.ifp.maintain.SearchTxn"  method="{1}" >
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="loggingStack"></interceptor-ref>   
+			<interceptor-ref name="clickInterceptor" />
+			        	<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			 <result name="cardtxnsearch_home" type="tiles">cardtxnsearch_home</result> 
+		</action> 
+		
+		
+		<action name="*RevenueSharing" class="com.ifp.maintain.RevenueSharing"  method="{1}" >
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="loggingStack"></interceptor-ref>   
+			<interceptor-ref name="clickInterceptor" />
+			        	<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<result name="revenuepostingupload_home" type="tiles">revenuepostingupload_home</result>
+			 <result name="revenueposting_home" type="tiles">revenueposting_home</result> 
+			 <result name="revenueposting_list" type="tiles">revenueposting_list</result>
+			 <result name="revenuepostingview_home" type="tiles">revenuepostingview_home</result>
+			 <result name="revenuepostingview_list" type="tiles">revenuepostingview_list</result>
+			 <result name="revenuepostingverify_home" type="tiles">revenuepostingverify_home</result>
+			 <result name="revenuepostingverify_list" type="tiles">revenuepostingverify_list</result>
+			 <result name="revenuepostingauth_home" type="tiles">revenuepostingauth_home</result>
+			 <result name="revenuepostingauth_list" type="tiles">revenuepostingauth_list</result>
+		</action> 
+		
+		<action name="*CallCenterService*" class="com.ifp.maintain.CallCenter"  method="{1}" >
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="loggingStack"></interceptor-ref>   
+			<interceptor-ref name="clickInterceptor" />
+			        	<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			 <result name="cardtxnsearch_home" type="tiles">cardtxnsearch_home</result> 
+		</action> 
+		
+		<action name="*CardProcess" class="com.ifp.maintain.CardProcess"  method="{1}" >
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="loggingStack"></interceptor-ref>   
+			<interceptor-ref name="clickInterceptor" />
+			        	<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<result name="cardactivationhome" type="tiles">cardactivationhome</result> 
+			<result name="activecardlist" type="tiles">activecardlist</result>
+		</action> 
+				
+		<action name="*AlphaGasPriceAction" class="com.ifp.maintain.AlphaGasPriceAction" method="{1}" >
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="loggingStack"></interceptor-ref> 
+				<result name="alphaGasPrice" type="tiles">alphaGasPrice</result>	 
+				<result name="authalphaGasPrice" type="tiles">authalphaGasPrice</result>
+				<result name="authorizealphaGasPrice" type="tiles">authorizealphaGasPrice</result>
+		</action> 
+		
+		<action name="*CardMigration" class="com.ifp.maintain.CardMigration"  method="{1}" >
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="loggingStack"></interceptor-ref> 
+			<interceptor-ref name="clickInterceptor" />
+			        	<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+				<result name="search_home" type="tiles">search_home</result>
+				<result name="cardmigratedata" type="tiles">cardmigratedata</result>
+		</action>
+		
+		
+		<action name="*SMSSender" class="com.ifp.maintain.SMSSender"  method="{1}" >
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="loggingStack"></interceptor-ref>   
+			<interceptor-ref name="clickInterceptor" />
+			        	<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<result name="smssend_home" type="tiles">smssend_home</result> 
+			<result name="smsview_home" type="tiles">smsview_home</result>
+			<result name="smssend_view" type="tiles">smssend_view</result>
+			<result name="sms_edithome" type="tiles">sms_edithome</result>
+		</action> 
+		
+		<action name="*CbsCardLinkAction" class="com.ifd.cbslink.CbsCardLinkAction" method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<interceptor-ref name="clickInterceptor" />
+			       <interceptor-ref name="browserCacheInterceptor" />
+        	<interceptor-ref name="defaultStack"/>
+			<result name="cbscardlinkhome" type="tiles">cbscardlinkhome</result>
+			<result name="cardslinklist" type="tiles">cardslinklist</result>
+		</action>
+		
+	</package>
+</struts>

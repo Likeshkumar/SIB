@@ -1,0 +1,788 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+
+<tiles-definitions>	
+
+
+<!-- 
+ add feee-->
+ <definition name="feeConfighome" extends="baseLayout">
+  	   <put-attribute name="title"  value="Fee List"/> 
+  	   <put-attribute name="body"  value="/jsp/FeeConfigindex.jsp"/> 
+	</definition> 
+	
+ <definition name="addfee_home" extends="baseLayout">
+  	    <put-attribute name="title"  value="Add Fee Configuration"/> 
+  		<put-attribute name="body"  value="/jsp/configuration/fee/addfee_home.jsp"/> 
+  	</definition> 
+	
+	<definition name="addfee_view" extends="baseLayout">
+  	    <put-attribute name="title"  value="View Fee Configuration"/> 
+  		<put-attribute name="body"  value="/jsp/configuration/fee/addfee_view.jsp"/> 
+  	</definition> 
+
+	<definition name="editfee_home" extends="baseLayout">
+  	    <put-attribute name="title"  value="Edit Fee Configuration"/> 
+  		<put-attribute name="body"  value="/jsp/configuration/fee/editfee_home.jsp"/> 
+  	</definition> 
+  	
+  	<definition name="authfeehome" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Authorize Fee "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/fee/authfeehome.jsp"/>      
+	</definition>
+	
+	<definition name="authviewfeehome" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Authorize Fee "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/fee/authviewfeehome.jsp"/>      
+	</definition>
+	
+  	<definition name="authdeletefeehome" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Authorize Fee "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/fee/authdeletefeehome.jsp"/>      
+	</definition>
+  	<definition name="authdeauthfee_home" extends="baseLayout">
+  	    <put-attribute name="title"  value="Fee Configuration"/> 
+  		<put-attribute name="body"  value="/jsp/configuration/fee/authdeauthfee_home.jsp"/> 
+  	</definition> 
+  	 <definition name="deleteauthdeauthfee_home" extends="baseLayout">
+  	    <put-attribute name="title"  value="Disable Fee Configuration"/> 
+  		<put-attribute name="body"  value="/jsp/configuration/fee/deleteauthdeauthfee_home.jsp"/> 
+  	</definition>
+	<definition name="deletefee_home" extends="baseLayout">
+  	    <put-attribute name="title"  value="Disable Fee Configuration"/> 
+  		<put-attribute name="body"  value="/jsp/configuration/fee/deletefee_home.jsp"/> 
+  	</definition>
+  	<definition name="authfeehome" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Authorize Fee "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/fee/authfeehome.jsp"/>      
+	</definition>
+	
+	<definition name="View_Fee_Config" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Edit Fee Config "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/fee/vIewFeeHome.jsp"/>      
+	</definition>
+	
+	
+	<definition name="EditViewFee" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Edit Fee Config View "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/fee/EditFeeConfigView1.jsp"/>      
+	</definition>
+	
+  	
+  	<!-- add Fee -->
+  	
+  	
+  	<!-- LIMIT -->
+  	  
+  	<definition name="addlimithome" extends="baseLayout">
+	  <put-attribute name="title"  value="Add Limit Configuration"/>
+	  <put-attribute name="body"  value="/jsp/configuration/limit/AddLimitProduct.jsp"/>      
+	</definition>  
+	
+  	<definition name="AddLimitProduct" extends="baseLayout">
+	  <put-attribute name="title"  value="Add Limit Configuration"/>
+	  <put-attribute name="body"  value="/jsp/configuration/limit/AddLimitProduct.jsp"/>      
+	</definition>  
+	
+	<definition name="viewlimit" extends="baseLayout">
+		<put-attribute name="title"  value="View Limit Configuration"/>
+		<put-attribute name="body"  value="/jsp/configuration/limit/viewselectLimit.jsp"/>      
+	</definition> 
+	
+	
+	<definition name="viewlimitdetails" extends="baseLayout">
+		<put-attribute name="title"  value="View Limit Configuration"/>
+		<put-attribute name="body"  value="/jsp/configuration/limit/ViewLimitDetails.jsp"/>      
+	</definition>
+	
+	<definition name="editlimit" extends="baseLayout">
+		<put-attribute name="title"  value="Edit Limit Configuration"/>
+		<put-attribute name="body"  value="/jsp/configuration/limit/EditLimitDetails.jsp"/>      
+	</definition> 
+
+	<definition name="editlimithome" extends="baseLayout">
+		<put-attribute name="title"  value="Edit Limit Configuration"/>
+		<put-attribute name="body"  value="/jsp/configuration/limit/EditLimitHome.jsp"/>      
+	</definition> 
+	
+	<definition name="editlimitdeltails" extends="baseLayout">
+		<put-attribute name="title"  value="Edit Limit Configuration"/>
+		<put-attribute name="body"  value="/jsp/configuration/limit/editlimit.jsp"/>      
+	</definition> 
+	
+	<definition name="vieweditlimit" extends="baseLayout">
+		<put-attribute name="title"  value="Authorize Limit Configuration"/>
+		<put-attribute name="body"  value="/jsp/configuration/limit/vieweditlimit.jsp"/>      
+	</definition> 
+	
+	<definition name="addlimit_view" extends="baseLayout">
+  	    <put-attribute name="title"  value="Add Limit Configuration"/> 
+  		<put-attribute name="body"  value="/jsp/configuration/limit/addlimit_view.jsp"/> 
+  	</definition>
+  	<definition name="auth_limithome" extends="baseLayout">
+  	    <put-attribute name="title"  value="Authorize Limit Configuration"/> 
+  		<put-attribute name="body"  value="/jsp/configuration/limit/auth_limithome.jsp"/> 
+  	</definition>
+  	   
+  	<!-- LIMIT -->
+  	
+  	
+  	<!-- cardtype -->
+  	<definition name="add_cardtype_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Card Type"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/cardtype/AddCardType_home.jsp"/>
+  	</definition> 
+  	  <definition name="view_cardtype_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Card Type"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/cardtype/view_cardtype_home.jsp"/>
+  	</definition> 
+  	<definition name="authselectcardtype" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Authorize Card Type "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/cardtype/authselectcardtype.jsp"/>      
+	</definition>
+	<definition name="viewCardTypeDetails" extends="baseLayout">
+  	   <put-attribute name="title"  value=" View Card Type "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/cardtype/viewCardTypeDetails.jsp"/>      
+	</definition>  
+	<definition name="authcardtype" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Authorize Card Type "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/cardtype/authcardtype.jsp"/>      
+	</definition>
+	
+	<definition name="edit_cardtype_home" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Edit Card Type "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/cardtype/editCardType_home.jsp"/>      
+	</definition>
+	
+	<definition name="edit_cardtype_view" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Edit Card Type View "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/cardtype/editCardType_view.jsp"/>      
+	</definition>
+	
+  	<!-- cardtype -->  
+  	
+  	<!-- accountype -->
+  	<definition name="add_accounttype_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Account Type"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/accounttype/AddAccountType_home.jsp"/>
+  	</definition> 
+  	  <definition name="view_Accounttype_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Account Type"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/accounttype/view_Accounttype_home.jsp"/>
+  	</definition> 
+  	<definition name="authselectaccounttype" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Authorize Account Type "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/accounttype/authselectaccounttype.jsp"/>      
+	</definition>
+	<definition name="view_Accounttype_Details" extends="baseLayout">
+  	   <put-attribute name="title"  value=" View Account Type "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/accounttype/view_Accounttype_Details.jsp"/>      
+	</definition>  
+	<definition name="authaccounttype" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Authorize Account Type "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/accounttype/authaccounttype.jsp"/>      
+	</definition>
+	
+	<definition name="edit_Accounttype_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Edit Account Type"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/accounttype/edit_Accounttype_home.jsp"/>
+  	</definition> 
+  	
+  	<definition name="edit_accounttype_view" extends="baseLayout">
+  	   <put-attribute name="title"  value="Edit Account Type View"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/accounttype/edit_accounttype_view.jsp"/>
+  	</definition>
+	
+  	<!-- accounttype --> 
+  	
+  	<!-- account sub type -->
+  	<definition name="add_accountsubtype_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Account Sub Type"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/accountsubtype/AddAccountSubType_home.jsp"/>
+  	</definition> 
+  	  <definition name="view_Accountsubtype_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Account Sub Type"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/accountsubtype/view_Accountsubtype_home.jsp"/>
+  	</definition> 
+  	<definition name="authListAccountSubType" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Authorize Account Sub Type "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/accountsubtype/authselectacctsubtype.jsp"/>      
+	</definition>
+	  
+	<definition name="authAccountsubtype" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Authorize Account Sub Type "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/accountsubtype/authacctsubtype.jsp"/>      
+	</definition>
+	
+	 <definition name="view_AccountSubType_Details" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Account Sub Type"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/accountsubtype/view_AccountSubType_Details.jsp"/>
+  	</definition>
+  	
+  	<definition name="edit_Accountsubtype_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Edit Account Sub Type"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/accountsubtype/edit_Accountsubtype_home.jsp"/>
+  	</definition> 
+	
+	<definition name="edit_accountsubtype_view" extends="baseLayout">
+  	   <put-attribute name="title"  value="Edit Account Sub Type View"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/accountsubtype/edit_accountsubtype_view.jsp"/>
+  	</definition> 
+	
+  	<!-- accounttype --> 
+  	
+  	
+  	<!-- BIN -->
+  	<definition name="displaybin" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add BIN Configuration"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/bin/addbin.jsp"/>      
+  </definition> 
+  <definition name="viewbin" extends="baseLayout">
+  	   <put-attribute name="title"  value="View BIN Configuration"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/bin/viewbin.jsp"/>      
+  </definition>
+  <definition name="bindetails" extends="baseLayout">
+  	   <put-attribute name="title"  value="View BIN Configuration"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/bin/binview.jsp"/>      
+  </definition>
+  <definition name="editbin" extends="baseLayout">
+  	   <put-attribute name="title"  value="Edit BIN Configuration"/>
+  	   <put-attribute name="body"  value="/jsp/editbin.jsp"/>      
+  </definition>
+  <definition name="AuthBinList" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Authorize BIN Configuration"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/bin/AuthBinList.jsp"/>      
+	</definition>
+	  
+	 
+	<definition name="editbinlist" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Edit BIN Configuration "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/bin/editbinlist.jsp"/>      
+	</definition>
+	
+	<definition name="editbindata" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Edit BIN Configuration "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/bin/editbindata.jsp"/>      
+	</definition>
+	<definition name="AuthBinList" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Authorize BIN Configuration "/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/bin/AuthBinList.jsp"/>      
+	</definition>
+	  <definition name="bindel_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Disable BIN Configuration"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/bin/bindel_home.jsp"/>      
+  </definition>
+  
+   <definition name="bindetails_delete" extends="bindetails">
+  	   <put-attribute name="title"  value="Disable BIN Configuration"/> 
+  </definition>
+  
+   <definition name="bindetails_deleteauth" extends="bindetails">
+  	   <put-attribute name="title"  value="Delete BIN Authorization"/> 
+  </definition>
+  	<!-- BIN -->
+  	
+  	<!-- PRODUCT -->
+  	<definition name="AddMainProduct" extends="baseLayout">
+		<put-attribute name="title"  value="Add Card Product"/>
+	   <put-attribute name="body"  value="/jsp/mainproduct/addmainproduct.jsp"/>      
+	</definition>  
+	
+	<definition name="viewmainproduct" extends="baseLayout">
+		<put-attribute name="title"  value="View Card Product"/>
+		<put-attribute name="body"  value="/jsp/mainproduct/viewmainproduct.jsp"/>      
+	</definition>  
+	
+	<definition name="viewmainproduct_delete" extends="viewmainproduct">
+		<put-attribute name="title"  value="Disable Product"/> 
+	</definition>  
+	
+	<definition name="proddetails_delete" extends="proddetails">
+		<put-attribute name="title"  value="Disable Product"/> 
+	</definition>  
+	<definition name="viewmainproduct_delete" extends="viewmainproduct">
+		<put-attribute name="title"  value="Disable Product"/> 
+	</definition>  
+	
+	<definition name="viewmainproduct_deleteauth" extends="viewmainproduct">
+		<put-attribute name="title"  value="Authorize Card Product"/> 
+	</definition>  
+	<definition name="viewmainproduct_deleteauth" extends="viewmainproduct">
+		<put-attribute name="title"  value="Disable Product Authorization"/> 
+	</definition>  
+	<definition name="viewmainproduct_edit" extends="viewmainproduct">
+		<put-attribute name="title"  value="Edit Card Product"/> 
+	</definition>
+	  
+	<definition name="edit_view" extends="AddMainProduct">
+		<put-attribute name="title"  value="Edit Card Product"/>	         
+	</definition>  
+	<definition name="viewmainproduct" extends="baseLayout">
+		<put-attribute name="title"  value="View Card Product"/>
+		<put-attribute name="body"  value="/jsp/mainproduct/viewmainproduct.jsp"/>      
+	</definition>   
+	<definition name="AddMainProduct" extends="baseLayout">
+		<put-attribute name="title"  value="Add Card Product"/>
+	   <put-attribute name="body"  value="/jsp/mainproduct/addmainproduct.jsp"/>      
+	</definition> 
+  	<!-- PRODUCT -->
+  	
+  	<!-- BRANCH -->
+  	<definition name="AddBranchError" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Branch"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/branch/AddBranchError.jsp"/>      
+  </definition>
+  <definition name="displayBranch" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Branch"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/branch/displayBranch.jsp"/>      
+  </definition>
+  <definition name="viewallBranches" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Branch"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/branch/viewallBranches.jsp"/>      
+  </definition>
+	<definition name="viewBranchDetails" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Branch"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/branch/viewBranchDetail.jsp"/>      
+  </definition>
+  <definition name="dispEditBranch" extends="baseLayout">
+  	   <put-attribute name="title"  value="Edit Branch"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/branch/dispEditBranch.jsp"/>      
+  </definition>
+  	<!-- BRANCH -->   
+  	
+  	<!-- SUBPRODUCT -->
+  	 
+	<definition name="viewmainproduct_delete" extends="viewmainproduct">
+		<put-attribute name="title"  value="Disable Sub Product"/> 
+	</definition>  
+	<definition name="proddetails_delete" extends="proddetails">
+		<put-attribute name="title"  value="Disable Sub Product"/> 
+	</definition>  
+	<definition name="viewmainproduct_delete" extends="viewmainproduct">
+		<put-attribute name="title"  value="Disable Sub Product"/> 
+	</definition>  
+	<definition name="viewmainproduct_deleteauth" extends="viewmainproduct">
+		<put-attribute name="title"  value="Authorize Sub Product"/> 
+	</definition>  
+	<definition name="viewmainproduct_deleteauth" extends="viewmainproduct">
+		<put-attribute name="title"  value="Authorize Sub Product"/> 
+	</definition>  
+	<definition name="viewmainproduct_edit" extends="viewmainproduct">
+		<put-attribute name="title"  value="Edit Sub Product"/> 
+	</definition>
+	<definition name="edit_view" extends="AddMainProduct">
+		<put-attribute name="title"  value="Edit Sub Product"/>	         
+	</definition>  
+	<definition name="AddSubProduct" extends="baseLayout">
+	   <put-attribute name="title"  value="Add Main Product"/>
+	   <put-attribute name="body"  value="/jsp/ViewProduct.jsp"/>      
+	</definition>  
+	<definition name="displaysubproduct" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Sub Product"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/sub_product/displaysubproduct.jsp"/>      
+  </definition>  
+  
+  	<definition name="savesucess" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Sub Product"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/sub_product/displaysubproduct.jsp"/>      
+  </definition>  
+  
+  <definition name="SucessSubProductSave" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Sub Product"/>
+  	   <put-attribute name="body"  value="Subproduct Added Sucessfully"/>      
+  </definition>
+    
+  <definition name="viewsubprod" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Sub Products"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/sub_product/viewsubprod.jsp"/>      
+  </definition>
+  
+   <definition name="viewsubprod" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Sub Products"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/sub_product/viewsubproduct.jsp"/>      
+  </definition>
+  
+   <definition name="auth_subproduct" extends="baseLayout">
+  	   <put-attribute name="title"  value="Authorize Sub Product"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/sub_product/viewsubproduct.jsp"/>      
+  </definition>
+ 
+   <definition name="subprod_glmaphome" extends="baseLayout">
+  	   <put-attribute name="title"  value="Ledger Mapping For Sub-Product"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/sub_product/subprod_glmaphome.jsp"/>      
+  </definition>
+
+   <definition name="subprod_glmaplist" extends="baseLayout">
+  	   <put-attribute name="title"  value="Ledger Mapping For Sub-Product"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/sub_product/subprod_glmaplist.jsp"/>      
+  </definition>
+  
+  <definition name="subproddetails" extends="baseLayout">
+  	   <put-attribute name="title"  value="Sub Product Detail"/>
+  	   <put-attribute name="body"  value="/jsp/configuration/sub_product/subproddetails.jsp"/>      
+  </definition>
+  
+  	<!-- SUBPRODUCT -->
+  	
+  	<!-- addon card -->
+  	
+  	 <definition name="addonhome" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add-on card"/>
+  	   <put-attribute name="body"  value="/jsp/maintain/addoncard/addonhome.jsp"/>      
+  </definition>
+  <definition name="addonCardAction" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add-on card"/>
+  	   <put-attribute name="body"  value="/jsp/maintain/addoncard/addonhome.jsp"/>      
+  </definition>
+  <definition name="generateAddoncardAction" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add-on card"/>
+  	   <put-attribute name="body"  value="/jsp/maintain/addoncard/addonhome.jsp"/>      
+  </definition>
+  	<!-- addon card -->
+  
+  		<!-- addon suplmentary card -->
+  <definition name="addonSuplHome" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add-Supplementary card"/>
+  	   <put-attribute name="body"  value="/jsp/maintain/addonsuplimentarycard/addsuplimentaryhome.jsp"/>      
+  </definition>
+  
+  <definition name="addonCardSuplAction" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add-Supplementary card"/>
+  	   <put-attribute name="body"  value="/jsp/maintain/addonsuplimentarycard/addsuplimentaryhome.jsp"/>      
+  </definition>
+  
+   <definition name="addonSuplProduct" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add-Supplementary card"/>
+  	   <put-attribute name="body"  value="/jsp/maintain/addonsuplimentarycard/addsuplementaryproduct.jsp"/>      
+  </definition>
+  
+  
+  
+  
+  <definition name="addonSuplCardAction" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add-Supplementary card"/>
+  	   <put-attribute name="body"  value="/jsp/maintain/addonsuplimentarycard/addsuplimentaryhome.jsp"/>      
+  </definition>
+  <definition name="generateAddoncardSuplimentAction" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add-Supplementary card"/>
+  	   <put-attribute name="body"  value="/jsp/maintain/addonsuplimentarycard/addsuplimentaryhome.jsp"/>      
+  </definition>
+  		<!-- addon suplmentary card -->        
+  
+  	
+  	
+  	<definition name="reportGenHome" extends="baseLayout">
+  	   <put-attribute name="title"  value="REPORT"/>
+  	   <put-attribute name="body"  value="/jsp/report/reporthome.jsp"/>      
+  </definition>
+
+<definition name="cardreporthome" extends="baseLayout">
+  	   <put-attribute name="title"  value="Card Process Report"/>
+  	   <put-attribute name="body"  value="/jsp/report/cardreporthome.jsp"/>      
+  </definition>
+
+
+<definition name="cardproductionreporthome" extends="baseLayout">
+  	   <put-attribute name="title"  value="CardProduction Report"/>
+  	   <put-attribute name="body"  value="/jsp/report/cardproductionreporthome.jsp"/>      
+  </definition>
+
+<definition name="cardmaintainhome" extends="baseLayout">
+  	   <put-attribute name="title"  value="Card Maintain Report"/>
+  	   <put-attribute name="body"  value="/jsp/report/cardmaintainreporthome.jsp"/>      
+  </definition>
+
+	<definition name="debitreg_home" extends="baseLayout">
+		<put-attribute name="title" value="Customer Registeration"/>
+		<put-attribute name="body" value="/jsp/debit/customer/dbt_customeraddhome.jsp"/>
+	</definition>
+	
+	<definition name="debitreg_home" extends="baseLayout">
+		<put-attribute name="title" value="Customer Registeration"/>
+		<put-attribute name="body" value="/jsp/debit/customer/dbt_customeraddhome.jsp"/>
+	</definition>
+	
+	<definition name="authorizeCustomerRegHome" extends="baseLayout">
+		<put-attribute name="title" value="Authorize Customer Details"/>
+		<put-attribute name="body" value="/jsp/debit/customer/dbt_authorizecustomerview_form.jsp"/>
+	</definition>
+	
+	<definition name="EditCustomerRegHome" extends="baseLayout">
+		<put-attribute name="title" value="Edit Customer Registeration"/>
+		<put-attribute name="body" value="/jsp/debit/customer/dbt_editcustomerview_form.jsp"/>
+	</definition>
+	
+	<definition name="authorizedebitCustomerRegEntry" extends="baseLayout">
+		<put-attribute name="title" value="Authorize Customer Registeration"/>
+		<put-attribute name="body" value="/jsp/debit/customer/dbt_authorizecustomerentry_form.jsp"/>
+	</definition>
+	
+	<definition name="debitreg_entry" extends="baseLayout">
+		<put-attribute name="title" value="Customer Registration"/>
+		<put-attribute name="body" value="/jsp/debit/customer/dbt_customerentry_form.jsp"/>
+	</definition>
+	
+	<definition name="customerSearch" extends="baseLayout">
+		<put-attribute name="title" value="Authorize Customer Details"/>
+		<put-attribute name="body" value="/jsp/debit/customer/authCardOrderCutomer.jsp"/>
+	</definition>
+	
+	<definition name="customerSearchAll" extends="baseLayout">
+		<put-attribute name="title" value="Authorize Customer Details"/>
+		<put-attribute name="body" value="/jsp/debit/customer/authCardOrderCutomerAll.jsp"/>
+	</definition>
+	
+	<definition name="EditcustomerSearch" extends="baseLayout">
+		<put-attribute name="title" value="Edit Customer Registration"/>
+		<put-attribute name="body" value="/jsp/debit/customer/editCardOrderCutomer.jsp"/>
+	</definition>
+	
+	<definition name="DebitBulkRegHome" extends="baseLayout">
+		<put-attribute name="title" value="Bulk Registration"/>
+		<put-attribute name="body" value="/jsp/debit/bulk/DebitBulkRegHome.jsp"/>
+	</definition>
+		<definition name="DebitBulkRegHome" extends="baseLayout">
+		<put-attribute name="title" value="Bulk Registration"/>
+		<put-attribute name="body" value="/jsp/debit/bulk/DebitBulkRegHome.jsp"/>
+	</definition>
+	
+	<definition name="customerbulkregister" extends="baseLayout">
+		<put-attribute name="title" value="Bulk Customer Registration"/>
+		<put-attribute name="body" value="/jsp/debit/bulk/DebitBulkRegHome.jsp"/>
+	</definition>
+	
+	
+	
+	<definition name="DebitBulk_SQLLoadHome" extends="baseLayout">
+		<put-attribute name="title" value="Registered Bulk Customers Authorization"/>
+		<put-attribute name="body" value="/jsp/debit/bulk/DebitBulk_SQLLoadHome.jsp"/>
+	</definition>
+	
+	<definition name="changeLostStolen" extends="baseLayout">
+		<put-attribute name="title" value="Upload to Change Lost/stolen[or]Bulk RENEW Status"/>
+		<put-attribute name="body" value="/jsp/debit/bulk/changeLostStolen.jsp"/>
+	</definition>
+	
+	<definition name="DebitBulk_SQLRegHome" extends="baseLayout">
+		<put-attribute name="title" value="Register Loaded Customer"/>
+		<put-attribute name="body" value="/jsp/debit/bulk/DebitBulkRegHome.jsp"/>
+	</definition>
+		
+	<definition name="checkbulkloadedcardsHOME" extends="baseLayout">
+		<put-attribute name="title" value="Bulk Reissuance of Cards"/>
+		<put-attribute name="body" value="/jsp/debit/bulk/checkbulkuploadedrecords.jsp"/>
+	</definition>
+	<definition name="cbsreg_home" extends="baseLayout">
+		<put-attribute name="title" value="Customer Registration"/>
+		<put-attribute name="body" value="/jsp/debit/customer/cbsreg_home.jsp"/>
+	</definition>
+	<definition name="cbsreglist" extends="baseLayout">
+		<put-attribute name="title" value="Customer Registration"/>
+		<put-attribute name="body" value="/jsp/debit/customer/cbsreglist.jsp"/>
+	</definition>
+	
+	<definition name="cbsreg_entry" extends="baseLayout">
+		<put-attribute name="title" value="CBS Registration"/>
+		<put-attribute name="body" value="/jsp/debit/customer/cbs_customerentry_form.jsp"/>
+	</definition>
+	
+	
+	<!-- <definition name="debit_customerreg" extends="baseLayout">
+		<put-attribute name="title" value="Customer Registration"/>
+		<put-attribute name="body" value="/jsp/debit/customer/debit_customerreg.jsp"/>
+	</definition> -->
+	
+	
+	
+	
+	
+	<definition name="UploadFile" extends="baseLayout">
+		<put-attribute name="title" value="Bulk Upload File"/>
+		<put-attribute name="body" value="/jsp/debit/bulk/DebitBulkRegHome.jsp"/>
+	</definition>
+	
+	
+	
+	
+	
+	
+	
+	<definition name="customerentry_form" extends="baseLayout">
+		<put-attribute name="title" value="Customer Registration"/>
+		<put-attribute name="body" value="/jsp/creditcard/customer/customerentry_form.jsp"/>
+	</definition>
+	
+	<definition name="customer_search_home" extends="baseLayout">
+		<put-attribute name="title" value="Search"/>
+		<put-attribute name="body" value="/jsp/creditcard/customer/customer_search_home.jsp"/>
+	</definition>
+
+	 <definition name="customerentry_view" extends="baseLayout">
+		<put-attribute name="title" value="Customer View "/>
+		<put-attribute name="body" value="/jsp/creditcard/customer/customerentry_view.jsp"/>
+	</definition>  
+	
+	<definition name="assignproduct_home" extends="baseLayout">
+		<put-attribute name="title" value="Assign Product "/>
+		<put-attribute name="body" value="/jsp/creditcard/assignproduct/assignproduct_home.jsp"/>
+	</definition>  
+	
+	<definition name="assignproduct_view" extends="baseLayout">
+		<put-attribute name="title" value="Assign Product "/>
+		<put-attribute name="body" value="/jsp/creditcard/assignproduct/assignproduct_view.jsp"/>
+	</definition>  
+	
+	<definition name="assignproduct_edithome" extends="baseLayout">
+		<put-attribute name="title" value="Edit Assigned Product "/>
+		<put-attribute name="body" value="/jsp/creditcard/assignproduct/assignproduct_edithome.jsp"/>
+	</definition> 
+	
+	<definition name="asignproduct_editview" extends="baseLayout">
+		<put-attribute name="title" value="Edit Assigned Product "/>
+		<put-attribute name="body" value="/jsp/creditcard/assignproduct/asignproduct_editview.jsp"/>
+	</definition> 
+
+	<definition name="assignedproduct_authhome" extends="baseLayout">
+		<put-attribute name="title" value="Authorize Assigned Product "/>
+		<put-attribute name="body" value="/jsp/creditcard/assignproduct/assignedproduct_authhome.jsp"/>
+	</definition> 
+	
+	<definition name="asignproduct_authview" extends="baseLayout">
+		<put-attribute name="title" value="Authorize Assigned Product "/>
+		<put-attribute name="body" value="/jsp/creditcard/assignproduct/asignproduct_authview.jsp"/>
+	</definition> 
+	
+	<definition name="assignedproduct_viewhome" extends="baseLayout">
+		<put-attribute name="title" value="View Assigned Product "/>
+		<put-attribute name="body" value="/jsp/creditcard/assignproduct/assignedproduct_authhome.jsp"/>
+	</definition> 
+	
+	<definition name="asignproduct_view" extends="asignproduct_authview">
+		<put-attribute name="title" value="View Assigned Product "/> 
+	</definition> 
+	
+	<definition name="creditissuance_home" extends="baseLayout">
+		<put-attribute name="title" value="Card Issuance"/>
+		<put-attribute name="body" value="/jsp/creditcard/issuance/creditissuance_home.jsp"/>
+	</definition> 
+ 
+	<definition name="creditissuance_list" extends="baseLayout">
+		<put-attribute name="title" value="Card Issuance"/>
+		<put-attribute name="body" value="/jsp/creditcard/issuance/creditissuance_list.jsp"/>
+	</definition> 
+
+	<definition name="creditissuance_view" extends="baseLayout">
+		<put-attribute name="title" value="Card Issuance"/>
+		<put-attribute name="body" value="/jsp/creditcard/issuance/creditissuance_view.jsp"/>
+	</definition> 	
+	
+	<definition name="creditissuance_authlist" extends="creditissuance_list">
+		<put-attribute name="title" value="Card Issuance Authorization"/> 
+	</definition> 
+	
+	<definition name="creditissuance_authview" extends="creditissuance_view">
+		<put-attribute name="title" value="Card Issuance Authrozation"/>	 
+	</definition>
+	
+	
+	
+	<definition name="userchngpswresult" extends="baseLayout">
+  	   	<put-attribute name="title"  value="Change Password"/>
+  	    <put-attribute name="body"  value="/jsp/configuration/passwordpolicy/PaswordPolicy.jsp"/>      
+  </definition>
+  
+  <definition name="changePolicy" extends="baseLayout">
+  	   	<put-attribute name="title"  value="Change Password Policy"/>
+  	    <put-attribute name="body"  value="/jsp/configuration/passwordpolicy/PaswordPolicy.jsp"/>      
+  </definition>
+  
+   <definition name="authchangePolicy" extends="baseLayout">
+  	   	<put-attribute name="title"  value="Authorize Password Policy"/>
+  	    <put-attribute name="body"  value="/jsp/configuration/passwordpolicy/authPaswordPolicy.jsp"/>      
+  </definition>
+  
+  <definition name="renewalcardhome" extends="baseLayout">
+   	<put-attribute name="title"  value="Renewal Cards Report"/>
+   	<put-attribute name="body"  value="/jsp/report/renewalcardreporthome.jsp"/>      
+  </definition>
+<!--   Switch Activity Report -->
+  <definition name="transactionreporthome" extends="baseLayout">
+  	   <put-attribute name="title"  value="Transaction Report"/>
+  	   <put-attribute name="body"  value="/jsp/report/transactionreporthome.jsp"/>      
+  </definition>
+  
+  <definition name="feereporthome" extends="baseLayout">
+  		<put-attribute name="title"  value="Fee Report"/>
+  		<put-attribute name="body"  value="/jsp/report/feereporthome.jsp"/>
+  </definition>
+  
+  <definition name="feelist" extends="baseLayout">
+  		<put-attribute name="title"  value="Fee Report View"/>
+  		<put-attribute name="body"  value="/jsp/report/feereportlist.jsp"/>
+  </definition> 
+  
+  <!-- Currency Rate -->
+  	<definition name="addcurrencyrate" extends="baseLayout">
+  	   <put-attribute name="title"  value="Update Currency Rate"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/currencyrate/addcurrencyrate.jsp"/>
+  	</definition>  
+  	
+  	<definition name="authcurrencyhome" extends="baseLayout">
+  	   <put-attribute name="title"  value="Authorize Currency Rate"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/currencyrate/authcurrencyratehome.jsp"/>
+  	</definition>  
+  	
+  	<definition name="authcurrency" extends="baseLayout">
+  	   <put-attribute name="title"  value="Authorize Currency Rate"/> 
+  	   <put-attribute name="body"  value="/jsp/configuration/currencyrate/authcurrencyrate.jsp"/>
+  	</definition>
+  	
+  	 <!-- Customer Edit Detail -->
+  	<definition name="editcustomerhome" extends="baseLayout">
+  	   <put-attribute name="title"  value="Edit Customer Details"/> 
+  	   <put-attribute name="body"  value="/jsp/debit/customer/editcustomerhome.jsp"/>
+  	</definition>  
+  	
+  	<definition name="editcustomer" extends="baseLayout">
+  	   <put-attribute name="title"  value="Edit Customer Details"/> 
+  	   <put-attribute name="body"  value="/jsp/debit/customer/editcustomer.jsp"/>
+  	</definition>  
+  	
+  	<definition name="autheditcustdetails" extends="baseLayout">
+  	   <put-attribute name="title"  value="Authorize Customer Details"/> 
+  	   <put-attribute name="body"  value="/jsp/debit/customer/autheditcustdetails.jsp"/>
+  	</definition>
+  	
+  	<definition name="autheditcustlistorders" extends="baseLayout">
+  	   <put-attribute name="title"  value="Authorize Customer Details"/> 
+  	   <put-attribute name="body"  value="/jsp/debit/customer/autheditcustlistorders.jsp"/>
+  	</definition> 
+  	
+  	
+ <!--  ============end============ -->
+	
+</tiles-definitions>

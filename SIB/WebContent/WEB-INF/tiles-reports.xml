@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+
+<tiles-definitions> 
+	<definition name="txnreport_home" extends="baseLayout">
+		<put-attribute name="title" value="Prepaid Transaction Report"/>
+		<put-attribute name="body" value="/jsp/reports/prepaid/txnreport_home.jsp"/>
+	</definition> 
+ 
+  	<definition name="glreporthome" extends="baseLayout">
+  	   <put-attribute name="title"  value="Eod Of Day - GL Transaction Report"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/reports/GL_Report.jsp"/>      
+	</definition>
+
+	<definition name="servicereport" extends="baseLayout">
+		<put-attribute name="title" value="Service Report"/>
+		<put-attribute name="body" value="/jsp/reports/prepaid/servicereport.jsp"/>
+	</definition> 
+	
+	 <definition name="customerstmthome" extends="baseLayout">
+		<put-attribute name="title" value="Statement Report"/>
+		<put-attribute name="body" value="/jsp/reports/stmentreportindex.jsp"/>
+	</definition>
+	
+	<definition name="statementview" extends="baseLayout">
+		<put-attribute name="title"  value="Statement Report"/>
+		<put-attribute name="body"  value="/jsp/reports/statementreportview.jsp"/>      
+	</definition>
+	
+	<definition name="feereporthome" extends="baseLayout">
+		<put-attribute name="title" value="Fee Report"/>
+		<put-attribute name="body" value="/jsp/reports/feereporthome.jsp"/>
+	</definition>
+	
+
+	
+	<definition name="statementview" extends="baseLayout">
+		<put-attribute name="title"  value="Statement Report"/>
+		<put-attribute name="body"  value="/jsp/reports/statementreportview.jsp"/>      
+	</definition>
+	
+	<definition name="transanalysesview" extends="baseLayout">
+		<put-attribute name="title" value="Transaction Analyses Report"/>
+		<put-attribute name="body" value="/jsp/reports/transanalysesview.jsp"/>
+	</definition>
+	
+	<definition name="transanalysesindex" extends="baseLayout">
+		<put-attribute name="title"  value="Transaction Analyses Report"/>
+		<put-attribute name="body"  value="/jsp/reports/transanalysesindex.jsp"/>      
+	</definition>
+	
+	<definition name="cardprocessindex" extends="baseLayout">
+		<put-attribute name="title"  value="Card Processing Report"/>
+		<put-attribute name="body"  value="/jsp/reports/cardprocessindex.jsp"/>      
+	</definition>
+	
+	<definition name="vasreport" extends="baseLayout">
+		<put-attribute name="title"  value="VAS/Transaction details Report"/>
+		<put-attribute name="body"  value="/jsp/reports/vasreport.jsp"/>      
+	</definition>
+	
+	<definition name="corporateTxnReport" extends="baseLayout">
+		<put-attribute name="title"  value="Corporate Report"/>
+		<put-attribute name="body"  value="/jsp/reports/corporateTxnReport.jsp"/>      
+	</definition>
+	
+	<definition name="stmtreporthome" extends="baseLayout">
+		<put-attribute name="title" value="Statement Report"/>
+		<put-attribute name="body" value="/jsp/reports/stmentreportindex.jsp"/>
+	</definition>  
+	
+	
+	<definition name="auditreport_home" extends="baseLayout">
+		<put-attribute name="title" value="User Activity Report"/>
+		<put-attribute name="body" value="/jsp/reports/auditreport/auditreport_home.jsp"/>
+	</definition>  
+	
+	
+</tiles-definitions>

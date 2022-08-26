@@ -1,0 +1,231 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.action.excludePattern" value=".*unfiltered.*,.*\\.nofilter"/>
+	<constant name="struts.action.extension" value="do" />
+	<constant name="struts.ui.theme" value="simple" /> 
+	<constant name="struts.devMode" value="false" />			
+	<package name="personalize" extends="struts-default">
+		<result-types>
+					<result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult" />
+					<result-type name="jasper" class="org.apache.struts2.views.jasperreports.JasperReportsResult"/>
+		</result-types>
+		
+		
+	
+		
+		<interceptors>
+    		<interceptor name="mylogging" class="com.ifp.util.SessionInterceptor">
+   		 	</interceptor>
+   		 	<interceptor name="NewInter" class="com.ifp.util.NewInter"></interceptor>
+   		 	<interceptor name="loggerinterceptor" class="com.ifp.util.LoggerInterceptor">
+   		 	</interceptor>
+   		 	
+   
+   		 	<interceptor name="clickInterceptor" class="com.ifp.util.ClickJackInterceptor">
+			</interceptor>
+
+			<interceptor name="browserCacheInterceptor" class="com.ifp.util.BrowserClearCacheInterceptor">
+			</interceptor>
+   		 	
+    			<interceptor-stack name="loggingStack">
+        			<interceptor-ref name="mylogging"/>
+        			<interceptor-ref name="NewInter"/>
+        			<interceptor-ref name="loggerinterceptor"/>
+        			<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+    			</interceptor-stack>
+		</interceptors>
+		 
+		<global-results>
+    		<!-- <result name="session" type="redirectAction">logoutAction1</result> --> 
+    		<result name="session" type="tiles">logout</result>
+    		<result name="required_home" type="tiles">required_home</result>	
+    	</global-results>
+    	
+		<action name="*PersonalCardOrderAction*" method="{1}" class="com.ifp.personalize.PersonalCardOrderAction">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<interceptor-ref name="NewInter"/>
+				<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+				<result name="cardorder_home" type="tiles">cardorder_home</result> 
+				<result name="personalproducts" type="tiles">PersonalCardOrderpage</result>
+				<result name="customerdetails" type="tiles">customerdetails</result>
+				<result name="personalproducts" type="tiles">PersonalCardOrderpage</result>
+				<result name="vieworderhome" type="tiles">vieworderhome</result>
+				<result name="viewpersonalorder" type="tiles">viewpersonalorder</result>
+				<result name="orderauthorizehome" type="tiles">orderauthorizehome</result>
+				<result name="authorizeorders" type="tiles">authorizeorders</result>
+				<result name="kyccardorderhome" type="tiles">kyccardorderhome</result>
+				<result name="kyccustomerdetails" type="tiles">kyccustomerdetails</result>
+				<result name="editorderhome" type="tiles">editorderhome</result>
+				<result name="personalcardeditorders" type="tiles">personalcardeditorders</result>
+				<result name="personalcardetails" type="tiles">personalcardetails</result>
+				<result name="editpersonalorderhome" type="tiles">editpersonalorderhome</result>
+				<result name="deletecardorderhome" type="tiles">deletecardorderhome</result>
+				<result name="deletecardorderlist" type="tiles">deletecardorderlist</result>
+				<result name="deleteorderdetails" type="tiles">deleteorderdetails</result>
+				<result name="input" type="tiles">required_home</result>
+				<result name="showreport" type="jasper">				
+					<param name="location">/jasper/Customerdetails.jasper</param>
+            		<param name="dataSource">cust</param>
+           			 <param name="format">XLS</param>
+				</result>
+		</action>
+		<action name="ajaxgettingpersonalsubproducts" class="com.ifp.personalize.PersonalCardOrderAction" method="getPersonalSubProductetails">
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="clickInterceptor" />
+			
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+		</action>
+		
+		<action name="ajaxgettingpersonalsubproductscount" class="com.ifp.personalize.PersonalCardOrderAction" method="getPersonalSubProductcount">
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+		</action>
+		
+		<action name="viewpersonalordercustomerinfo" class="com.ifp.personalize.PersonalCardOrderAction" method="getCustomerdetails">
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<result name="success" type="tiles">customerinfoview</result>
+		</action>	
+		
+		
+		
+			
+
+	<action name="*PersonalCardprocessAction*" method="{1}" class="com.ifp.personalize.PersonalCardprocessAction">
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<result name="personalcardgenhome" type="tiles">personalcardgenhome</result>
+			<result name="personalcardgenorders" type="tiles">personalcardgenorders</result>
+			<result name="authcardgenrationhome" type="tiles">authcardgenrationhome</result>
+			<result name="authcardgenorders" type="tiles">authcardgenorders</result>	
+			<result name="reissue_cardgeneration" type="tiles">reissue_cardgeneration</result>			
+	</action>
+
+	<action name="*PingenerationAction*" method="{1}" class="com.ifp.personalize.PingenerationAction">
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+			<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<result name="pingenerationhome" type="tiles">pingenerationhome</result>
+			<result name="pingenerationorders" type="tiles">pingenerationorders</result>
+			<result name="authpingenrationhome" type="tiles">authpingenrationhome</result>
+			<result name="authpingenauthorders" type="tiles">authpingenauthorders</result>
+			
+			<result name="transactionexcel" type="stream">
+			   	 <param name="contentType">application/vnd.ms-excel</param>
+			 	 <param name="inputName">input_stream</param>
+			 	 <param name="contentDisposition">attachment,filename=%{pinReport}</param>
+			 	 <param name="bufferSize">1024</param>
+			</result>
+			
+	</action>
+
+	<action name="*PreprocessAction*" method="{1}" class="com.ifp.personalize.PreprocessAction">
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+			<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<result name="pregenerationhome" type="tiles">pregenerationhome</result>
+			<result name="pregenerationorders" type="tiles">pregenerationorders</result>
+			<result name="preauthorizehome" type="tiles">preauthorizehome</result>
+			<result name="preauthorders" type="tiles">preauthorders</result>
+			<result name="predownloadhome" type="tiles">predownloadhome</result>
+			
+			
+			<!-- <result name="predownloadpers" type="stream">
+				<param name="contentType">application/octet-stream</param>
+ 				 <param name="inputName">inputStreampers</param>
+ 				 <param name="contentDisposition">filename=%{fileName}</param>
+ 				 <param name="bufferSize">1024</param>
+			</result> -->
+			
+			<result name="predownload" type="stream">
+				<param name="contentType">application/octet-stream</param>
+ 				 <param name="inputName">inputStream</param>
+ 				 <param name="contentDisposition">attachment;filename=%{fileName}</param>
+ 				 <param name="bufferSize">1024</param>
+ 				 <!-- <param name="contentDisposition">attachment;filename="fileABC.txt"</param> -->
+			</result>
+						
+	</action>
+
+	<action name="*PersonalCardReceiveIssueAction*" class="com.ifp.personalize.PersonalCardReceiveIssueAction" method="{1}">
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+		<result name="plasticcardreceivehome" type="tiles">plasticcardreceivehome</result>
+		<result name="plasticcardreceivedorders" type="tiles">plasticcardreceivedorders</result>
+		<result name="authorizecardreceivedhome" type="tiles">authorizecardreceivedhome</result>
+		<result name="authplasticcardreceivedorder" type="tiles">authplasticcardreceivedorder</result>
+		<result name="cardissuehome" type="tiles">cardissuehome</result>
+		<result name="cardissuenceorders" type="tiles">cardissuenceorders</result>
+		<result name="authcardissuehome" type="tiles">authcardissuehome</result>
+		<result name="authcardissueorders" type="tiles">authcardissueorders</result>
+	</action>
+
+	<action name="*PersonalCardActivationAction*" class="com.ifp.personalize.PersonalCardActivationAction" method="{1}">
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+		<result name="cardactivationhome" type="tiles">cardactivationhome</result>
+	</action>
+
+	<action name="*RePincreationAction*" class="com.ifp.personalize.RePingenerationAction" method="{1}">
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+		<result name="repingenerationhome" type="tiles">repingenerationhome</result>
+		<result name="repingenerationlist" type="tiles">repingenerationlist</result>
+	</action>
+	
+	<action name="*DamageCardAction*" class="com.ifp.personalize.DamageCardAction" method="{1}">
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+		<result name="damagecardhome" type="tiles">damagecardhome</result>
+		<result name="damagedcardslist" type="tiles">damagedcardslist</result>
+	</action>	
+
+	<action name="*DamageCardreceiveissueAction*" class="com.ifp.personalize.DamageCardreceiveissueAction" method="{1}">
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+		<result name="damagecardreceivehome" type="tiles">damagecardreceivehome</result>
+		<result name="damagecardreceivelist" type="tiles">damagecardreceivelist</result>
+	</action>	
+
+	<action name="*SendmailAction*" class="com.ifp.personalize.SendmailAction" method="{1}">
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+		<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+		<result name="sendmailhome" type="tiles">sendmailhome</result>
+	</action>		
+	</package>
+</struts>

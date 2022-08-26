@@ -1,0 +1,51 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.action.excludePattern" value=".*unfiltered.*,.*\\.nofilter"/>
+		<constant name="struts.action.extension" value="do" />
+		<constant name="struts.ui.theme" value="simple" /> 
+		<constant name="struts.devMode" value="false" />		
+	<package name="vas" extends="struts-default">
+		<result-types>
+					<result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult" /></result-types>
+					
+	<interceptors> 
+					<interceptor name="mylogging" class="com.ifp.util.SessionInterceptor"></interceptor>
+   		 			<interceptor name="loggerinterceptor" class="com.ifp.util.LoggerInterceptor"></interceptor>
+   					 <interceptor name="NewInter" class="com.ifp.util.NewInter"></interceptor>
+    				<interceptor-stack name="loggingStack">
+        			<interceptor-ref name="mylogging"/>
+        			<interceptor-ref name="loggerinterceptor"/>
+        				<interceptor-ref name="NewInter"/>
+        			<interceptor-ref name="defaultStack"/>
+    			    </interceptor-stack>
+	</interceptors>
+		
+		 <global-results>
+    		<!-- <result name="session" type="redirectAction">logoutAction1</result> --> 
+    		<result name="session" type="tiles">logout</result>
+    		<result name="required_home" type="tiles">required_home</result>	
+    	</global-results> 
+	 
+		<action name="*VasAgent" class="com.vas.action.VasAgent"  method="{1}" >
+			<interceptor-ref name="loggingStack"></interceptor-ref>  
+				<interceptor-ref name="NewInter"/>
+			<result name="serviceprovider_home" type="tiles">serviceprovider_home</result>
+			<result name="agentinfo_home" type="tiles">agentinfo_home</result>  
+			<result name="denominfo_home" type="tiles">denominfo_home</result>
+			<result name="airtimefileupload_home" type="tiles">airtimefileupload_home</result>
+		</action> 
+		
+		<action name="*VasWallet" class="com.vas.action.VasWallet"  method="{1}" >
+			<interceptor-ref name="loggingStack"></interceptor-ref> 
+				<interceptor-ref name="NewInter"/> 
+			<result name="walletupload_home" type="tiles">walletupload_home</result> 
+			<result name="walletauthorize_home" type="tiles">walletauthorize_home</result>
+			<result name="walletauthorize_list" type="tiles">walletauthorize_list</result>
+			
+		</action> 
+		
+	</package>
+</struts>

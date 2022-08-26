@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pre_gen_wait" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fee4329c-db7a-46f1-a356-2a4e731108e5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="6"/>
+	<field name="order_ref_no" class="java.lang.String"/>
+	<field name="product_name" class="java.lang.String"/>
+	<field name="order_date" class="java.lang.String"/>
+	<field name="reporttitle" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="daef6d2b-bc63-4fc6-b128-3a1bb6328ab9" x="382" y="0" width="159" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c15cb04b-9815-4f05-b4f9-0661439a3d7e" x="203" y="39" width="148" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CARD GENERATED REPORT]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="f0ae2d00-84f1-4bde-91df-4ca9d76a3500" x="24" y="0" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ORDER REF NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eaa16ca9-8c48-4ff6-b1ff-a7817f1b0f4a" x="185" y="0" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRODUCT NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2a59288f-e828-4791-aa84-29dd3f01b2f3" x="372" y="0" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ORDER DATE]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="650b2d49-fed1-434f-9bd0-1da46b9c964b" x="12" y="20" width="487" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<line>
+				<reportElement uuid="650b2d49-fed1-434f-9bd0-1da46b9c964b" x="11" y="22" width="487" height="1"/>
+			</line>
+			<textField>
+				<reportElement uuid="d6855762-bbba-4c51-aabd-6e37907e16aa" x="26" y="4" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{order_ref_no}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="bbafc9dc-eadf-40e3-8d5b-9b01b0124a6c" x="185" y="4" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{product_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="852f94ea-e9ca-409e-b629-6a167077dfd6" x="372" y="3" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{order_date}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement uuid="43f5534b-c6e0-45ff-af88-66b4c97b8360" x="85" y="19" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="242ab183-2ec7-47c8-ab31-a74330ad693d" x="12" y="19" width="55" height="20"/>
+				<textElement/>
+				<text><![CDATA[Page No]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

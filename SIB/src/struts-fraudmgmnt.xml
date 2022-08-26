@@ -1,0 +1,87 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+		
+	<struts>
+		<constant name="struts.action.excludePattern" value=".*unfiltered.*,.*\\.nofilter"/>
+		<constant name="struts.action.extension" value="do" />
+		<constant name="struts.ui.theme" value="simple" /> 
+		<constant name="struts.devMode" value="false" />
+		<package name="fraudmanagement" extends="struts-default">
+		<result-types>
+					<result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult" />
+		</result-types>
+				<interceptors>
+    		<interceptor name="mylogging" class="com.ifp.util.SessionInterceptor">
+   		 	</interceptor>
+   		 	<interceptor name="NewInter" class="com.ifp.util.NewInter"></interceptor>
+   		 	<interceptor name="loggerinterceptor" class="com.ifp.util.LoggerInterceptor">
+   		 	</interceptor> 
+      
+      		 <interceptor-stack name="loggingStack">
+        			<interceptor-ref name="mylogging"/>
+        			<interceptor-ref name="NewInter"/>
+        			<interceptor-ref name="loggerinterceptor"/>
+        			<interceptor-ref name="defaultStack"/>
+    		</interceptor-stack>
+		
+			<interceptor-stack name="loadingstack">
+        		<interceptor-ref name="basicStack"></interceptor-ref> 
+        		 <interceptor-ref name="completeStack"/>  
+				<interceptor-ref name="execAndWait">
+			 	<param name="delay">1000</param>
+		       	<param name="delaySleepInterval">500</param>
+			 	</interceptor-ref> 
+    		</interceptor-stack>
+    	
+		</interceptors>
+		 
+		 <global-results>
+    		<!-- <result name="session" type="redirectAction">logoutAction1</result> --> 
+    		<result name="session" type="tiles">logout</result>
+    		<result name="required_home" type="tiles">required_home</result>	
+    	</global-results>
+    	
+    	<action name="*FraudManagementAction*" class="com.ifp.fraudManagement.FraudManagementAction"  method="{1}" >
+			 <interceptor-ref name="loggingStack"></interceptor-ref>
+			 <interceptor-ref name="NewInter"/>
+			 <result name="customergroup" type="tiles">customergroup</result>
+			 <result name="customerinfo" type="tiles">customerinfo</result>
+			 <result name="terminalinfo" type="tiles">terminalinfo</result> 
+			 <result name="cardlist" type="tiles">cardlist</result>
+			 <result name="cardgrp" type="tiles">cardgrp</result>
+			 <result name="smsgrouphome" type="tiles">smsgrouphome</result> 
+			 <result name="addmobilenumberhome" type="tiles">addmobilenumberhome</result>
+			 <result name="mailgrouphome" type="tiles">mailgrouphome</result>
+			 <result name="addmailidhome" type="tiles">addmailidhome</result>
+			 <result name="addMerchantGrp" type="tiles">addMerchantGrp</result>
+			 <result name="addMerchantgrpdetails" type="tiles">addMerchantgrpdetails</result>
+			 <result name="addMerchScheme_home" type="tiles">addMerchScheme_home</result>
+			  <result name="addsecurity_home" type="tiles">addsecurity_home</result>  
+			  <result name="addmerchantsecurity_home" type="tiles">addmerchantsecurity_home</result>  
+		</action>
+		
+		 <action name="*FraudManagementReport*" class="com.ifp.fraudManagement.FraudManagementReport"  method="{1}" > 
+			  <interceptor-ref name="NewInter"/>
+			  <result name="limit_exceedhome" type="tiles">limit_exceedhome</result>
+			  <result name="limitexceed_view" type="tiles">limitexceed_view</result>
+			  
+			  <result name="hotcard_txnhome" type="tiles">hotcard_txnhome</result> 
+			  <result name="hotcard_txnview" type="tiles">hotcard_txnview</result>
+			  
+			  
+			  <result name="warmcard_txnhome" type="tiles">warmcard_txnhome</result>
+			  <result name="warmcard_txnview" type="tiles">warmcard_txnview</result> 
+			  
+			  <result name="inactivecard_txnhome" type="tiles">inactivecard_txnhome</result>
+			  <result name="inactivecard_txnview" type="tiles">inactivecard_txnview</result>
+			  
+			  <result name="txnvolume_home" type="tiles">txnvolume_home</result>
+			  <result name="txnvolume_view" type="tiles">txnvolume_view</result>
+			  
+			  <result name="withdraw_exceedhome" type="tiles">withdraw_exceedhome</result>
+			  <result name="withdraw_exceedview" type="tiles">withdraw_exceedview</result>
+		</action>
+		</package>
+	</struts>

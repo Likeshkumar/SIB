@@ -1,0 +1,480 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+		
+<struts>
+	<constant name="struts.action.excludePattern" value=".*unfiltered.*,.*\\.nofilter"/>
+	<constant name="struts.action.extension" value="do" />
+	<constant name="struts.ui.theme" value="simple" /> 		
+	<constant name="struts.devMode" value="false" />
+	  <package name="debit" extends="struts-default" >
+			<result-types>
+				<result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult"/>
+				<result-type name="json" class="com.googlecode.jsonplugin.JSONResult"/>
+			</result-types>
+					
+			<interceptors>
+	    		<interceptor name="session_interceptor" class="com.ifp.util.SessionInterceptor">
+	   		 	</interceptor>
+	   		 	<interceptor name="NewInter" class="com.ifp.util.NewInter"></interceptor>
+	   		 	<interceptor-stack name="loggingStack">
+	   		 	<interceptor-ref name="NewInter"/>
+	        			<interceptor-ref name="session_interceptor"/>
+	        			<interceptor-ref name="defaultStack"/>
+	    		</interceptor-stack>
+			</interceptors>
+						
+			<global-results>
+	    		<result name="session" type="redirectAction">logoutAction</result>
+				<result name="session" type="tiles">logout</result>
+	    		<result name="required_home" type="tiles">required_home</result>	
+	    	<!-- 	<result name="required_home1" type="tiles">required_home1</result> -->
+	   			<result name="globalreporterror">/jsp/required_home.jsp</result>      
+ 	    	</global-results>	 
+		    
+	<!-- Fee -->
+	<action name="*FeeConfig" class="com.ifd.fee.FeeConfig"  method="{1}">
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+		<interceptor-ref name="NewInter"/>
+		<result name="addfee_home" type="tiles">addfee_home</result> 
+		<result name="addfee_view" type="tiles">addfee_view</result>    
+		<result name="editfee_home" type="tiles">editfee_home</result>
+		<result name="authfeehome" type="tiles">authfeehome</result>
+		<result name="authviewfeehome" type="tiles">authviewfeehome</result>
+		<result name="authdeletefeehome" type="tiles">authdeletefeehome</result>
+		<result name="authdeauthfee_home" type="tiles">authdeauthfee_home</result>
+		<result name="deleteauthdeauthfee_home" type="tiles">deleteauthdeauthfee_home</result>
+		<result name="deletefee_home" type="tiles">deletefee_home</result>
+		<result name="View_Fee_Config" type="tiles">View_Fee_Config</result>
+		<result name="EditViewFee" type="tiles">EditViewFee</result>
+		
+		
+		
+	</action>
+		   
+	
+	<!-- Limit -->
+	
+	<action name="*AddLimitAction*" class="com.ifd.limit.AddLimitAction" method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<interceptor-ref name="NewInter"/>
+			<result name="addlimithome" type="tiles" >AddLimitProduct</result>
+			<result name="viewlimit" type="tiles">viewlimit</result>
+			<result name="editlimitdeltails" type="tiles">editlimitdeltails</result>
+			<result name="viewlimitdetails" type="tiles">viewlimitdetails</result>
+			<result name="addlimit_view" type="tiles">addlimit_view</result>			
+			<result name="auth_limithome" type="tiles">auth_limithome</result>
+			<result name="ajaxlimit" type="tiles">ajaxlimit</result>
+			<result name="editlimithome" type="tiles">editlimithome</result>
+		</action>
+		
+			 
+		
+	<!-- card type -->  
+	 <action name="*CardTypeAction" class="com.ifd.CardType.CardTypeAction" method="{1}">
+			 <interceptor-ref name="loggingStack"></interceptor-ref>
+			 <interceptor-ref name="NewInter"/>
+			 <result name="add_cardtype_home" type="tiles">add_cardtype_home</result>
+			 <result name="view_cardtype_home" type="tiles">view_cardtype_home</result>
+			 <result name="authcardtype" type="tiles">authcardtype</result>
+			 <result name="authselectcardtype" type="tiles">authselectcardtype</result>
+			  <result name="viewCardTypeDetails" type="tiles">viewCardTypeDetails</result>
+			  <result name="edit_cardtype_home" type="tiles">edit_cardtype_home</result>
+			 <result name="edit_cardtype_view" type="tiles">edit_cardtype_view</result>
+	 </action>
+	 
+	 <!-- Account type -->  
+	 <action name="*AccountTypeAction" class="com.ifd.AcountType.AccountTypeAction" method="{1}">
+			 <interceptor-ref name="loggingStack"></interceptor-ref>
+			 <interceptor-ref name="NewInter"/>
+			 <result name="add_accounttype_home" type="tiles">add_accounttype_home</result>  
+			 <result name="view_Accounttype_home" type="tiles">view_Accounttype_home</result>
+			 <result name="authaccounttype" type="tiles">authaccounttype</result>
+			 <result name="authselectaccounttype" type="tiles">authselectaccounttype</result>
+			  <result name="view_Accounttype_Details" type="tiles">view_Accounttype_Details</result>
+			  <result name="edit_Accounttype_home" type="tiles">edit_Accounttype_home</result>
+			  <result name="edit_accounttype_view" type="tiles">edit_accounttype_view</result>
+	 </action>
+	 
+	 <!-- Account sub type -->  
+	 <action name="*AccountSubTypeAction" class="com.ifd.AcountSubType.AccountSubTypeAction" method="{1}">
+			 <interceptor-ref name="loggingStack"></interceptor-ref>
+			 <interceptor-ref name="NewInter"/>
+			 <result name="add_accountsubtype_home" type="tiles">add_accountsubtype_home</result>  
+			 <result name="view_Accountsubtype_home" type="tiles">view_Accountsubtype_home</result>
+			 <result name="authAccountsubtype" type="tiles">authAccountsubtype</result>
+			 <result name="authListAccountSubType" type="tiles">authListAccountSubType</result>
+			  <result name="view_AccountSubType_Details" type="tiles">view_AccountSubType_Details</result>
+			  <result name="edit_Accountsubtype_home" type="tiles">edit_Accountsubtype_home</result>
+			 <result name="edit_accountsubtype_view" type="tiles">edit_accountsubtype_view</result>
+	 </action>
+	 
+		 
+	<!-- Bin -->	 	
+	<action name="*AddBinAction" class="com.ifd.Bin.addBinAction" method="{1}">
+		  <interceptor-ref name="loggingStack"></interceptor-ref>  
+		  <interceptor-ref name="NewInter"/>
+		  	<interceptor-ref name="loggingStack"></interceptor-ref>
+		   	<result name="display" type="tiles">displaybin</result> 
+		   	<result name="SucessAddBin" type="redirectAction">displayAddBinAction.do</result> 
+			<result name="viewbin" type="tiles">viewbin</result>
+			<result name="bindetails" type="tiles">bindetails</result>
+			<result name="AuthBinList" type="tiles">AuthBinList</result>
+		   	<result name="editbinlist" type="tiles">editbinlist</result>
+			<result name="editbindata" type="tiles">editbindata</result>
+			<result name="bindel_home" type="tiles">bindel_home</result>
+			<result name="bindetails_delete" type="tiles">bindetails_delete</result>
+			<result name="bindetails_deleteauth" type="tiles">bindetails_deleteauth</result>
+			<!-- NOT IN USE MAY BE USE LATER 
+				<result name="editBinSucess" type="redirectAction">editBinAddBinAction.do</result>
+				<result name="editbin" type="tiles">editbin</result>	
+				<result name="deletebinsuccess" type="redirectAction">viewAddBinAction.do</result>
+			 -->
+    </action>
+    
+    <!-- PRoduct -->
+     <action name="*AddMainProductAction" class="com.ifd.Product.AddMainProductAction" method="{1}">
+		  	<interceptor-ref name="loggingStack"></interceptor-ref>
+			<result name="sucess" type="tiles" >AddMainProduct</result> 
+			<result name="viewmainproduct" type="tiles" >viewmainproduct</result>
+			<result name="proddetails" type="tiles">proddetails</result>
+			<result name="viewmainproduct_delete" type="tiles" >viewmainproduct_delete</result> 
+			<result name="proddetails_delete" type="tiles">proddetails_delete</result>
+			<result name="viewmainproduct_deleteauth" type="tiles">viewmainproduct_deleteauth</result>
+			<result name="viewmainproduct_edit" type="tiles">viewmainproduct_edit</result>
+			<result name="edit_view" type="tiles">edit_view</result>
+			<result name="edit_data" type="chain">editconfigureddata</result>
+		  </action>
+		   
+		   
+		  <action class="com.ifd.Product.AddMainProductAction" name="editconfigureddata" method="savedata">
+		  		 <param name="doact">EDIT</param>
+                <result name="sucess" type="tiles" >AddMainProduct</result> 
+    	</action>
+    	
+    	<!-- BRANCH -->
+    	<action name="*BranchAction" class="com.ifd.Branch.BranchAction" method="{1}">
+		<interceptor-ref name="loggingStack"></interceptor-ref>  
+			<result name="AddBranchError" type="tiles">AddBranchError</result> 
+			<result name="displayBranch" type="tiles">displayBranch</result> 
+			<result name="viewallBranches" type="tiles">viewallBranches</result>
+			<result name="viewBranchDetails" type="tiles">viewBranchDetails</result>
+			<result name="dispEditBranch" type="tiles">dispEditBranch</result> 
+			<result name="viewallBranches_edithome" type="tiles">viewallBranches_edithome</result>
+			<result name="displayBranch_edit" type="tiles">displayBranch_edit</result>
+		</action>
+    	
+    	<!-- BRANCH -->
+    	  
+    	<!-- subproduct -->
+    	<action name="*AddSubProdAction" class="com.ifd.SubProduct.AddSubProdAction" method="{1}">
+				<interceptor-ref name="loggingStack"></interceptor-ref>  
+				<result name="addsubproddisplay" type="tiles">displaysubproduct</result> 
+				<result name="viewsubproductdetails" type="tiles">viewsubproductdetails</result>
+				<result name="fail" type="tiles">fail</result>
+				<result name="Exception" type="tiles">Exception</result>
+				
+				<result name="savesucess" type="tiles">savesucess</result> 
+				<result name="viewsubprod" type="tiles">viewsubprod</result>
+				<result name="dispeditsubprod" type="tiles">dispeditsubprod</result>
+				<result name="editsubprod" type="tiles">editsubprod</result>
+				<result name="sucessSaveEdit" type="redirectAction">dispeditsubprodAddSubProdAction.do</result> 
+				<result name="dispdelsubprod" type="tiles">dispdelsubprod</result>
+				<result name="sucdelsubprod" type="redirectAction">dispdelsubprodAddSubProdAction.do</result>
+				<result name="auth_subproduct" type="tiles">auth_subproduct</result>
+				<result name="subprod_glmaphome" type="tiles">subprod_glmaphome</result>
+				<result name="subprod_glmaplist" type="tiles">subprod_glmaplist</result>
+				<result name="subproddetails" type="tiles">subproddetails</result>
+				<result name="editsubproductdetails" type="tiles">editsubproductdetails</result>
+				<result name="deletesubprod_home" type="tiles">deletesubprod_home</result>
+				<result name="deletesubproduct_view" type="tiles">deletesubproduct_view</result>
+				<result name="deletesubprod_authhome" type="tiles">deletesubprod_authhome</result>
+				<result name="deletesubproduct_authview" type="tiles">deletesubproduct_authview</result>
+		</action>
+		    
+		   
+		     <action name="*DebitCustomerRegister" class="com.ifd.personalize.DebitCustomerRegister" method="{1}">			
+		   		<interceptor-ref name="loggingStack"></interceptor-ref> 
+		   		<result name="tab2_home" >/jsp/debit/customer/cust_tab2_PersionalDetails.jsp</result>  
+		   		<result name="tab3_home" >/jsp/debit/customer/cust_tab3_PersionalDetails.jsp</result>  
+		   		<result name="debitreg_home" type="tiles">debitreg_home</result>  
+		   		<result name="authorizeCustomerRegHome" type="tiles">authorizeCustomerRegHome</result> 
+		   		<result name="EditCustomerRegHome" type="tiles">EditCustomerRegHome</result> 
+		   		<result name="debitreg_entry" type="tiles">debitreg_entry</result>
+		   		<result name="authorizedebitCustomerRegEntry" type="tiles">authorizedebitCustomerRegEntry</result>
+		   		<result name="debitreg_entry" type="tiles">debitreg_entry</result>
+		   		<result name="creditissuance_list" type="tiles">creditissuance_list</result>
+		   		<result name="creditissuance_view" type="tiles">creditissuance_view</result>
+		   		<result name="creditissuance_authlist" type="tiles">creditissuance_authlist</result>
+		   		<result name="creditissuance_authview" type="tiles">creditissuance_authview</result>
+		   		<result name="customerSearch" type="tiles">customerSearch</result>
+		   		<result name="customerSearchAll" type="tiles">customerSearchAll</result>
+		   		<result name="EditcustomerSearch" type="tiles">EditcustomerSearch</result>
+		   		<result name="cbsreg_home" type="tiles">cbsreg_home</result>
+		   		<result name="debit_customerreg" type="tiles">debit_customerreg</result>
+		   		<result name="deletesuccess" >jsp/debit/customer/regdeletesuccess.jsp</result>
+		   		
+		   		
+		    </action>
+		    
+		    
+		    
+		    <action name="*CbsCustomerReg" class="com.ifd.personalize.CbsCustomerReg" method="{1}">			
+		   		<interceptor-ref name="loggingStack"></interceptor-ref> 
+		   		<interceptor-ref name="NewInter"/>
+		   		<result name="tab2_home" >/jsp/debit/customer/cust_tab2_PersionalDetails.jsp</result>  
+		   		<result name="tab3_home" >/jsp/debit/customer/cust_tab3_PersionalDetails.jsp</result>  
+		   		<result name="debitreg_home" type="tiles">debitreg_home</result>  
+		   		<result name="authorizeCustomerRegHome" type="tiles">authorizeCustomerRegHome</result> 
+		   		<result name="EditCustomerRegHome" type="tiles">EditCustomerRegHome</result> 
+		   		<result name="cbsreg_entry" type="tiles">cbsreg_entry</result>
+		   		<result name="authorizedebitCustomerRegEntry" type="tiles">authorizedebitCustomerRegEntry</result>
+		   		<result name="debitreg_entry" type="tiles">debitreg_entry</result>		   		
+		   		<result name="customerSearch" type="tiles">customerSearch</result>
+		   		<result name="EditcustomerSearch" type="tiles">EditcustomerSearch</result>
+		   		<result name="cbsreg_home" type="tiles">cbsreg_home</result>
+		   		<result name="cbsreglist" type="tiles">cbsreglist</result>
+		   		<result name="debit_customerreg" type="tiles">debit_customerreg</result>
+		   		
+		    </action>
+		    
+		    
+		    
+		    <action name="*DebitBulkCustomerRegister" class="com.ifd.personalize.DebitBulkCustomerRegister" method="{1}">			
+		   		<interceptor-ref name="loggingStack"></interceptor-ref> 
+		   		<interceptor-ref name="NewInter"/>
+		   		<result name="customerbulkregister" type="tiles">customerbulkregister</result>
+		   		
+		   		<result name="UploadFile" type="tiles">UploadFile</result>   
+		   		
+		   		
+	
+		   		
+		   				
+		    </action>
+		    
+		      
+		    <action name="*regBULK" class="com.ifd.personalize.regBULK" method="{1}">			
+		   		<interceptor-ref name="loggingStack"></interceptor-ref> 
+		   		<interceptor-ref name="NewInter"/>
+		   		<result name="DebitBulkRegHome" type="tiles">DebitBulkRegHome</result>
+		   		<result name="UploadFile" type="tiles">UploadFile</result>   		
+		    </action>
+
+		    <action name="*BulkCustomerRegister" class="com.ifd.BulkReg.BulkCustomerRegister" method="{1}">			
+		   		<interceptor-ref name="loggingStack"></interceptor-ref> 
+		   		<interceptor-ref name="NewInter"/>
+		   		<result name="DebitBulk_SQLLoadHome" type="tiles">DebitBulk_SQLLoadHome</result>
+		   			<!-- <result name="DebitBulk_SQLRegHome" type="tiles">DebitBulk_SQLRegHome</result> -->
+		   		
+		   		<result name="checkbulkloadedcardsHOME" type="tiles">checkbulkloadedcardsHOME</result>
+		   		<result name="customerbulkregister" type="tiles">customerbulkregister</result>
+		   		<result name="changeLostStolen" type="tiles">changeLostStolen</result>
+		   		<result name="UploadFile" type="tiles">UploadFile</result>  
+		   		
+		   			   		
+<result name="itextpdfreport" type="stream">
+	<param name="contentType">application/pdf</param>
+			 <param name="inputName">input_stream</param>
+			 <param name="contentDisposition">attachment,filename=%{report_name}</param>
+			 <param name="bufferSize">1024</param>
+	</result> 		
+		    </action>		    
+		    
+		    <!-- addon card  -->
+		     <action name="*AddonCardAction" class="com.ifd.callcenter.addon.AddonCardAction" method="{1}">			
+		   		<interceptor-ref name="loggingStack"></interceptor-ref>
+		   		<interceptor-ref name="NewInter"/> 
+		   		<result name="addonhome" type="tiles">addonhome</result>  
+		   		<result name="addonCardAction" type="tiles">addonCardAction</result>
+		   		<result name="generateAddoncardAction" type="tiles">generateAddoncardAction</result>
+		   	</action>
+		    
+		    
+		    <!-- addon supl card  -->
+		     <action name="*AddonCardSuplAction" class="com.ifd.callcenter.addonsupl.AddonCardSuplAction" method="{1}">			
+		   		<interceptor-ref name="loggingStack"></interceptor-ref> 
+		   		<result name="addonSuplHome" type="tiles">addonSuplHome</result>  
+		   		<result name="addonSuplProduct" type="tiles">addonSuplProduct</result> 
+		   		
+		   		
+		   		<result name="addonCardSuplAction" type="tiles">addonCardSuplAction</result>
+		   		<result name="generateAddoncardSuplimentAction" type="tiles">generateAddoncardSuplimentAction</result>
+		   	</action>
+		    
+	
+    		    
+		     <!-- report  -->
+		    
+		    
+		     <action name="*ReportGenration" class="com.ifd.Report.ReportGenration" method="{1}">			
+		   		<result name="reportGenHome" type="tiles">reportGenHome</result>  
+		   		<result name="reportGenMasterHome" >jsp/report/ReportGenerator.jsp</result>
+		   		<result name="transactionexcel" type="stream">
+			   	 <param name="contentType">application/vnd.ms-excel</param>
+			 	 <param name="inputName">input_stream</param>
+			 	 <param name="contentDisposition">attachment,filename=%{transctionreport}</param>
+			 	 <param name="bufferSize">1024</param>
+		</result>   
+		<result name="getPDFReport" type="stream">
+            	<param name="contentType">application/pdf</param>
+ 				 <param name="inputName">file_inputstream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{report_name}</param>
+ 				 <param name="bufferSize">1024</param> 				  				  
+        </result>
+		   		  
+		    </action>
+		    
+		    
+		    
+		     <action name="*MasterReportGeneration" class="com.ifd.Report.MasterReportGeneration" method="{1}">			
+		   		<result name="cardreporthome" type="tiles">cardreporthome</result>  
+		   		<result name="cardreportpage" >jsp/report/cardreportgenerator.jsp</result>    
+		   		
+		   		   
+		   		<result name="reportGenMasterHome" >jsp/report/ReportGenerator.jsp</result>
+		   		<result name="transactionexcel" type="stream">
+			   	 <param name="contentType">application/vnd.ms-excel</param>
+			 	 <param name="inputName">input_stream</param>
+			 	 <param name="contentDisposition">attachment,filename=%{transctionreport}</param>
+			 	 <param name="bufferSize">1024</param>
+		</result>   
+		<result name="getPDFReport" type="stream">
+            	<param name="contentType">application/pdf</param>
+ 				 <param name="inputName">file_inputstream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{report_name}</param>
+ 				 <param name="bufferSize">1024</param> 				  				  
+        </result>
+		   		  
+		    </action>
+		    
+		     <action name="*CardProductionReport" class="com.ifd.Report.CardProductionReport" method="{1}">			
+		   		<result name="cardproductionreporthome" type="tiles">cardproductionreporthome</result>  
+		   		<result name="cardreportpage" >jsp/report/cardproductionreportgenerator.jsp</result>    
+		   		<result name="transactionexcel" type="stream">
+			   	 <param name="contentType">application/vnd.ms-excel</param>
+			 	 <param name="inputName">input_stream</param>
+			 	 <param name="contentDisposition">attachment,filename=%{transctionreport}</param>
+			 	 <param name="bufferSize">1024</param>
+		</result>   
+		<result name="getPDFReport" type="stream">
+            	<param name="contentType">application/pdf</param>
+ 				 <param name="inputName">file_inputstream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{report_name}</param>
+ 				 <param name="bufferSize">1024</param> 				  				  
+        </result>
+		   		  
+		    </action>
+		    
+		    <action name="*CardMaintainReport" class="com.ifd.Report.CardMaintainReport" method="{1}">	
+		 <!--    <interceptor-ref name="NewInter"/>		 -->
+		   		<result name="cardmaintainhome" type="tiles">cardmaintainhome</result> 
+		   		
+		   		<result name="itextpdfreport" type="stream">
+            	<param name="contentType">application/pdf</param>
+ 				 <param name="inputName">input_stream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{auditreportname}</param>
+ 				 <param name="bufferSize">1024</param>
+        </result>
+        
+        
+         <result name="transactionexcel" type="stream">
+			   	 <param name="contentType">application/vnd.ms-excel</param>
+			 	 <param name="inputName">input_stream</param>
+			 	 <param name="contentDisposition">attachment,filename=%{transctionreport}</param>
+			 	 <param name="bufferSize">1024</param>
+		</result>   
+		    </action>
+		    
+	<action name="*PasswordPolicyAction" class="com.ifg.passwordpolicy.PasswordPolicyAction" method="{1}">
+	<!-- <interceptor-ref name="NewInter"/> -->
+			<result name="changePolicy" type="tiles">changePolicy</result>    
+	   		<result name="authchangePolicy" type="tiles">authchangePolicy</result>
+		</action>
+		    
+		<action name="*RenewalCardReport" class="com.ifd.Report.RenewalCardReport" method="{1}">
+<!-- 		<interceptor-ref name="NewInter"/> -->
+		<result name="renewalcardhome" type="tiles">renewalcardhome</result>
+		<result name="itextpdfreport" type="stream">
+			 <param name="contentType">application/pdf</param>
+			 <param name="inputName">input_stream</param>
+			 <param name="contentDisposition">attachment,filename=%{report_name}</param>
+			 <param name="bufferSize">1024</param>
+		</result>
+		
+		<result name="transactionexcel" type="stream">
+			   	 <param name="contentType">application/vnd.ms-excel</param>
+			 	 <param name="inputName">input_stream</param>
+			 	 <param name="contentDisposition">attachment,filename=%{renewalCardReport}</param>
+			 	 <param name="bufferSize">1024</param>
+		</result> 
+	</action>
+
+		    		
+	<!-- Switch Activity Report -->	    		
+	<action name="*SwitchActivityReport*" class="com.ifd.Report.SwitchActivityReport" method="{1}">
+	<interceptor-ref name="NewInter"/>
+		    <result name="transactionreporthome" type="tiles">transactionreporthome</result>
+		    
+		    <result name="transactionexcel" type="stream">
+			   	 <param name="contentType">application/vnd.ms-excel</param>
+			 	 <param name="inputName">input_stream</param>
+			 	 <param name="contentDisposition">attachment,filename=%{transctionreport}</param>
+			 	 <param name="bufferSize">1024</param>
+			</result>
+		    
+		    	<result name="itextpdfreport" type="stream">
+	            	 <param name="contentType">application/pdf</param>
+	 				 <param name="inputName">input_stream</param>
+	 				 <param name="contentDisposition">attachment,filename=%{report_name}</param>
+	 				 <param name="bufferSize">1024</param>
+        		 </result>
+		    </action>
+		    
+		    <action name="*FeeReport*" class="com.ifd.Report.FeeReport" method="{1}">
+	<!-- 	    <interceptor-ref name="NewInter"/> -->
+				<result name="feereporthome" type="tiles">feereporthome</result>
+				<result name="feelist" type="tiles">feelist</result>
+				<result name="deletesuccess" >jsp/debit/customer/regdeletesuccess.jsp</result>
+				<result name="transactionexcel" type="stream">
+					   	 <param name="contentType">application/vnd.ms-excel</param>
+					 	 <param name="inputName">input_stream</param>
+					 	 <param name="contentDisposition">attachment,filename=%{feeReport}</param>
+					 	 <param name="bufferSize">1024</param>
+				</result> 
+
+				
+				
+				<result name="itextpdfreport" type="stream">
+            	<param name="contentType">application/pdf</param>
+ 				 <param name="inputName">input_stream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{report_name}</param>
+ 				 <param name="bufferSize">1024</param>
+ 				   </result>
+			</action>
+			<!--Currency Rate  -->
+			<action name="*CurrencyRateAction" class="com.ifd.CurrencyRate.CurrencyRateAction" method="{1}">
+				 <interceptor-ref name="loggingStack"></interceptor-ref>
+				 <interceptor-ref name="NewInter"/>
+				 <result name="addcurrencyrate" type="tiles">addcurrencyrate</result>
+				 <result name="authcurrencyhome" type="tiles">authcurrencyhome</result>
+				  <result name="authcurrency" type="tiles">authcurrency</result>
+	 		</action>
+			
+		    <!--Customer Details Edit  -->
+			<action name="*CustomerDetailsAction" class="com.ifd.Customer.CustomerDetailsAction" method="{1}">
+				 <interceptor-ref name="loggingStack"></interceptor-ref>
+				 <interceptor-ref name="NewInter"/>
+				 <result name="editcustomerhome" type="tiles">editcustomerhome</result>
+				 <result name="editcustomer" type="tiles">editcustomer</result>
+				 <result name="autheditcustdetails" type="tiles">autheditcustdetails</result>
+				 <result name="autheditcustlistorders" type="tiles">autheditcustlistorders</result>
+				 
+				 
+	 		</action>
+<!-- 	   ======End==== -->
+		    
+	</package>
+		
+</struts>

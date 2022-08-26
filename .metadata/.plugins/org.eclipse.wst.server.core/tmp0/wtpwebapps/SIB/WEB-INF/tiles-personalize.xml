@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+
+<tiles-definitions>
+ <definition name="cardorder_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Personal Card Order"/> 
+  	   <put-attribute name="body"  value="/jsp/personalize/cardorder_home.jsp"/>
+  </definition>
+  
+  <definition name="PersonalCardOrderpage" extends="baseLayout">
+      <put-attribute name="title"  value="Personalized Card Order"/> 
+      <put-attribute name="body"   value="/jsp/personalize/PersonalCardOrderpage.jsp"/>      
+  </definition>
+  
+  <definition name="customerdetails" extends="baseLayout">
+      <put-attribute name="title"  value="Personalized Card Order"/> 
+      <put-attribute name="body"   value="/jsp/personalize/customerdetails.jsp"/>      
+  </definition>
+  
+    <definition name="vieworderhome" extends="baseLayout">
+      <put-attribute name="title"  value="Personalized Card Order View"/> 
+      <put-attribute name="body"   value="/jsp/personalize/vieworderhome.jsp"/>      
+	</definition>
+	
+	<definition name="viewpersonalorder" extends="baseLayout">
+      <put-attribute name="title"  value="Personalized Card Order View"/> 
+      <put-attribute name="body"   value="/jsp/personalize/viewpersonalorder.jsp"/>      
+  	</definition>
+  	
+	<definition name="customerinfoview" extends="baseLayout">
+      <put-attribute name="title"  value="Customer Details"/> 
+      <put-attribute name="body"   value="/jsp/personalize/customerinfomation.jsp"/>      
+  	</definition>
+  	
+  	<definition name="orderauthorizehome" extends="baseLayout">
+  		<put-attribute name="title" value="Personalized Order Authorization"/>
+  		<put-attribute name="body" value="/jsp/personalize/orderauthorizehome.jsp"/>
+  	</definition>
+  	
+	<definition name="authorizeorders" extends="baseLayout">
+  		<put-attribute name="title" value="Personalized Order Authorization"/>
+  		<put-attribute name="body" value="/jsp/personalize/authorizeorders.jsp"/>
+  	</definition>
+
+	<definition name="kyccardorderhome" extends="baseLayout">
+  		<put-attribute name="title" value="Personalized Order Authorization"/>
+  		<put-attribute name="body" value="/jsp/personalize/kyccardorderhome.jsp"/>
+  	</definition>
+
+	<definition name="kyccustomerdetails" extends="baseLayout">
+  		<put-attribute name="title" value="Personalized Order Authorization"/>
+  		<put-attribute name="body" value="/jsp/personalize/kyccustomerdetails.jsp"/>
+  	</definition>
+
+
+
+	<!-- Personal Card Generation Start-->
+	<definition name="personalcardgenhome" extends="baseLayout">
+  		<put-attribute name="title" value="Personalized Card Generation"/>
+  		<put-attribute name="body" value="/jsp/personalize/personalcardgenhome.jsp"/>
+  	</definition>
+  	
+	<definition name="personalcardgenorders" extends="baseLayout">
+  		<put-attribute name="title" value="Personalized Card Generation"/>
+  		<put-attribute name="body" value="/jsp/personalize/personalcardgenorders.jsp"/>
+  	</definition>
+  	
+	<definition name="authcardgenrationhome" extends="baseLayout">
+  		<put-attribute name="title" value="Personalized Card Authorization"/>
+  		<put-attribute name="body" value="/jsp/personalize/authcardgenrationhome.jsp"/>
+  	</definition>  	
+  	
+	<definition name="authcardgenorders" extends="baseLayout">
+  		<put-attribute name="title" value="Personalized Card Authorization"/>
+  		<put-attribute name="body" value="/jsp/personalize/authcardgenorders.jsp"/>
+  	</definition>    	
+  	
+	<!-- Personal Card Generation End-->
+	
+	<!-- Personal PIN Generation Start-->
+	
+	<definition name="pingenerationhome" extends="baseLayout">
+  		<put-attribute name="title" value="Personalized Security Data Generation"/>
+  		<put-attribute name="body" value="/jsp/personalize/pingenerationhome.jsp"/>
+  	</definition>	
+
+	<definition name="pingenerationorders" extends="baseLayout">
+  		<put-attribute name="title" value="Security Data Generation"/>
+  		<put-attribute name="body" value="/jsp/personalize/pingenerationorders.jsp"/>
+  	</definition>	
+	
+	<definition name="authpingenrationhome" extends="baseLayout">
+  		<put-attribute name="title" value="Security Data Authorization"/>
+  		<put-attribute name="body" value="/jsp/personalize/authpingenerationhome.jsp"/>
+  	</definition>
+  	
+	<definition name="authpingenauthorders" extends="baseLayout">
+  		<put-attribute name="title" value="Security Data Authorization"/>
+  		<put-attribute name="body" value="/jsp/personalize/authpingenorders.jsp"/>
+  	</definition>  	
+  	
+	<!-- Personal PIN Generation End -->
+
+	<!-- Personal PRE Generation Starts -->
+	<definition name="pregenerationhome" extends="baseLayout">
+  		<put-attribute name="title" value="Personalization File Generation"/>
+  		<put-attribute name="body" value="/jsp/personalize/pregenerationhome.jsp"/>
+  	</definition> 
+  	
+	<definition name="pregenerationorders" extends="baseLayout">
+  		<put-attribute name="title" value="Personalization File Generation"/>
+  		<put-attribute name="body" value="/jsp/personalize/pregenerationorders.jsp"/>
+  	</definition> 
+	
+	<definition name="preauthorizehome" extends="baseLayout">
+  		<put-attribute name="title" value="Personalization File Authorization"/>
+  		<put-attribute name="body" value="/jsp/personalize/preauthorizehome.jsp"/>
+  	</definition>
+  	 
+	<definition name="preauthorders" extends="baseLayout">
+  		<put-attribute name="title" value="Personalization File Authorization"/>
+  		<put-attribute name="body" value="/jsp/personalize/preauthorders.jsp"/>
+  	</definition>   	 
+
+	<definition name="predownloadhome" extends="baseLayout">
+  		<put-attribute name="title" value="Download Personalization File"/>
+  		<put-attribute name="body" value="/jsp/personalize/predownloadhome.jsp"/>
+  	</definition>   	 
+
+	<!-- Personal PRE Generation End -->
+	
+	<!-- Personal Plastic Card Received Starts -->
+	<definition name="plasticcardreceivehome" extends="baseLayout">
+  		<put-attribute name="title" value="Printed Cards Received"/>
+  		<put-attribute name="body" value="/jsp/personalize/plasticcardreceivehome.jsp"/>
+  	</definition>
+  	
+	<definition name="plasticcardreceivedorders" extends="baseLayout">
+  		<put-attribute name="title" value="Printed Cards Received"/>
+  		<put-attribute name="body" value="/jsp/personalize/plasticcardreceivedorders.jsp"/>
+  	</definition>  	
+
+	<definition name="authorizecardreceivedhome" extends="baseLayout">
+  		<put-attribute name="title" value="Printed Cards Authorization"/>
+  		<put-attribute name="body" value="/jsp/personalize/authorizecardreceivedhome.jsp"/>
+  	</definition>  	  	
+
+	<definition name="authplasticcardreceivedorder" extends="baseLayout">
+  		<put-attribute name="title" value="Printed Cards Authorization"/>
+  		<put-attribute name="body" value="/jsp/personalize/authplasticcardreceivedorder.jsp"/>
+  	</definition>  	  	
+
+	<definition name="cardissuehome" extends="baseLayout">
+  		<put-attribute name="title" value="Personalized Card Issuance "/>
+  		<put-attribute name="body" value="/jsp/personalize/cardissuehome.jsp"/>
+  	</definition>  	  	
+
+	<definition name="cardissuenceorders" extends="baseLayout">
+  		<put-attribute name="title" value="Personalized Card Issuance"/>
+  		<put-attribute name="body" value="/jsp/personalize/cardissuenceorders.jsp"/>
+  	</definition>  	  	
+
+	<definition name="authcardissuehome" extends="baseLayout">
+  		<put-attribute name="title" value="Card Issuance Authorization"/>
+  		<put-attribute name="body" value="/jsp/personalize/authcardissuehome.jsp"/>
+  	</definition>  	
+
+	<definition name="authcardissueorders" extends="baseLayout">
+  		<put-attribute name="title" value="Card Issuance Authorization"/>
+  		<put-attribute name="body" value="/jsp/personalize/authcardissueorders.jsp"/>
+  	</definition>  	
+  	   	 
+	<!-- Personal Plastic Card Received End -->	
+	
+	
+	<!-- Personal Card Activation Start -->
+	<definition name="cardactivationhome" extends="baseLayout">
+		<put-attribute name="title" value="Personal Card Activation"/>
+		<put-attribute name="body" value="/jsp/instant/insactivatecard_home.jsp"/>
+	</definition>
+	<!-- Personal Card Activation End -->
+	
+	<!-- RePin Generation Starts -->
+	
+	<definition name="repingenerationhome" extends="baseLayout">
+		<put-attribute name="title" value="Re-PIN Request"/>
+		<put-attribute name="body" value="/jsp/personalize/repingenerationhome.jsp"/>
+	</definition>	
+	
+	<definition name="repingenerationlist" extends="baseLayout">
+		<put-attribute name="title" value="Re-PIN Request"/>
+		<put-attribute name="body" value="/jsp/personalize/repingenerationlist.jsp"/>
+	</definition>		
+	
+	
+	<!-- RePin Generation End -->
+	
+	<!-- Damage Card Config Start -->
+	<definition name="damagecardhome" extends="baseLayout">
+		<put-attribute name="title" value="Damage Card Request"/>
+		<put-attribute name="body" value="/jsp/personalize/damagecardhome.jsp"/>
+	</definition>		
+
+	<definition name="damagedcardslist" extends="baseLayout">
+		<put-attribute name="title" value="Damage Card Request"/>
+		<put-attribute name="body" value="/jsp/personalize/damagedcardslist.jsp"/>
+	</definition>	
+	
+	<!-- Damage Card Config End -->	
+	
+	<!-- Damage Card Receive Start -->
+	
+	<definition name="damagecardreceivehome" extends="baseLayout">
+		<put-attribute name="title" value=" Damage Card Request "/>
+		<put-attribute name="body" value="/jsp/personalize/damagecardreceivehome.jsp"/>
+	</definition>
+	
+	<definition name="damagecardreceivelist" extends="baseLayout">
+		<put-attribute name="title" value=" Damage Card Request "/>
+		<put-attribute name="body" value="/jsp/personalize/damagecardreceivelist.jsp"/>
+	</definition>		
+	
+	<!-- Damage Card Receive End -->
+	
+	<!-- Edit Personalizes Card Order Start -->
+	<definition name="editorderhome" extends="baseLayout">
+		<put-attribute name="title" value="Edit Card Order"/>
+		<put-attribute name="body" value="/jsp/personalize/EditPersonalizeOrder.jsp"/>
+	</definition>
+	
+	<definition name="editpersonalproducts" extends="baseLayout">
+		<put-attribute name="title" value="personal edit products"/>
+		<put-attribute name="body" value="/jsp/personalize/Editpersonalizedcarddetails.jsp"/>
+	</definition>
+	
+	<definition name="personalcardeditorders" extends="baseLayout">
+		<put-attribute name="title" value="personal card edit order"/>
+		<put-attribute name="body" value="/jsp/personalize/Editpersonalizedcardorders.jsp"/>
+	</definition>
+	
+	<definition name="personalcardetails" extends="baseLayout">
+		<put-attribute name="title" value="personal edit order"/>
+		<put-attribute name="body" value="/jsp/personalize/Editpersonalizedregisterdetails.jsp"/> 
+	</definition>
+	<definition name="editpersonalorderhome" extends="baseLayout">
+		<put-attribute name="title" value=" Personalize Order Edit "/>
+		<put-attribute name="body" value="/jsp/personalize/editpersonalorderhome.jsp"/>
+	</definition>
+	
+	<!-- Edit Order End End -->
+<!-- Delete Card Order Starts -->
+	<definition name="deletecardorderhome" extends="baseLayout">
+		<put-attribute name="title" value=" Personalize Card Order Delete "/>
+		<put-attribute name="body" value="/jsp/personalize/deletecardorderhome.jsp"/>
+	</definition>
+	
+	<definition name="deletecardorderlist" extends="baseLayout">
+		<put-attribute name="title" value=" Personalize Card Order Delete "/>
+		<put-attribute name="body" value="/jsp/personalize/deletecardorderlist.jsp"/>
+	</definition>	
+			
+	
+	<definition name="deleteorderdetails" extends="baseLayout">
+		<put-attribute name="title" value=" Personalize Card Order Details "/>
+		<put-attribute name="body" value="/jsp/personalize/deletecardorderconfirm.jsp"/>
+	</definition>		
+	<!-- Delete Card Order Ends -->
+
+	<definition name="sendmailhome" extends="baseLayout">
+		<put-attribute name="title" value=" Personalize Card Order Details "/>
+		<put-attribute name="body" value="/jsp/personalize/sendmailhome.jsp"/>
+	</definition>	
+	
+	<definition name="personalizereissue_home" extends="baseLayout">
+		<put-attribute name="title" value=" Personalize Reissue Card "/>
+		<put-attribute name="body" value="/jsp/personalize/personalizereissue_home.jsp"/>
+	</definition>	
+	
+	<definition name="reissue_cardgeneration" extends="baseLayout">
+		<put-attribute name="title" value=" Personalize Reissue Card "/>
+		<put-attribute name="body" value="/jsp/personalize/reissue_cardgeneration.jsp"/>
+	</definition>	
+</tiles-definitions>

@@ -1,0 +1,91 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+		
+<struts>
+	<constant name="struts.action.excludePattern" value=".*unfiltered.*,.*\\.nofilter"/>
+	<constant name="struts.action.extension" value="do" />
+	<constant name="struts.ui.theme" value="simple" /> 		
+	<constant name="struts.devMode" value="false" />
+	  <package name="scratch" extends="struts-default" >
+			<result-types>
+				<result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult"/>
+				<result-type name="json" class="com.googlecode.jsonplugin.JSONResult"/>
+			</result-types>
+					
+			<interceptors>
+	    			<interceptor name="session_interceptor" class="com.ifp.util.SessionInterceptor"></interceptor>
+	    			<interceptor name="NewInter" class="com.ifp.util.NewInter"></interceptor>
+	  					<interceptor-stack name="loggingStack">
+	  					<interceptor-ref name="NewInter"/>
+	        			<interceptor-ref name="session_interceptor"/>
+	        			<interceptor-ref name="defaultStack"/>
+	    		</interceptor-stack>
+			</interceptors>
+						
+			<global-results>
+	    		<result name="session" type="redirectAction">logoutAction</result>
+				<result name="session" type="tiles">logout</result>
+	    		<result name="required_home" type="tiles">required_home</result>	
+	    	</global-results>	
+	    	
+			<action name="*ProductConfiguration*" class="com.ifs.Action.ProductConfiguration" method="{1}">
+			<interceptor-ref name="NewInter"/>
+				<result name="ProductAdded" type="tiles">ProductAdded</result>
+				<result name="editproduct" type="tiles">editproduct</result>
+				<result name="fetchProduct">jsp/scratch/updateProductConfig.jsp</result>
+				<result name="viewProduct" type="tiles">viewProduct</result>
+				<result name="authDeauthProduct" type="tiles">authDeauthProduct</result>
+				<result name="authProduct" type="tiles">authDeauthProduct</result>
+		   </action>
+		   
+		   <action name="*DenomConfiguration*" class="com.ifs.Action.DenomConfiguration" method="{1}">
+		   <interceptor-ref name="NewInter"/>
+				<result name="addDenom" type="tiles">addDenom</result>	
+				<result name="authDeauthDenom" type="tiles">authDeauthDenom</result>
+				<result name="viewauthDeauthDenom" type="tiles">viewauthDeauthDenom</result>	
+				<result name="editauthDeauthDenom" type="tiles">editauthDeauthDenom</result>	
+				<result name="viewDenom" type="tiles">viewDenom</result>							  		
+		   </action>
+		   
+		   <action name="*BatchGenerationProcess*" class="com.ifs.Action.BatchGenerationProcess" method="{1}">
+		   <interceptor-ref name="NewInter"/>
+				<result name="genBatch" type="tiles">genBatch</result>	
+				<result name="authBatch" type="tiles">authBatch</result>
+				<result name="viewBatch" type="tiles">viewBatch</result>
+		   </action>
+		   
+		   <action name="*ScratchCardProduction*" class="com.ifs.Action.ScratchCardProduction" method="{1}">
+		   <interceptor-ref name="NewInter"/>
+				<result name="AddScratchCard" type="tiles">addScratchCard</result>
+				<result name="fetchScratchCard" type="tiles">fetchScratchCard</result>
+				<result name="fetchBatchId" type="tiles">fetchBatchId</result>
+				<result name="saveScratchCard" type="tiles">saveScratchCard</result>
+				<result name="editScratchCard" type="tiles">editScratchCard</result>
+				<result name="viewScratchCard" type="tiles">viewScratchCard</result>
+				<result name="authorizeScratchCard" type="tiles">authorizeScratchCard</result>
+				
+		   </action>
+		   
+		   <action name="*BatchFileDownload*" class="com.ifs.Action.BatchFileDownload" method="{1}">	
+		   <interceptor-ref name="NewInter"/>		
+		   		<result name="batchdownload" type="tiles">batchdownload</result>
+		   		<result name="receivebatch" type="tiles">receivebatch</result>
+		   		<result name="stmtexcel" type="stream">
+			   		<param name="contentType">application/vnd.ms-excel</param>
+			 	 	<param name="inputName">input_stream</param>
+			 	 	<param name="contentDisposition">attachment,filename=%{reportgendownloadfilename}</param>
+			 	 	<param name="bufferSize">1024</param>
+				</result>
+				<result name="receivebatchlist" type="tiles">receivebatchlist</result>
+		    </action>
+		    
+		   <action name="*BatchIssuanceProcess*" class="com.ifs.Action.BatchIssuanceProcess" method="{1}">	
+		   <interceptor-ref name="NewInter"/>		
+		   		<result name="issuebatch" type="tiles">issuebatch</result>
+		   		<result name="issuebatchlist" type="tiles">issuebatchlist</result>		   		
+		    </action>
+	</package>
+		
+</struts>

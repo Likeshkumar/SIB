@@ -1,0 +1,124 @@
+@charset "UTF-8";
+
+/** 
+ * Default CSS Drop-Down Menu Theme
+ *
+ * @file		default.css
+ * @name		Default
+ * @version		0.1.1
+ * @type		transitional
+ * @browsers	Windows: IE5+, Opera7+, Firefox1+
+ *				Mac OS: Safari2+, Firefox2+
+ *
+ 
+ * @copyright	2012@CGS-IFPrepaid Team
+ *
+ * Module Classes: *.dir {} *.on {} *.open {} li.hover {} li.first {} li.last {}
+ * Expected directory tag - li
+ *
+ */
+
+/*-------------------------------------------------/
+ * @section		Base Drop-Down Styling
+ * @structure	ul (unordered list)
+ *				ul li (list item)
+ *				ul li a (links)
+ *				/*\.class|(li|a):hover/
+ * @level sep	ul
+ */
+ul.dropdown {
+	font-weight: bold;
+	color: white;
+}
+
+ul.dropdown li {
+	padding: 5px 5px;
+	border-style: solid;
+	border-width: 1px 1px 1px 0;
+	border-color: #fff #d9d9d9 #d9d9d9;
+	background-color: #a61a1b ;
+	color: white;
+	font-weight:bold;
+}
+
+ul.dropdown li.hover,ul.dropdown li:hover {
+	/* background-color: #f26321; */
+	background-color: #a61a1b; 
+	color: black;
+}
+
+ ul.dropdown a:link,ul.dropdown a:visited {
+	color: white;
+	text-decoration: none;
+} 
+
+ul.dropdown a:hover {
+	color: black;
+}
+
+/* ul.dropdown a:active {
+	color: #ffa500;
+} */
+
+/* -- level mark -- */
+ul.dropdown ul {
+	width: 150px;
+	margin-top: 1px;
+	color: white;
+}
+
+ul.dropdown ul li {
+	font-weight: bold;
+	color: white;
+}
+
+/*-------------------------------------------------/
+ * @section		Support Class `dir`
+ * @level sep	ul, .class
+ */
+ul.dropdown *.dir {
+	padding-right: 20px;
+	background-image: url(images/nav-arrow-down.png);
+	background-position: 100% 50%;
+	background-repeat: no-repeat;
+	color: white;
+}
+
+/* -- Components override -- */
+ul.dropdown-horizontal ul *.dir {
+	padding-right: 15px;
+	background-image: url(images/nav-arrow-right1.png);
+	background-position: 100% 50%;
+	background-repeat: no-repeat;
+	color: white;
+}
+
+ul.dropdown-horizontal1 ul *.dir {
+	padding-right: 15px;
+	background-image: none;
+	background-position: 100% 50%;
+	background-repeat: no-repeat;
+	color: white;
+}
+
+ul.dropdown-upward *.dir {
+	background-image: url(images/nav-arrow-top.png);
+	color: white;
+}
+
+ul.dropdown-vertical *.dir,ul.dropdown-upward ul *.dir {
+	background-image: url(images/nav-arrow-right.png);
+	color: white;
+}
+
+ul.dropdown-vertical-rtl *.dir {
+	padding-right: 10px;
+	padding-left: 15px;
+	background-image: url(images/nav-arrow-left.png);
+	background-position: 0 50%;
+	color: white;
+}
+
+.dropdown-horizontal1{
+	background-color:#a61a1b;
+}

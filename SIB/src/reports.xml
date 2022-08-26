@@ -1,0 +1,321 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+ <package name="default" extends="jasperreports-default,struts-default">
+ 	
+ 	<result-types>
+					<result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult" />
+					<result-type name="jasper" class="org.apache.struts2.views.jasperreports.JasperReportsResult"/>
+	</result-types>
+	
+	<interceptors>
+    		<interceptor name="mylogging" class="com.ifp.util.SessionInterceptor">
+   		 	</interceptor>
+   		 	
+   		 	<interceptor name="loggerinterceptor" class="com.ifp.util.LoggerInterceptor">
+   		 	</interceptor>
+   		 	<interceptor name="NewInter" class="com.ifp.util.NewInter"></interceptor>
+    			<interceptor-stack name="loggingStack">
+        			<interceptor-ref name="mylogging"/>
+        			<interceptor-ref name="loggerinterceptor"/>
+        			<interceptor-ref name="defaultStack"/>
+    			</interceptor-stack>
+	</interceptors>
+		
+	<global-results>
+    		<result name="session">/jsp/SessionExpired.jsp</result>
+    		<result name="globalreporterror">/jsp/required_home.jsp</result>
+    		<result name="required_home" type="tiles">required_home</result>	
+    </global-results>
+    
+    <action name="*ReportgenerationAction" class="com.ifp.Action.ReportgenerationAction" method="{1}">
+		<interceptor-ref name="loggingStack"></interceptor-ref>
+		<interceptor-ref name="NewInter"/>
+		<result name="userreportproperties" type="tiles">userReportproperty</result>
+		<result name="cardreportproperties" type="tiles">cardReportproperty</result>
+		<result name="txnreportproperties" type="tiles">txnReportproperty</result>
+		<result name="cardreportstatus" type="tiles">cardReportStatus</result>
+		<result name="instcardreportstatus" type="tiles">InstcardReportStatus</result>
+        <result name="transactionstatus" type="tiles">transactionstatus</result>
+        <result name="cardscrollreporthome" type="tiles">cashScrollReportHome</result>
+        <result name="cardStatisticReportHome" type="tiles">cardStatisticReportHome</result>
+        <result name="nfsreport" type="tiles">NetworkReport</result>
+		<result name="customerstmthome" type="tiles">customerstmthome</result>
+		<result name="cardactivation" type="tiles">cardactivation</result>
+		<result name="glview_list" type="tiles">glview_list</result>
+		<result name="glview_report" type="tiles">glview_report</result>
+		<result name="cardmaintainstatus" type="tiles">cardmaintainstatus</result>
+		<result name="txnfailerhome" type="tiles">txnfailerhome</result>
+		<result name="servicereport" type="tiles">servicereport</result>
+		<result name="glreporthome" type="tiles">glreporthome</result>
+		<result name="stmtreporthome" type="tiles">stmtreporthome</result>
+		<result name="statementview" type="tiles">statementview</result>
+		<result name="cardprocessindex" type="tiles">cardprocessindex</result>
+		<result name="cardprocessreportview" type="tiles">cardprocessreportview</result>
+		<result name="transanalysesindex" type="tiles">transanalysesindex</result>
+		<result name="transanalysesview" type="tiles">transanalysesview</result>
+		<result name="feereportstatus" type="tiles">feereportstatus</result>
+		<result name="vasreport" type="tiles">vasreport</result>
+		<result name="itextpdfreport2" type="stream">
+            	<param name="contentType">application/pdf</param>
+ 				 <param name="inputName">input_stream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{reportgendownloadfilename}</param>
+ 				 <param name="bufferSize">1024</param> 				  				  
+        </result>
+		
+		<result name="itextpdfreport" type="stream">
+            	<param name="contentType">application/pdf</param>
+ 				 <param name="inputName">input_stream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{report_name}</param>
+ 				 <param name="bufferSize">1024</param>
+        </result>
+        
+         <result name="itextfeepdfreport" type="stream">
+            	<param name="contentType">application/pdf</param>
+ 				 <param name="inputName">input_stream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{Fee_report_name}</param>
+ 				 <param name="bufferSize">1024</param>
+        </result>
+        
+        <result name="itextvaspdfreport" type="stream">
+            	<param name="contentType">application/pdf</param>
+ 				 <param name="inputName">input_stream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{vas_report_name}</param>
+ 				 <param name="bufferSize">1024</param>
+        </result>
+		<result name="userdatareports" type="jasper">
+            <param name="location">/jasper/usercreated_report.jasper</param>
+             <param name="dataSource">order_source</param>
+            <param name="contentType">application/pdf</param>
+            <param name="contentDisposition">attachment,filename=%{reportname}</param> 
+            <param name="reportParameters" >reportParams</param>           
+            <param name="format">PDF</param>
+        </result>
+        
+        <result name="gencardreportstatus2" type="jasper">
+            <param name="location">/jasper/card_status_report.jasper</param>
+             <param name="dataSource">card_source</param>
+            <param name="contentType">application/pdf</param>
+            <param name="contentDisposition">attachment,filename=%{reportname}</param> 
+            <param name="reportParameters" >reportParams</param>           
+            <param name="format">PDF</param>
+        </result>
+         <result name="gencardreportstatus" type="stream">
+           <param name="contentType">application/pdf</param>
+ 				 <param name="inputName">input_stream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{report_name}</param>
+ 				 <param name="bufferSize">1024</param>
+        </result>
+        
+        <result name="geninstcardreportstatus" type="jasper">
+            <param name="location">/jasper/card_status_report.jasper</param>
+             <param name="dataSource">card_source</param>
+            <param name="contentType">application/pdf</param>
+            <param name="contentDisposition">attachment,filename=%{reportname}</param> 
+            <param name="reportParameters" >reportParams</param>           
+            <param name="format">PDF</param>
+        </result>
+        
+        
+        <result name="no_data_period" type="jasper">
+            <param name="location">/jasper/no_data_period.jasper</param>
+            <param name="dataSource">no_data_reportsource</param>
+            <param name="contentType">application/pdf</param>
+            <param name="contentDisposition">attachment,filename=%{reportname}</param> 
+            <param name="format">PDF</param>
+        </result>
+        <result name="FraudMgmt_reportview" type="tiles">FraudMgmt_reportview</result>
+        
+		<result name="FraudmgmtReportHome" type="tiles">FraudmgmtReportHome</result>
+		
+		<result name="FraudMgmt_report" type="jasper">
+            <param name="location">/jasper/FraudMgmt_report1.jasper</param>
+             <param name="dataSource">Fraud_source</param>
+            <param name="contentType">application/pdf</param>
+            <param name="contentDisposition">attachment,filename=%{reportname}</param> 
+            <param name="reportParameters" >reportParams</param>           
+            <param name="format">PDF</param>
+        </result>
+
+		<result name="merchantdizereport" type="tiles">merchantdizereport</result>
+		 
+		<!-- <result name="stmtreporthome" type="tiles">stmtreporthome</result> -->
+
+		<result name="statementview" type="tiles">statementview</result>
+	
+		<result name="stmtexcel" type="stream">
+			   	 <param name="contentType">application/vnd.ms-excel</param>
+			 	 <param name="inputName">input_stream</param>
+			 	 <param name="contentDisposition">attachment,filename=%{reportgendownloadfilename}</param>
+			 	 <param name="bufferSize">1024</param>
+		</result>
+		<result name="itextpdfreport2" type="stream">
+		          	<param name="contentType">application/pdf</param>
+					 <param name="inputName">input_stream</param>
+					 <param name="contentDisposition">attachment,filename=%{reportgendownloadfilename}</param>
+					 <param name="bufferSize">1024</param> 				  				  
+		 </result>
+		 
+		 <result name="itextcardactpdfreport" type="stream">
+            	<param name="contentType">application/pdf</param>
+ 				 <param name="inputName">input_stream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{cardact_report_name}</param>
+ 				 <param name="bufferSize">1024</param>
+        </result>
+		<result name="feereporthome" type="tiles">feereporthome</result>
+		
+		<result name="itextcreditstatementpdfreport" type="stream">
+			 <param name="contentType">application/pdf</param>
+	 		 <param name="inputName">input_stream</param>
+	 		 <param name="contentDisposition">attachment,filename=%{creditcard_report_name}</param>
+	 		 <param name="bufferSize">1024</param>
+        </result>
+		
+	</action>
+	
+	<action name="*GenerateCardReportAction" class="com.ifp.Action.GenerateCardReportAction" method="{1}">
+	<interceptor-ref name="NewInter"/>
+		<result name="no_data_period" type="jasper">
+            <param name="location">/jasper/no_data_period.jasper</param>
+            <param name="dataSource">no_data_reportsource</param>
+            <param name="format">PDF</param>
+        </result>
+        
+		<result name="cardorderreport" type="jasper">
+            <param name="location">/jasper/order_wait_auth.jasper</param>
+            <param name="dataSource">order_source</param>
+            <param name="contentType">application/pdf</param>
+            <param name="contentDisposition">attachment,filename=%{reportname}</param>
+            <param name="format">PDF</param>
+        </result>
+        
+       <result name="no_data_period" type="jasper">
+            <param name="location">/jasper/no_data_period.jasper</param>
+            <param name="dataSource">order_source</param>
+            <param name="format">PDF</param>
+        </result>
+        <result name="cardgenreport" type="jasper">
+            <param name="location">/jasper/pre_gen_wait.jasper</param>
+            <param name="dataSource">order_source</param>
+            <param name="contentType">application/pdf</param>
+            <param name="contentDisposition">attachment,filename=%{reportname}</param>            
+            <param name="format">PDF</param>
+        </result>
+        <result name="report_error" type="tiles">report_error</result>
+    </action>
+ 	
+ 		
+	<action name="*TxnReportAction" class="com.ifp.Action.TxnReportAction" method="{1}">
+	<interceptor-ref name="NewInter"/>
+		<result name="no_data_period" type="jasper">
+            <param name="location">/jasper/no_data_period.jasper</param>
+            <param name="dataSource">no_data_reportsource</param>
+            <param name="format">PDF</param>
+        </result>
+        <result name="report_error" type="tiles">report_error</result>
+		<result name="gen_txn_report" type="jasper">
+            <param name="location">/jasper/gen_txn_report.jasper</param>
+            <param name="dataSource">order_source</param>
+            <param name="format">PDF</param>
+        </result>
+    </action>
+ 
+ 
+ 	<action name="*BalanceSheetReportAction" class="com.ifp.Action.BalanceSheetReportAction" method="{1}">
+ 	<interceptor-ref name="NewInter"/>
+		<result name="no_data_period" type="jasper">
+            <param name="location">/jasper/no_data_period.jasper</param>
+            <param name="dataSource">no_data_reportsource</param>
+            <param name="format">PDF</param>
+        </result>
+        
+        <result name="error_balance_sheet_report" type="tiles">error_balance_sheet_report</result>
+		<result name="view_balance_page" type="tiles">view_balance_page</result>
+		
+		
+		<result name="balance_sheet_report" type="jasper">
+            <param name="location">/jasper/balance_sheet_report.jasper</param>
+            <param name="dataSource">balance_sheet_source</param>
+            <param name="contentType">application/pdf</param>
+            <param name="contentDisposition">attachment,filename=%{reportname}</param>            
+            <param name="format">PDF</param>
+        </result>
+    </action>
+ 
+ 
+ 	<action name="*MerchantReports*" class="com.ifp.merchant.MerchantReports"  method="{1}" > 
+ 	<interceptor-ref name="NewInter"/>
+			 <result name="batchreports" type="tiles">batchreports</result>	   
+			 <result name="batchidlist" type="tiles">batchidlist</result>
+		
+		<result name="no_data_period" type="jasper">
+            <param name="location">/jasper/no_data_period.jasper</param>
+            <param name="dataSource">no_data_reportsource</param>
+            <param name="contentDisposition">attachment,filename=%{reportname}</param>
+            <param name="contentType">application/pdf</param>
+            <param name="format">PDF</param>
+        </result>
+
+        <result name="MerchBatchreport" type="jasper">
+            <param name="location">/jasper/tablejapser.jasper</param>
+            <param name="dataSource">order_source</param>            
+            <param name="contentType">application/pdf</param>            
+            <param name="contentDisposition">attachment,filename=%{reportname}</param>
+            <param name="reportParameters" >reportParams</param>
+            <param name="format">PDF</param>
+        </result>
+        
+         <result name="transreport" type="tiles">transreport</result>
+         
+         <result name="MerchBatchreport" type="stream">
+			<param name="contentType">application/pdf</param>
+			<param name="inputName">input_stream</param>
+			<param name="contentDisposition">attachment,filename=%{report_name}</param>
+			<param name="bufferSize">1024</param>
+		</result>
+		
+	</action>
+	
+	<action name="*TransactionReport*" class="com.ifp.reports.TransactionReport" method="{1}">
+	<interceptor-ref name="NewInter"/>
+		<result name="txnreport_home" type="tiles">txnreport_home</result>	   
+		<result name="itextpdfreport" type="stream">
+            	<param name="contentType">application/pdf</param>
+ 				 <param name="inputName">input_stream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{vas_report_name}</param>
+ 				 <param name="bufferSize">1024</param>
+        </result>
+        <result name="transactionexcel" type="stream">
+			   	 <param name="contentType">application/vnd.ms-excel</param>
+			 	 <param name="inputName">input_stream</param>
+			 	 <param name="contentDisposition">attachment,filename=%{transctionreport}</param>
+			 	 <param name="bufferSize">1024</param>
+		</result>
+		<result name="corporateTxnReport" type="tiles">corporateTxnReport</result>
+	</action>
+	
+	
+	
+	<action name="*ReportAction" class="com.ifp.reports.ReportAction" method="{1}">
+	<interceptor-ref name="NewInter"/>
+	<interceptor-ref name="loggingStack"></interceptor-ref> 
+		<result name="auditreport_home" type="tiles">auditreport_home</result>	   
+		<result name="itextpdfreport" type="stream">
+            	<param name="contentType">application/pdf</param>
+ 				 <param name="inputName">input_stream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{auditreportname}</param>
+ 				 <param name="bufferSize">1024</param>
+        </result>
+        <result name="stmtexcel" type="stream">
+			   	 <param name="contentType">application/vnd.ms-excel</param>
+			 	 <param name="inputName">input_stream</param>
+			 	 <param name="contentDisposition">attachment,filename=%{auditreportname}</param>
+			 	 <param name="bufferSize">1024</param>
+		</result> 
+	</action>
+	
+  </package>
+</struts>

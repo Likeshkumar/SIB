@@ -1,0 +1,241 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.action.excludePattern" value=".*unfiltered.*,.*\\.nofilter"/>
+		<constant name="struts.action.extension" value="do" />
+		<constant name="struts.ui.theme" value="simple" /> 
+		<constant name="struts.devMode" value="false" />			
+	<package name="merchant" extends="struts-default">
+		<result-types>
+					<result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult" />
+		</result-types>
+		<interceptors>
+    		<interceptor name="mylogging" class="com.ifp.util.SessionInterceptor">
+   		 	</interceptor>
+   		 	<interceptor name="NewInter" class="com.ifp.util.NewInter"></interceptor>
+   		 	<interceptor name="loggerinterceptor" class="com.ifp.util.LoggerInterceptor">
+   		 	</interceptor> 
+      
+      		 <interceptor-stack name="loggingStack">
+        			<interceptor-ref name="mylogging"/>
+        			<interceptor-ref name="NewInter"/>
+        			<interceptor-ref name="loggerinterceptor"/>
+        			<interceptor-ref name="defaultStack"/>
+    		</interceptor-stack>
+		
+			<interceptor-stack name="loadingstack">
+        		<interceptor-ref name="basicStack"></interceptor-ref> 
+        		 <interceptor-ref name="completeStack"/>  
+				<interceptor-ref name="execAndWait">
+			 	<param name="delay">1000</param>
+		       	<param name="delaySleepInterval">500</param>
+			 	</interceptor-ref> 
+    		</interceptor-stack>
+    	
+		</interceptors>
+		 
+		 <global-results>
+    		<!-- <result name="session" type="redirectAction">logoutAction1</result> --> 
+    		<result name="session" type="tiles">logout</result>
+    		<result name="required_home" type="tiles">required_home</result>	
+    	</global-results>
+		
+ 		<action name="*MerchantRegister*" class="com.ifp.merchant.MerchantRegister"  method="{1}" >
+			 <interceptor-ref name="loggingStack"></interceptor-ref>  
+			 <interceptor-ref name="NewInter"/>
+			 <result name="addmerch_home" type="tiles">addmerch_home</result>	
+			 <result name="addstore_merchhome" type="tiles">addstore_merchhome</result>	
+			 <result name="addterminal_merchhome" type="tiles">addterminal_merchhome</result>	
+			 <result name="merchreg_home" type="tiles">merchreg_home</result>	    
+			 <result name="merchreg_view" type="tiles">merchreg_view</result>
+			 
+			 <result name="addstore_home" type="tiles">addstore_home</result>   
+			 <result name="addterminal_home" type="tiles">addterminal_home</result>   
+			 <result name="merchant_type_home" type="tiles">merchant_type_home</result>   
+			 <result name="merchant_type_viewhome" type="tiles">merchant_type_viewhome</result>
+			 <result name="merchant_type_view" type="tiles">merchant_type_view</result>
+			 <result name="blacklisted_home" type="tiles">blacklisted_home</result>
+			 <result name="blacklisted_list" type="tiles">blacklisted_list</result>
+			 <result name="blacklisted_data" type="tiles">blacklisted_data</result>
+			 <result name="merchantusertype_home" type="tiles">merchantusertype_home</result>
+			  <result name="merchantusertype_view" type="tiles">merchantusertype_view</result>
+			  <result name="view_additonaluser_list" type="tiles">view_additonaluser_list</result>
+			  <result name="downloadmerchantList" type="tiles">downloadmerchantList</result>
+			  <result name="viewnwextpage" type="tiles">viewnwextpage</result>
+			  <result name="exportreport" type="stream">
+            	<param name="contentType">application/vnd.ms-excel</param>
+ 				 <param name="inputName">input_stream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{defaultreport}</param>
+ 				 <param name="bufferSize">1024</param>
+        	</result>
+        	<result name="unblockmerchant" type="tiles">unblockmerchant</result>
+        	<result name="authmerchhome" type="tiles">authmerchhome</result>
+        	 <result name="merchauth_view" type="tiles">merchauth_view</result>
+        	
+		</action> 
+		
+		 <action name="*MerchantCategoryCode*" class="com.ifp.merchant.MerchantCategoryCode"  method="{1}" > 
+			 <interceptor-ref name="loggingStack"></interceptor-ref>
+			 <interceptor-ref name="NewInter"/>
+			 <result name="addmcc_home" type="tiles">addmcc_home</result>	
+			 <result name="viewmcc_home" type="tiles">viewmcc_home</result>   
+		</action> 
+		
+		<action name="*MerchantProcess*" class="com.ifp.merchant.MerchantProcess"  method="{1}" > 
+			 <interceptor-ref name="loggingStack"></interceptor-ref>
+			 <interceptor-ref name="NewInter"/>
+			 <result name="merch_addlimithome" type="tiles">merch_addlimithome</result>	   
+			 
+			 <result name="merchantfee_home" type="tiles">merchantfee_home</result>
+			 <result name="addMerchFee_home" type="tiles">addMerchFee_home</result>	 
+			    
+			 <result name="addMerchCommission_home" type="tiles">addMerchCommission_home</result>
+			 <result name="additioncommission" type="tiles">additioncommission</result>
+			 <result name="addScheme_home" type="tiles">addScheme_home</result>	 
+			 
+			 <result name="registercomplaint" type="tiles">registercomplaint</result>
+			 <result name="viewdisputecomplaints" type="tiles">viewdisputecomplaints</result>
+			 <result name="viewdisputedetails" type="tiles">viewdisputedetails</result>
+			 <result name="addMerchDiscount_home" type="tiles">addMerchDiscount_home</result>
+			 <result name="viewMerchDiscount" type="tiles">viewMerchDiscount</result>
+			  <result name="viewMerchant" type="tiles">viewMerchant</result>
+			  <result name="displayviewCommission" type="tiles">displayviewCommission</result>
+			  <result name="viewMerchCommission" type="tiles">viewMerchCommission</result> 
+			  <result name="addMerchCommission_home" type="tiles">addMerchCommission_home</result>
+			 <result name="nextcommission" type="tiles">nextcommission</result>
+			 <result name="addMerchDiscount_home" type="tiles">addMerchDiscount_home</result>
+			 <result name="addmerchdiscounthome" type="tiles">addmerchdiscounthome</result>
+			 <result name="getCommissionviewDetails" type="tiles">getCommissionviewDetails</result>
+			 <result name="showdetaildiscount" type="tiles">showdetaildiscount</result>	
+			 
+		</action>
+		 <action name="*MerchMonitor*" class="com.ifp.merchant.MerchMoniter"  method="{1}" > 
+			 <interceptor-ref name="loggingStack"></interceptor-ref>
+			 <interceptor-ref name="NewInter"/>
+			 <result name="merch_monitering_home" type="tiles">merch_monitering_home</result>	  
+			 <result name="tree_view" type="tiles">tree_view</result>	  
+			 <result name="merchmonitor_home" type="tiles">merchmonitor_home</result>  
+			 <result name="terminalmonitor_home" type="tiles">terminalmonitor_home</result>
+			 <result name="terminalmonitor_view" type="tiles">terminalmonitor_view</result>
+			 <result name="terminalmonitoringconfig_home" type="tiles">terminalmonitoringconfig_home</result>
+		</action> 
+		
+	 
+		
+		<action name="*MerchantAccountRule*" class="com.ifp.merchant.MerchantAccountRule"  method="{1}" > 
+			 <interceptor-ref name="loggingStack"></interceptor-ref>
+			 <interceptor-ref name="NewInter"/>
+			 <result name="addmerch_acc" type="tiles">addmerch_acc</result>	   	   
+		</action>
+		
+		<!-- <action name="*MerchMonitor*" class="com.ifp.merchant.MerchMoniter"  method="{1}" > 
+			 <interceptor-ref name="loggingStack"></interceptor-ref>
+			 <result name="merch_monitering_home" type="tiles">merch_monitering_home</result>	  
+			 <result name="tree_view" type="tiles">tree_view</result>	    
+		</action> -->
+		
+		<action name="*SettlementProcess*" class="com.ifp.merchant.SettlementProcess"  method="{1}" > 
+			 <interceptor-ref name="loggingStack"></interceptor-ref>
+			 <interceptor-ref name="NewInter"/>
+			 <result name="settlement_home" type="tiles">settlement_home</result>	  
+			 <result name="uploadvisa_home" type="tiles">uploadvisa_home</result> 
+			  <result name="settlement_home_download" type="tiles">settlement_home_download</result>	   
+			  <result name="filedownload" type="stream">
+				<param name="contentType">application/octet-stream</param>
+				 <param name="inputName">fileinpustr</param>
+				 <param name="contentDisposition">attachment,filename=%{settlefilename}</param>
+				 <param name="bufferSize">2048</param>
+			  </result>	
+			  <result name="txnfiledown_home" type="tiles">txnfiledown_home</result> 
+			  <result name="netsettle_downhome" type="tiles">netsettle_downhome</result>
+			   <result name="settle_merch_view" type="tiles">settle_merch_view</result> 
+			   <result name="cbssettle_home" type="tiles">cbssettle_home</result>
+			   <result name="cbssettle_view" type="tiles">cbssettle_view</result>
+			   <result name="txnlist_setrefno" type="tiles">txnlist_setrefno</result>
+		</action>
+		
+		<!--  Sankar Start -->
+		
+		<action name="*MerchantSettlementReportsAction*" class="com.ifp.merchant.MerchantSettlementReportsAction"  method="{1}" >
+		 <interceptor-ref name="loggingStack"></interceptor-ref>
+		 <interceptor-ref name="NewInter"/>
+		 	<result name="storereporthome" type="tiles">storereporthome</result>
+			<result name="storebasedtxn" type="stream">
+				<param name="contentType">application/pdf</param>
+ 				 <param name="inputName">input_stream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{report_name}</param>
+ 				 <param name="bufferSize">1024</param>
+			</result>
+			
+			<result name="merchantTxnSettle" type="tiles">merchantTxnSettle</result>
+			
+			<result name="merchantwalletreport" type="tiles">merchantwalletreport</result>
+			<result name="itextpdfreport" type="stream">
+            	<param name="contentType">application/pdf</param>
+ 				 <param name="inputName">input_stream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{report_name}</param>
+ 				 <param name="bufferSize">1024</param>
+        	</result>
+        
+			 <result name="merchantwallet_report" type="stream">
+            	<param name="contentType">application/pdf</param>
+ 				 <param name="inputName">input_stream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{report_name}</param>
+ 				 <param name="bufferSize">1024</param>
+      		  </result>
+        
+			
+			<result name="terminalreporthome" type="tiles">terminalreporthome</result>
+
+			<result name="terminalbasereport" type="stream">
+				<param name="contentType">application/pdf</param>
+ 				 <param name="inputName">input_stream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{report_name}</param>
+ 				 <param name="bufferSize">1024</param>
+			</result>			
+		 		  
+		 	<result name="merchSettlementreporthome" type="tiles">merchSettlementreporthome</result>
+		 	<result name="consolidatedreporthome" type="tiles">consolidatedreporthome</result>
+		 	<result name="merchnettransreporthome" type="tiles">merchnettransreporthome</result>
+		 	
+		 	<result name="settlementreportfiledownload" type="stream">
+			<param name="contentType">application/pdf</param>
+ 				 <param name="inputName">input_stream</param>
+ 				 <param name="contentDisposition">attachment,filename=%{report_name}</param>
+ 				 <param name="bufferSize">1024</param>
+			  </result>	
+		 		  
+		 	<result name="netsettlementreporthome" type="tiles">netsettlementreporthome</result> 
+		</action>
+		
+		<!-- Sankar End -->
+		
+		
+		<!-- prito begins -->
+		
+		<action name="*Dispute" class="com.ifp.merchant.Dispute"  method="{1}" > 
+			 <interceptor-ref name="loggingStack"></interceptor-ref> 
+			 <interceptor-ref name="NewInter"/>
+			  <result name="txnsearch_home" type="tiles">txnsearch_home</result> 
+			 <result name="compliant_reghome" type="tiles">compliant_reghome</result>
+			 <result name="registerComplaint" type="tiles">compliant_reghome</result>	
+			 <result name="viewtransdetails" type="tiles">viewtransdetails</result>
+			 <result name="view_compliant_home" type="tiles">view_compliant_home</result>    
+			 <result name="view_compliant_data" type="tiles">view_compliant_data</result>
+			 <result name="complaintsuccess">jsp/merchant/dispute/compaintsuccess.jsp</result>
+		</action>
+		
+		<action name="*BlackListed" class="com.ifp.merchant.BlackListed"  method="{1}" > 
+		<interceptor-ref name="NewInter"/>
+			 <interceptor-ref name="loggingStack"></interceptor-ref> 
+			  <result name="txnsearch_home" type="tiles">txnsearch_home</result> 
+			 <result name="blacklisted_upload_home" type="tiles">blacklisted_upload_home</result>	    
+		</action>
+		
+		
+		<!-- prito begins -->
+		
+	</package>
+		</struts>

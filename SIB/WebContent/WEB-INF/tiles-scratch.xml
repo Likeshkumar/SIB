@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+
+<tiles-definitions>	
+	<definition name="addDenom" extends="baseLayout">
+		<put-attribute name="title" value="Add Denomination"/>
+		<put-attribute name="body" value="/jsp/scratch/addDenom.jsp"/>
+	</definition>
+	
+	<definition name="authDeauthDenom" extends="baseLayout">
+		<put-attribute name="title" value="View Denomination"/>
+		<put-attribute name="body" value="/jsp/scratch/authDeauthDenom.jsp"/>
+	</definition>
+	
+	<definition name="viewauthDeauthDenom" extends="baseLayout">
+		<put-attribute name="title" value="View Denomination"/>
+		<put-attribute name="body" value="/jsp/scratch/viewauthDeauthDenom.jsp"/>
+	</definition>
+	
+	<definition name="editauthDeauthDenom" extends="baseLayout">
+		<put-attribute name="title" value="View Denomination"/>
+		<put-attribute name="body" value="/jsp/scratch/editauthDeauthDenom.jsp"/>
+	</definition>
+	
+	<definition name="genBatch" extends="baseLayout">
+		<put-attribute name="title" value="Generate Batch"/>
+		<put-attribute name="body" value="/jsp/scratch/genBatch.jsp"/>
+	</definition>	
+	<definition name="authBatch" extends="baseLayout">
+		<put-attribute name="title" value="Batch Production"/>
+		<put-attribute name="body" value="/jsp/scratch/authBatch.jsp"/>
+	</definition>
+	<definition name="viewBatch" extends="baseLayout">
+		<put-attribute name="title" value="View Batch Production"/>
+		<put-attribute name="body" value="/jsp/scratch/viewBatch.jsp"/>
+	</definition>
+	<definition name="batchdownload" extends="baseLayout">
+		<put-attribute name="title" value="Batch Download"/>
+		<put-attribute name="body" value="/jsp/scratch/batchdownload.jsp"/>
+	</definition>
+	<definition name="receivebatch" extends="baseLayout">
+		<put-attribute name="title" value="Receive Batch"/>
+		<put-attribute name="body" value="/jsp/scratch/authreceiveBatch.jsp"/>
+	</definition>	
+	<definition name="receivebatchlist" extends="baseLayout">
+		<put-attribute name="title" value="Receive Batch List"/>
+		<put-attribute name="body" value="/jsp/scratch/receivebatchlist.jsp"/>
+	</definition>
+	<definition name="issuebatch" extends="baseLayout">
+		<put-attribute name="title" value="Issue Batch"/>
+		<put-attribute name="body" value="/jsp/scratch/issueBatch.jsp"/>
+	</definition>
+	<definition name="issuebatchlist" extends="baseLayout">
+		<put-attribute name="title" value="Issue Batch List"/>
+		<put-attribute name="body" value="/jsp/scratch/issuebatchlist.jsp"/>
+	</definition>	
+	
+	<definition name="ProductAdded" extends="baseLayout">
+		<put-attribute name="title" value="Add Product"/>
+		<put-attribute name="body" value="/jsp/scratch/addProductConfig.jsp"/>
+	</definition>
+	<definition name="editproduct" extends="baseLayout">
+		<put-attribute name="title" value="Edit Product"/>
+		<put-attribute name="body" value="/jsp/scratch/editProductConfig.jsp"/>
+	</definition>
+	<definition name="fetchProduct" extends="baseLayout">
+		<put-attribute name="title" value="Update Product Configuration"/>
+		<put-attribute name="body" value="/jsp/scratch/updateProductConfig.jsp"/>
+	</definition>
+	<definition name="viewProduct" extends="baseLayout">
+		<put-attribute name="title" value="View Product"/>
+		<put-attribute name="body" value="/jsp/scratch/viewProductConfig.jsp"/>
+	</definition>
+	<definition name="authDeauthProduct" extends="baseLayout">
+		<put-attribute name="title" value="Authorize Deauthorize Configuration"/>
+		<put-attribute name="body" value="/jsp/scratch/viewProductConfig.jsp"/>
+	</definition>
+	<definition name="authProduct" extends="baseLayout">
+		<put-attribute name="title" value="Authorize Deauthorize Configuration"/>
+		<put-attribute name="body" value="/jsp/scratch/viewProductConfig.jsp"/>
+	</definition>
+	
+	
+	
+	<definition name="addScratchCard" extends="baseLayout">
+		<put-attribute name="title" value="Add ScratchCard Configuration"/>
+		<put-attribute name="body" value="/jsp/scratch/cardgeneration/addscratchCardGeneration.jsp"/>
+	</definition>
+	<definition name="fetchScratchCard" extends="baseLayout">
+		<put-attribute name="title" value="Add ScratchCard Configuration"/>
+		<put-attribute name="body" value="/jsp/scratch/cardgeneration/addscratchCardGeneration.jsp"/>
+	</definition>
+	<definition name="fetchBatchId" extends="baseLayout">
+		<put-attribute name="title" value="Add ScratchCard Configuration"/>
+		<put-attribute name="body" value="/jsp/scratch/cardgeneration/addscratchCardGeneration.jsp"/>
+	</definition>
+	<definition name="saveScratchCard" extends="baseLayout">
+		<put-attribute name="title" value="Add ScratchCard Configuration"/>
+		<put-attribute name="body" value="/jsp/scratch/cardgeneration/addscratchCardGeneration.jsp"/>
+	</definition>
+	<definition name="editScratchCard" extends="baseLayout">
+		<put-attribute name="title" value="Update ScratchCard Configuration"/>
+		<put-attribute name="body" value="/jsp/scratch/cardgeneration/editscratchCardGeneration.jsp"/>
+	</definition>
+	<definition name="viewScratchCard" extends="baseLayout">
+		<put-attribute name="title" value="View ScratchCard"/>
+		<put-attribute name="body" value="/jsp/scratch/cardgeneration/viewscratchCardGeneration.jsp"/>
+	</definition>
+	<definition name="authorizeScratchCard" extends="baseLayout">
+		<put-attribute name="title" value="View ScratchCard Configuration"/>
+		<put-attribute name="body" value="/jsp/scratch/cardgeneration/viewscratchCardGeneration.jsp"/>
+	</definition>
+	<definition name="viewDenom" extends="baseLayout">
+		<put-attribute name="title" value="View Denomination"/>
+		<put-attribute name="body" value="/jsp/scratch/viewDenom.jsp"/>
+	</definition>
+	
+</tiles-definitions>

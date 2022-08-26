@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+
+<tiles-definitions>
+
+	<definition name="wait" extends="baseLayout">
+		<put-attribute name="title" value="Wait" />
+		<put-attribute name="body" value="/jsp/wait.jsp" />
+	</definition>
+
+	<definition name="serach_home" extends="baseLayout">
+		<put-attribute name="title" value="" />
+		<put-attribute name="body" value="/jsp/maintain/serach_home.jsp" />
+	</definition>
+	
+	<definition name="viewserach_home" extends="baseLayout">
+		<put-attribute name="title" value="" />
+		<put-attribute name="body" value="/jsp/maintain/viewserach_home.jsp" />
+	</definition>
+	
+	<definition name="cardtxnsearch_home" extends="baseLayout">
+		<put-attribute name="title" value="Search Transaction" />
+		<put-attribute name="body" value="/jsp/maintain/txnsearch/cardtxnsearch_home.jsp" />
+	</definition>
+
+	<definition name="maintain_home" extends="baseLayout">
+		<put-attribute name="title" value="Call Center" />
+		<put-attribute name="body" value="/jsp/maintain/maintain_home.jsp" />
+	</definition>
+	
+	
+	<definition name="viewmaintain_home" extends="baseLayout">
+		<put-attribute name="title" value="Call Center" />
+		<put-attribute name="body" value="/jsp/maintain/viewmaintain_home.jsp" />
+	</definition>
+	
+	
+
+	<definition name="lateral_reg_home" extends="baseLayout">
+		<put-attribute name="title" value="Customer Registeration" />
+		<put-attribute name="body" value="/jsp/maintain/lateral_reg_home.jsp" />
+	</definition>
+	
+	<definition name="customer_entry" extends="baseLayout">
+		<put-attribute name="title" value="Customer Registeration" />
+		<put-attribute name="body" value="/jsp/maintain/lateralcustomer_entry.jsp" />
+	</definition>
+	
+	<definition name="instantrepin_home" extends="baseLayout">
+		<put-attribute name="title" value="Repin" />
+		<put-attribute name="body" value="/jsp/maintain/instantrepin_home.jsp" />
+	</definition>
+	
+	<definition name="instantrepin_view" extends="baseLayout">
+		<put-attribute name="title" value="Repin" />
+		<put-attribute name="body" value="/jsp/maintain/instantrepin_view.jsp" />
+	</definition>
+	
+	<definition name="instantreissue_home" extends="baseLayout">
+		<put-attribute name="title" value="Instant Re-Issue Card" />
+		<put-attribute name="body" value="/jsp/maintain/instantreissue_home.jsp" />
+	</definition>
+
+	<definition name="instantreissue_view" extends="baseLayout">
+		<put-attribute name="title" value="Re-Issue" />
+		<put-attribute name="body" value="/jsp/maintain/instantreissue_view.jsp" />
+	</definition>
+
+	<definition name="instantdamage_home" extends="baseLayout">
+		<put-attribute name="title" value="Damage Card" />
+		<put-attribute name="body" value="/jsp/maintain/instantdamage_home" />
+	</definition>
+
+	<definition name="topup_home" extends="baseLayout">
+		<put-attribute name="title" value="Upload Consumer Top-up File " />
+		<put-attribute name="body" value="/jsp/maintain/topup/topup_home.jsp" />
+	</definition>
+	
+	<definition name="topupverify_home" extends="baseLayout">
+		<put-attribute name="title" value="Vefify Uploaded File " />
+		<put-attribute name="body" value="/jsp/maintain/topup/topupverify_home.jsp" />
+	</definition>
+	
+	<definition name="topup_auth_home" extends="baseLayout">
+		<put-attribute name="title" value="Authorize Uploaded File " />
+		<put-attribute name="body" value="/jsp/maintain/topup/topup_auth_home.jsp" />
+	</definition>
+
+	<definition name="topup_auth_list" extends="baseLayout">
+		<put-attribute name="title" value="Authorize Uploaded File " />
+		<put-attribute name="body" value="/jsp/maintain/topup/topup_auth_list.jsp" />
+	</definition>
+	
+	<definition name="topup_view_home" extends="baseLayout">
+		<put-attribute name="title" value="Uploaded Files View" />
+		<put-attribute name="body" value="/jsp/maintain/topup/topup_view_home.jsp" />
+	</definition>
+
+	<definition name="topup_view_list" extends="baseLayout">
+		<put-attribute name="title" value="Uploaded Files View" />
+		<put-attribute name="body" value="/jsp/maintain/topup/topup_view_list.jsp" />
+	</definition>
+	
+	<definition name="topupverify_home" extends="baseLayout">
+		<put-attribute name="title" value="Uploaded Files Verification" />
+		<put-attribute name="body" value="/jsp/maintain/topup/topup_virify_home.jsp" />
+	</definition>
+	
+	<definition name="topup_verify_list" extends="baseLayout">
+		<put-attribute name="title" value="Uploaded Files Verification" />
+		<put-attribute name="body" value="/jsp/maintain/topup/topup_verify_list.jsp" />
+	</definition>
+	<definition name="addcbsacct_home" extends="baseLayout">
+		<put-attribute name="title" value="Card Number - Link with - Account Number" />
+		<put-attribute name="body" value="/jsp/maintain/cbs/addcbsacct_home.jsp" />
+	</definition>
+	
+	<definition name="removecbsaccthome" extends="baseLayout">
+		<put-attribute name="title" value="Remove Account Number" />
+		<put-attribute name="body" value="/jsp/maintain/cbs/removecbsacct_home.jsp" />
+	</definition>
+	
+	
+	 
+	
+	
+	<definition name="chnageCbsPrimaryHome" extends="baseLayout">
+		<put-attribute name="title" value="Change Account Primary " />
+		<put-attribute name="body" value="/jsp/maintain/cbs/chnageCbsPrimaryHome.jsp" />
+	</definition>
+	   
+	
+	<definition name="bulkrenual_home" extends="baseLayout">
+		<put-attribute name="title" value="Bulk Renewal" />
+		<put-attribute name="body" value="/jsp/maintain/renual/bulkrenualhome.jsp" />
+	</definition>
+	
+	<definition name="singlerenewalhome" extends="baseLayout">
+		<put-attribute name="title" value="Single Renewal" />
+		<put-attribute name="body" value="/jsp/maintain/renual/singlerenewalhome.jsp" />
+	</definition>
+	
+	<definition name="bulkrenualList" extends="baseLayout">
+		<put-attribute name="title" value="Renewal" />
+		<put-attribute name="body" value="/jsp/maintain/renual/bulkrenualList.jsp" />
+	</definition>
+	<definition name="changeCardRenual" extends="baseLayout">
+		<put-attribute name="title" value="Bulk Renewal" />
+		<put-attribute name="body" value="/jsp/maintain/renual/bulkrenualList.jsp" />
+	</definition>
+	
+	
+	
+	
+	
+	
+
+	<definition name="editcbsacct_home" extends="baseLayout">
+		<put-attribute name="title" value="Edit Account Number" />
+		<put-attribute name="body" value="/jsp/maintain/cbs/editcbsacct_home.jsp" />
+	</definition>
+
+	<definition name="viewcbsacct_home" extends="baseLayout">
+		<put-attribute name="title" value="Account Number View" />
+		<put-attribute name="body" value="/jsp/maintain/cbs/viewcbsacct_home.jsp" />
+	</definition>
+
+	<definition name="authcbsacct_home" extends="baseLayout">
+		<put-attribute name="title" value="Authorize CBS Account Number" />
+		<put-attribute name="body" value="/jsp/maintain/cbs/authcbsacct_home.jsp" />
+	</definition>
+   
+   
+   <definition name="autheditacctlinkdetails" extends="baseLayout">
+		<put-attribute name="title" value="Authorize Account Link Details" />
+		<put-attribute name="body" value="/jsp/maintain/cbs/autheditacctlinkdetails.jsp" />
+	</definition>
+		
+	<definition name="authacctlistorders" extends="baseLayout">
+		<put-attribute name="title" value="Authorize Account Link Details" />
+		<put-attribute name="body" value="/jsp/maintain/cbs/authacctlistorders.jsp" />
+	</definition>
+
+	<definition name="revenuepostingupload_home" extends="baseLayout">
+		<put-attribute name="title" value="Expense/Revenue File Upload" />
+		<put-attribute name="body" value="/jsp/maintain/revenuesharing/revenuepostingupload_home.jsp" />
+	</definition>
+	
+	<definition name="revenueposting_home" extends="baseLayout">
+		<put-attribute name="title" value="Commission Posting" />
+		<put-attribute name="body" value="/jsp/maintain/revenuesharing/revenueposting_home.jsp" />
+	</definition>
+
+	<definition name="revenuepostingview_list" extends="baseLayout">
+		<put-attribute name="title" value="Expense / Commission Posting" />
+		<put-attribute name="body" value="/jsp/maintain/revenuesharing/revenuepostingview_list.jsp" />
+	</definition>	
+
+	<definition name="revenuepostingview_home" extends="baseLayout">
+		<put-attribute name="title" value="Expense / Commission Uploaded File View" />
+		<put-attribute name="body" value="/jsp/maintain/revenuesharing/revenuepostingview_home.jsp" />
+	</definition>	
+	
+	<definition name="revenuepostingverify_home" extends="baseLayout">
+		<put-attribute name="title" value="Expense / Commission Posting Verification" />
+		<put-attribute name="body" value="/jsp/maintain/revenuesharing/revenuepostingverify_home.jsp" />
+	</definition>		
+	
+	<definition name="revenuepostingverify_list" extends="baseLayout">
+		<put-attribute name="title" value="Expense / Commission Uploaded File Virification" />
+		<put-attribute name="body" value="/jsp/maintain/revenuesharing/revenuepostingverify_list.jsp" />
+	</definition>  
+	
+	<definition name="revenuepostingauth_home" extends="baseLayout">
+		<put-attribute name="title" value="Expense / Commission Posting Authorization" />
+		<put-attribute name="body" value="/jsp/maintain/revenuesharing/revenuepostingauth_home.jsp" />
+	</definition>
+
+	<definition name="revenuepostingauth_list" extends="baseLayout">
+		<put-attribute name="title" value="Expense / Commission Posting Authorization" />
+		<put-attribute name="body" value="/jsp/maintain/revenuesharing/revenuepostingauth_list.jsp" />
+	</definition>
+
+	<definition name="cardactivationhome" extends="baseLayout">
+		<put-attribute name="title" value="Card Activation" />
+		<put-attribute name="body" value="/jsp/maintain/cardprocess/cardactivationhome.jsp" />
+	</definition>
+	
+	<definition name="activecardlist" extends="baseLayout">
+		<put-attribute name="title" value="Card Activation" />
+		<put-attribute name="body" value="/jsp/maintain/cardprocess/activecardlist.jsp" />
+	</definition>
+	
+	
+	<definition name="alphaGasPrice" extends="baseLayout">
+		<put-attribute name="title" value="Alpha Gas Price" />
+		<put-attribute name="body" value="/jsp/alphagas/alphaGasPrice.jsp" />
+	</definition>
+	
+	<definition name="authalphaGasPrice" extends="baseLayout">
+		<put-attribute name="title" value="Alpha Gas Price" />
+		<put-attribute name="body" value="/jsp/alphagas/authalphaGasPrice.jsp" />
+	</definition>
+	
+	<definition name="authorizealphaGasPrice" extends="baseLayout">
+		<put-attribute name="title" value="Alpha Gas Price" />
+		<put-attribute name="body" value="/jsp/alphagas/authorizealphaGasPrice.jsp" />
+	</definition>
+	
+	<definition name="smssend_home" extends="baseLayout">
+		<put-attribute name="title" value="Send SMS" />
+		<put-attribute name="body" value="/jsp/maintain/sendsms/smssend_home.jsp" />
+	</definition>
+	
+	<definition name="smsview_home" extends="baseLayout">
+		<put-attribute name="title" value="SMS View" />
+		<put-attribute name="body" value="/jsp/maintain/sendsms/smsview_home.jsp" />
+	</definition>
+
+	<definition name="smssend_view" extends="baseLayout">
+		<put-attribute name="title" value="SMS View" />
+		<put-attribute name="body" value="/jsp/maintain/sendsms/smssend_view.jsp" />
+	</definition>
+	
+	<definition name="sms_edithome" extends="baseLayout">
+		<put-attribute name="title" value="Edit SMS Content" />
+		<put-attribute name="body" value="/jsp/maintain/sendsms/sms_edithome.jsp" />
+	</definition>
+	
+	<definition name="search_home" extends="baseLayout">
+		<put-attribute name="title" value="" />
+		<put-attribute name="body" value="/jsp/maintain/migration/search_home.jsp" />
+	</definition>
+	
+	<definition name="cardmigratedata" extends="baseLayout">
+		<put-attribute name="title" value="Migrate Data List" />
+		<put-attribute name="body" value="/jsp/maintain/migration/cardmigratedata.jsp" />
+	</definition>
+	
+	 <definition name="cbscardlinkhome" extends="baseLayout">
+  	   <put-attribute name="title"  value="CBS Card Link Status"/> 
+  	    <put-attribute name="body" value="/jsp/cbscardlink/cbscardlinkhome.jsp"/>         
+ 	 </definition>
+ 	 
+ 	  <definition name="cardslinklist" extends="baseLayout">
+  	   <put-attribute name="title"  value="CBS Card Link List"/> 
+  	    <put-attribute name="body" value="/jsp/cbscardlink/cbscardlinklist.jsp"/>         
+ 	 </definition>
+	
+</tiles-definitions>

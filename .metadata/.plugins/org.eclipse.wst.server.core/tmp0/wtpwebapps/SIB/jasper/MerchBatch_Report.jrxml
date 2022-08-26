@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MerchBatch_Report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="23ce5eba-8be8-45a8-a6fc-fe502744cdaf">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.layers" value="##Fri May 31 11:59:57 GMT+05:30 2013\nlayer.1.name=Layer 1\nlayer.1.visible=true\nlayer.1.id=1\nlayer.0.name=Background\nlayer.0.visible=true\nlayer.0.id=0"/>
+	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[($F{transdesc}=="Summary")]]></conditionExpression>
+			<style backcolor="#FDF8EB" radius="20"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#C3F4E8"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="MerchDataset" uuid="92ac2d02-871b-494e-812a-f6d24a07a7e8"/>
+	<parameter name="logo" class="java.lang.String">
+		<defaultValueExpression><![CDATA["http://localhost:8095/IFP_30_11_2012_FOR_CHANGING"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\IFP_PREPAID_20MAY\\IFP_30_11_2012_FOR_CHANGING\\WebContent\\jasper\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="reportParams.logo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="showCategory" class="java.lang.String"/>
+	<parameter name="nettransamt" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="cardno" class="java.lang.String"/>
+	<field name="transactamt" class="java.math.BigDecimal"/>
+	<field name="trndate" class="java.lang.String"/>
+	<field name="transtime" class="java.lang.String"/>
+	<field name="traceno" class="java.math.BigDecimal"/>
+	<field name="refno" class="java.lang.String"/>
+	<field name="txncode" class="java.lang.String"/>
+	<field name="transdesc" class="java.lang.String"/>
+	<field name="merchantname" class="java.lang.String"/>
+	<field name="storename" class="java.lang.String"/>
+	<field name="reportParams" class="java.lang.String"/>
+	<field name="terminalname" class="java.lang.String"/>
+	<field name="image" class="java.lang.String"/>
+	<field name="nettransamt" class="java.lang.Double"/>
+	<field name="reporttitle" class="java.lang.String"/>
+	<variable name="grouptotal" class="java.lang.Integer" resetType="Group" resetGroup="Transaction Description" incrementType="Group" incrementGroup="Transaction Description" calculation="Count">
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="groupamount" class="java.lang.String"/>
+	<variable name="Totalamount" class="java.math.BigDecimal" resetType="Group" resetGroup="Transaction Description" calculation="Sum">
+		<variableExpression><![CDATA[$F{transactamt}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="watermaker" class="java.lang.String" resetType="Page">
+		<variableExpression><![CDATA["EZMMS"]]></variableExpression>
+		<initialValueExpression><![CDATA["EZMMS"]]></initialValueExpression>
+	</variable>
+	<group name="Transaction Description" keepTogether="true">
+		<groupExpression><![CDATA[$F{txncode}]]></groupExpression>
+		<groupHeader>
+			<band height="43">
+				<printWhenExpression><![CDATA[($F{transdesc}!="Summary")]]></printWhenExpression>
+				<frame>
+					<reportElement uuid="b3a58fb3-b2ea-4f58-9502-4153b527b4b1" mode="Opaque" x="-8" y="19" width="570" height="23" forecolor="#C2D4E3" backcolor="#009999"/>
+					<box topPadding="1" bottomPadding="1">
+						<pen lineWidth="1.0" lineColor="#CCCCFF"/>
+						<topPen lineWidth="1.0" lineColor="#CCCCFF"/>
+						<leftPen lineWidth="1.0" lineColor="#CCCCFF"/>
+						<bottomPen lineWidth="1.0" lineColor="#CCCCFF"/>
+						<rightPen lineWidth="1.0" lineColor="#CCCCFF"/>
+					</box>
+					<staticText>
+						<reportElement uuid="343065fc-c65c-441c-895f-e37b9e5c3ba3" x="110" y="3" width="89" height="17" forecolor="#FFFFFF" backcolor="#F2EBDF"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+							<font fontName="Verdana" size="7" isBold="true" isUnderline="false"/>
+						</textElement>
+						<text><![CDATA[TXN AMOUNT]]></text>
+					</staticText>
+					<staticText>
+						<reportElement uuid="76f23158-d676-44d2-bf2f-bf0f7c429d1a" x="403" y="4" width="89" height="17" forecolor="#FFFFFF" backcolor="#F2EBDF"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+							<font fontName="Verdana" size="7" isBold="true"/>
+						</textElement>
+						<text><![CDATA[TRACE NUMBER]]></text>
+					</staticText>
+					<staticText>
+						<reportElement uuid="831a3694-794f-4f08-927c-b99fe2c33bfb" x="497" y="4" width="68" height="17" forecolor="#FFFFFF" backcolor="#F2EBDF"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+							<font fontName="Verdana" size="7" isBold="true"/>
+						</textElement>
+						<text><![CDATA[REF NUM]]></text>
+					</staticText>
+					<staticText>
+						<reportElement uuid="d839cf8f-a821-4d83-bd6b-ce68f47be24d" x="294" y="4" width="82" height="15" forecolor="#FFFFFF" backcolor="#F2EBDF"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+							<font fontName="Verdana" size="7" isBold="true"/>
+						</textElement>
+						<text><![CDATA[TXN TIME]]></text>
+					</staticText>
+					<staticText>
+						<reportElement uuid="aad9b5bf-23de-45fc-b6ac-aea8ff9c6b24" x="218" y="4" width="59" height="15" forecolor="#FFFFFF" backcolor="#F2EBDF"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+							<font fontName="Verdana" size="7" isBold="true"/>
+						</textElement>
+						<text><![CDATA[TXN DATE]]></text>
+					</staticText>
+					<staticText>
+						<reportElement uuid="4f54d4ee-a83c-4dc1-9029-1a5b42d1d634" mode="Transparent" x="21" y="4" width="64" height="17" forecolor="#FFFFFF" backcolor="#ECE9D8"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+							<font fontName="Verdana" size="7" isBold="true"/>
+						</textElement>
+						<text><![CDATA[CARD NUMBER]]></text>
+					</staticText>
+				</frame>
+				<frame>
+					<reportElement uuid="b3a58fb3-b2ea-4f58-9502-4153b527b4b1" mode="Transparent" x="-8" y="0" width="570" height="19" forecolor="#C2D4E3" backcolor="#ECE9D8"/>
+					<box topPadding="1" bottomPadding="1">
+						<pen lineWidth="0.0" lineColor="#FFFFFF"/>
+						<topPen lineWidth="0.0" lineColor="#FFFFFF"/>
+						<leftPen lineWidth="0.0" lineColor="#FFFFFF"/>
+						<bottomPen lineWidth="0.0" lineColor="#FFFFFF"/>
+						<rightPen lineWidth="0.0" lineColor="#FFFFFF"/>
+					</box>
+					<textField>
+						<reportElement uuid="bcbb50ae-a4ea-4c4a-b822-819ebefc719a" x="15" y="1" width="92" height="16" forecolor="#333333" backcolor="#000000"/>
+						<textElement verticalAlignment="Middle">
+							<font fontName="Verdana" size="7" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{transdesc}]]></textFieldExpression>
+					</textField>
+				</frame>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="39">
+				<printWhenExpression><![CDATA[($F{transdesc}!="Summary")]]></printWhenExpression>
+				<textField>
+					<reportElement uuid="fa0599d4-ec7b-43c4-bf10-9e69c4da313d" x="99" y="2" width="66" height="20"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{Totalamount}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="bfc91d51-dd91-49a5-a6fe-19f8df54a672" x="7" y="2" width="91" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total Amount]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="c40ac068-c26a-4650-95b8-db33850ec787" x="424" y="2" width="86" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[No.of Transaction]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="a1afd7fd-6a89-49cd-954e-739a78b3a68b" x="511" y="2" width="42" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{Transaction Description_COUNT}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band height="802" splitType="Stretch">
+			<textField>
+				<reportElement uuid="9a109f20-a961-4c41-8e91-0fa40930e629" x="-28" y="612" width="100" height="0">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="26" y="570" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="126" y="646" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="224" y="701" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="310" y="762" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="158" y="502" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="236" y="562" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="-1" y="377" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="72" y="445" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="243" y="397" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="336" y="465" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="65" y="268" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="158" y="336" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="313" y="612" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="178" y="177" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="269" y="237" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="24" y="69" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="92" y="127" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="357" y="299" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="453" y="377" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="-1" y="217" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="211" y="0" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="286" y="69" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="368" y="137" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="446" y="197" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="-151" y="417" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="-51" y="502" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="50" y="721" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="124" y="782" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="-151" y="588" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="-32" y="646" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="411" y="0" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="495" y="69" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="429" y="542" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="407" y="666" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="522" y="279" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+		</band>
+	</background>
+	<title>
+		<band height="77" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="651ec3df-1a6c-4bbf-9208-6ab41785d9f7" style="Column header" x="0" y="0" width="110" height="20" forecolor="#FF6600"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="db635145-60fa-4407-96ca-7fd18c705f33" x="13" y="49" width="68" height="15" forecolor="#666666"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="10"/>
+				</textElement>
+				<text><![CDATA[Merchant Name:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0363a3af-7e26-4d6c-b577-360dc90c8c30" x="210" y="49" width="68" height="15" forecolor="#666666"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="10"/>
+				</textElement>
+				<text><![CDATA[Store Name:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4e48bcde-49b4-4c17-83df-6344a21fc321" x="395" y="49" width="68" height="15" forecolor="#666666"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="10"/>
+				</textElement>
+				<text><![CDATA[Terminal Name:]]></text>
+			</staticText>
+			<image>
+				<reportElement uuid="94e6338c-0484-42a1-b561-15a35ef3f817" x="407" y="-1" width="148" height="44"/>
+				<imageExpression><![CDATA[$P{reportParams.logo}+"/images/logo_280284_web.JPG"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement uuid="22d5b90f-a54d-45b5-9c4e-29d0b205df32" x="1" y="68" width="555" height="1" forecolor="#666666"/>
+			</line>
+			<textField>
+				<reportElement uuid="5ba33812-5b1f-427d-aeb3-8de17feacbfe" x="102" y="49" width="87" height="15" forecolor="#333333"/>
+				<textElement>
+					<font fontName="Verdana" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{merchantname}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7cf83ac7-21e8-4370-b7eb-464a78000046" x="286" y="49" width="71" height="15" forecolor="#333333"/>
+				<textElement>
+					<font fontName="Verdana" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{storename}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f7437f2c-55bf-42c8-9aea-8d85ee000df4" x="475" y="49" width="71" height="15" forecolor="#333333"/>
+				<textElement>
+					<font fontName="Verdana" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{terminalname}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="a26dc690-5767-40b3-b0fa-2c7382289f5a" x="192" y="11" width="177" height="27" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" size="14" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reporttitle}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="19" splitType="Stretch">
+			<frame>
+				<reportElement uuid="4b5d1680-5e44-4517-9bbd-da5720f87689" style="Row" mode="Opaque" x="-8" y="0" width="570" height="19" forecolor="#000000"/>
+				<box topPadding="1" bottomPadding="1">
+					<pen lineWidth="1.0" lineColor="#D7D7D7"/>
+					<topPen lineWidth="1.0" lineColor="#D7D7D7"/>
+					<leftPen lineWidth="1.0" lineColor="#D7D7D7"/>
+					<bottomPen lineWidth="1.0" lineColor="#D7D7D7"/>
+					<rightPen lineWidth="1.0" lineColor="#D7D7D7"/>
+				</box>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="4f521f9c-f25e-45c5-ad83-0ddcf8775a5f" x="17" y="1" width="59" height="16" forecolor="#333333"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{cardno}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="6037ce08-c27e-4b87-8eb8-09820168743a" x="117" y="0" width="56" height="16" forecolor="#333333"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="7" isPdfEmbedded="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{transactamt}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="fd37febd-f79c-4953-b875-b2bae7c3066b" x="212" y="0" width="59" height="16" forecolor="#333333"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Verdana" size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{trndate}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="ac3bdea2-3d0b-42d5-bcb5-8cd9e1df3bdd" x="300" y="0" width="67" height="16" forecolor="#333333"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Verdana" size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{transtime}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="2061f636-4b2a-4600-882b-ce6f1dd8e2c1" x="400" y="0" width="71" height="16" forecolor="#333333"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Verdana" size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{traceno}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="8540d748-de0f-4a2a-82ed-4caca76ed44d" x="501" y="0" width="53" height="16" forecolor="#333333"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Verdana" size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{refno}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="104" splitType="Stretch">
+			<frame>
+				<reportElement uuid="6fa139c8-45b4-42e4-a21e-3109bbc4a983" mode="Transparent" x="-6" y="43" width="569" height="24" forecolor="#D0B48E" backcolor="#ECE9D8"/>
+				<textField evaluationTime="Report">
+					<reportElement uuid="38fde73a-9f40-4c19-94d2-c6df30f12227" style="Column header" x="521" y="0" width="40" height="20" forecolor="#FF6600"/>
+					<textElement verticalAlignment="Middle">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="138c6f52-30da-47bd-93e0-f3b1b295a33b" style="Column header" x="441" y="0" width="80" height="20" forecolor="#FF6600"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="79" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement uuid="38fe9c78-9e12-4e03-9d2c-ee7ddfbd9f18" x="10" y="38" width="301" height="31" backcolor="#FDF8EB"/>
+				<graphicElement>
+					<pen lineWidth="0.75" lineColor="#D7E2E2"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement uuid="f6ba841c-7037-4e32-8bf6-aca9e7b69d52" x="186" y="43" width="100" height="20" forecolor="#000000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nettransamt}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c1051898-668a-4443-8dd3-349dfaa91a98" x="18" y="10" width="150" height="20" forecolor="#FF6600"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Net Claim For Merchant]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="09a47943-8af0-4f9d-b70b-fd2780ccf073" x="18" y="43" width="150" height="20" forecolor="#333333"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Net Transaction Amount]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

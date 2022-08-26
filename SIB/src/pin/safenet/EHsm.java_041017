@@ -1,0 +1,627 @@
+package pin.safenet;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import junit.extensions.RepeatedTest;
+
+import org.apache.commons.codec.binary.Hex;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import com.ifp.Action.BaseAction;
+import com.ifp.instant.HSMParameter;
+import com.ifp.util.CommonDesc;
+
+public class EHsm extends BaseAction {
+	
+	
+	public static int atohex(int val){
+		int toreturn;		
+		if( ( val >= 48 ) && ( val <= 57 ) ){
+			toreturn = val - 48 ;
+		}else if( ( val >= 65 ) && ( val <= 70 ) ){
+			toreturn = val - 55 ;
+		}else if( ( val >= 97 ) && ( val <= 102 ) )	{
+			toreturn = val - 87 ;
+		}else{
+			toreturn = val;
+		} 
+		return toreturn;
+	}
+	
+	public static byte[] ascii_to_bcd( String token, int offsetsize ){
+		System.out.println( " ascii_to_bcd( "+token+ ", "+ offsetsize  );
+		int i = 0;
+		int index = 0;
+		String value = "";
+		byte[] toprocess_token = token.getBytes();
+		byte[] buffer = new byte[ offsetsize ]; 
+		while( i < offsetsize )	{ 
+			int lnibble = atohex((int)toprocess_token[index]); 
+			 int rnibble = atohex((int)toprocess_token[index + 1]); 
+			 buffer[i] = (byte)(( lnibble << 4 ) | ( rnibble & 0xf )); 
+			 i+=1;
+			 index += 2;			 
+		}  
+		return buffer;			 
+	}
+	
+	public   ByteArrayOutputStream eracom_out(String data,int datasize, String description,int conv_type, ByteArrayOutputStream bytestream ) throws IOException {	 
+		//trace("Description : " + description);
+		
+		trace("data:"+ data+":datasize:"+ datasize+":description:"+""+description+":conv_type:"+conv_type);
+		byte ascibcd[];
+		int offsetsize = 0;
+		offsetsize = datasize;   
+		String data_toprocess; 
+		if(conv_type == 1)	{
+			if( ( datasize % 2 ) == 0) {
+				offsetsize = datasize / 2;
+				data_toprocess = data;
+				trace("data to process...."+data_toprocess+"---"+data);
+			}else{  
+				offsetsize = datasize / 2 + 1;
+				data_toprocess = "0" + data;
+			}    
+			bytestream.write( ascii_to_bcd( data_toprocess, offsetsize ) ) ;
+			
+			trace(" ERACOM_OUT STR [ " + description + " ] and value " + data_toprocess ) ;
+			
+		}else if (conv_type == 2) { 
+			int dataint = Integer.parseInt(data);
+			byte datachar= (byte)dataint; 
+			bytestream.write( datachar  );
+			trace(" ERACOM_OUT INT [ " + description + " ] and value " + data ) ;
+		}else if (conv_type == 3) {  
+			bytestream.write( data.getBytes()  );
+			trace(" ERACOM_OUT BYTE [ " + description + " ] and value " + data ) ;
+		}
+
+		
+		
+		return bytestream;
+	}
+	
+	
+	public ByteArrayOutputStream ComposePINMailer( String instid, String command, String EPVK, String CHN, String cin, String productcode, String subproduct, String gentype,String orderrefno, JdbcTemplate jdbctemplate, CommonDesc commondesc, ByteArrayOutputStream outputStream, HSMParameter hsmobj  ) throws Exception {   
+		
+		
+		trace("command|||||"+command+"|||EPVK:::"+EPVK);
+		int PanOffset = Integer.parseInt( hsmobj.PAN_OFFSET );
+		int PanLength =Integer.parseInt( hsmobj.PANVALIDATION_LENGTH );
+		String PinType = "01" ;
+		String pinpadchar =  hsmobj.PANPADCHAR;  
+		
+		String PinLen = "04";
+		String PinLineNo="";  //06   //11
+		String PinColumnNo = ""; //36   //55
+		
+		String CHNLineNo = "10";
+		String CHNColumnNo = "11";
+	 
+		
+		String OrderrefLineNo = "11";
+		String OrderrefColumnNo = "11";  
+		
+		//String BankNameLineNo = "11";
+		//String BankNameColumnNo = "11";  
+		String CustomerName = "12232";
+		String CustomerNameLineNo="10";
+		String CustomerNameColumnNo="0"; 
+		String Address1="0";
+		String Address1LineNo="0";
+		String Address1ColumnNo="0"; 
+		String Address2="0";
+		String Address2LineNo="0";
+		String Address2ColumnNo="0";
+		 
+		String Address3="0";
+		String Address3LineNo="0";
+		String Address3ColumnNo="0";
+		
+		 
+		String Address4="0";
+		String Address4LineNo="0";
+		String Address4ColumnNo="0"; 
+	 
+		outputStream = eracom_out( command, command.length(), "FunctionCode", 1, outputStream );
+		outputStream = eracom_out( "00", 2, "FUNCTION-MODIFIER", 1, outputStream );
+		  
+		int len = EPVK.length() / 2 + 1;
+		
+		outputStream = eracom_out( Integer.toString(len), Integer.toString(len).length(), "EPVK-LENGTH", 2, outputStream );
+		
+		if( EPVK.length()  == 16 )
+			outputStream = eracom_out( "10", 2, "PVK-FORMAT", 1, outputStream );
+		else if( EPVK.length()  == 32 )
+			outputStream = eracom_out( "11", 2, "PVK-FORMAT", 1, outputStream );
+		else if (EPVK.length()  == 2  )
+		{
+			trace("EPVK length is "+ 2 ); 
+			outputStream = eracom_out( "01", 2, "PVK-FORMAT", 1, outputStream );
+		}
+		else  
+			outputStream = eracom_out( "12", 2, "PVK-FORMAT", 1, outputStream );
+		
+		outputStream = eracom_out( EPVK, EPVK.length(), "EPVK", 1, outputStream );
+		
+		String  pandata;
+		if( CHN.length() == 19 ){
+			pandata = CHN.substring(3, 19);
+		}else{
+			pandata = CHN.substring(0, 16);
+		}
+		
+		
+		trace("pandata:::"+pandata); 
+		
+		trace("pandata length:::"+pandata.length());
+		
+		if( pandata.length() < 16 ){
+			String repeated = String.format(String.format("%%0%dd", ( 16 -  pandata.length() )), 0).replace("0",pinpadchar);
+			trace("Repeated String : " + repeated );
+			pandata = pandata + repeated;
+			trace("pandata : " + pandata );
+		}
+		 
+		Boolean pinconfigured = false;
+		
+		String pinmailerqry = "select trim(FIELD_NAME) as FIELD_NAME, trim(FIELD_LENGTH) AS FIELD_LENGTH , TRIM(X_POS) AS X_POS, TRIM(Y_POS) AS Y_POS from PINMAILER_PROPERTY WHERE INST_ID='"+instid+"' AND PINMAILER_ID='"+hsmobj.PINMAILER_ID+"' AND PRINT_REQUIRED='Y'  ORDER BY PRINTORDER ";
+		
+		
+		String pinmailerqryformaster = "select trim(FIELD_NAME) as FIELD_NAME, trim(FIELD_LENGTH) AS FIELD_LENGTH , TRIM(X_POS) AS X_POS, TRIM(Y_POS) AS Y_POS from IFD_PINMAILER_FORMASTER WHERE INST_ID='"+instid+"' AND PINMAILER_ID='"+hsmobj.PINMAILER_ID+"' AND PRINT_REQUIRED='Y'  ORDER BY PRINTORDER ";
+		enctrace("pinmailerqry :" + pinmailerqry);
+		
+		List pinmailerlist =null;
+		if(productcode.substring(0, 6).equals("551270")){
+			
+			enctrace("pinmailerqryformaster :" + pinmailerqryformaster);
+			 pinmailerlist = jdbctemplate.queryForList(pinmailerqryformaster);
+
+		
+	}
+ else{
+	 enctrace("pinmailerqry :" + pinmailerqry);
+		 pinmailerlist = jdbctemplate.queryForList(pinmailerqry);
+
+	 trace("card no is printed on mailer");
+	}
+		
+		
+		
+		//List pinmailerlist = null;
+		if( !pinmailerlist.isEmpty() ){
+			Iterator itr = pinmailerlist.iterator();
+			String fldkey = null; 
+			
+			int repeat = pinmailerlist.size() - 1; 
+			
+			
+			while( itr.hasNext() ){
+				Map mp = (Map)itr.next(); 
+				fldkey = (String)mp.get("FIELD_NAME");
+				trace("Processing...fieldkye :" + fldkey );
+				
+				if( fldkey.equals("PINNO") ){ 
+					PinLineNo = (String)mp.get("X_POS");
+					PinColumnNo = (String)mp.get("Y_POS"); 
+					outputStream = eracom_out( pandata, pandata.length(), "PAN-VAL-DATA", 1, outputStream);				
+					outputStream = eracom_out( PinLen, PinLen.length(), "PIN-LEN", 1, outputStream);
+					outputStream = eracom_out( PinType, PinType.length(), "PIN-TYPE", 1, outputStream);
+					//outputStream = eracom_out( PinLineNo, PinLineNo.length(), "PIN-LINE-NO", 2, outputStream);
+					//outputStream = eracom_out( PinColumnNo, PinColumnNo.length(), "PIN-COLOMN-NO", 2, outputStream);
+					
+					//outputStream = eracom_out( "21", 2, "PAN-LINE-NO", 2, outputStream);
+					//outputStream = eracom_out( "60",2, "PAN-COLOMN-NO", 2, outputStream);
+					
+					outputStream = eracom_out( Integer.toString(repeat) , Integer.toString(repeat).length(), "REPEAT-COUNT", 2, outputStream );   
+					
+					pinconfigured = true;
+				} 
+				
+
+				
+				if( fldkey.equals("CARDNO") ){ 
+					CHNLineNo = (String)mp.get("X_POS");
+					CHNColumnNo = (String)mp.get("Y_POS");   
+					outputStream = eracom_out( CHNLineNo, CHNLineNo.length(), "CHN-LINE-NO", 2, outputStream);
+					outputStream = eracom_out( CHNColumnNo,CHNColumnNo.length(), "CHN-COLUMN-NO", 2, outputStream);
+					int chnlen = CHN.length();
+					outputStream = eracom_out( Integer.toString(chnlen), Integer.toString(chnlen).length(), "CHN-LEN", 2, outputStream);
+					outputStream = eracom_out( CHN, CHN.length(), "CHN", 3, outputStream);  
+				} 
+				
+				/*else if( fldkey.equals("BANKNAME") ){ 
+					BankNameLineNo = (String)mp.get("X_POS");
+					BankNameColumnNo = (String)mp.get("Y_POS"); 
+					String bankname = commondesc.getInstDesc(instid, jdbctemplate); 
+					outputStream = eracom_out( BankNameLineNo, 1, "BANKNAME-LINE-NO", 2, outputStream);
+					outputStream = eracom_out( BankNameColumnNo, 1, "BANKNAME-COLUMN-NO", 2, outputStream);
+					int banklen = bankname.length();
+					outputStream = eracom_out( Integer.toString(banklen), 1, "BANKNAME-LEN", 2, outputStream);
+					outputStream = eracom_out( bankname, bankname.length(), "BANKNAME", 3, outputStream);
+				}*/
+			
+				else if( fldkey.equals("ORDERREFNO") ){ 
+					OrderrefLineNo = (String)mp.get("X_POS");
+					OrderrefColumnNo = (String)mp.get("Y_POS"); 
+					//String bankname = commondesc.getInstDesc(instid, jdbctemplate); 
+					outputStream = eracom_out( OrderrefLineNo, 1, "ORDERREF-LINE-NO", 2, outputStream);
+					outputStream = eracom_out( OrderrefColumnNo, 1, "ORDERREF-COLUMN-NO", 2, outputStream);
+					int orderrefnolen = orderrefno.length();
+					outputStream = eracom_out( Integer.toString(orderrefnolen), 1, "ORDERREF-LEN", 2, outputStream);
+					outputStream = eracom_out( orderrefno, orderrefno.length(), "ORDERREF", 3, outputStream);
+				}
+				
+			   else if( fldkey.equals("CUSTNAME") ){ 
+					CustomerNameLineNo = (String)mp.get("X_POS");
+					CustomerNameColumnNo = (String)mp.get("Y_POS"); 
+					trace("gentype: " + gentype);
+					trace("CHN -->CHK: " + CHN);
+					CustomerName = commondesc.getCustomerNameByProces(instid, productcode, subproduct, cin,  gentype, jdbctemplate);
+					if( CustomerName == null || CustomerName.equals("")){
+						CustomerName = commondesc.getCustomerNameByProduction(instid, productcode, subproduct, cin, gentype, jdbctemplate);
+					}
+					
+					int customernamelen =CustomerName.length();  
+					outputStream = eracom_out( CustomerNameLineNo, CustomerNameLineNo.length(), "CUSTNAME-LINE-NO", 2, outputStream);
+					outputStream = eracom_out( CustomerNameColumnNo,CustomerNameColumnNo.length(), "CUSTNAME-COLUMN-NO", 2, outputStream); 
+					outputStream = eracom_out( Integer.toString(customernamelen), Integer.toString(customernamelen).length(), "CUSTNAME-LEN", 2, outputStream);
+					outputStream = eracom_out( CustomerName, CustomerName.length(), "CUSTOMER NAME", 3, outputStream);  
+				} 
+				else if( fldkey.equals("ADDRESSONE") ){ 
+					Address1LineNo= (String)mp.get("X_POS");
+					Address1ColumnNo= (String)mp.get("Y_POS");
+					 
+					Address1 = commondesc.getAddress(instid, productcode, subproduct, cin,  gentype, "$ADDR1", jdbctemplate);
+					int Address1Len = Address1.length();
+					outputStream = eracom_out( Address1LineNo, Address1LineNo.length(), "ADDRESS1-LINE-NO", 2, outputStream);
+					outputStream = eracom_out( Address1ColumnNo,Address1ColumnNo.length(), "ADDRESS1-COLUMN-NO", 2, outputStream); 
+					outputStream = eracom_out( Integer.toString(Address1Len), Integer.toString(Address1Len).length(), "ADDRESS1-LEN", 2, outputStream);
+					outputStream = eracom_out( Address1, Address1.length(), "ADDRESS1", 3, outputStream);  
+				}
+					
+				else if( fldkey.equals("ADDRESSTWO") ){ 
+					Address2LineNo= (String)mp.get("X_POS");
+					Address2ColumnNo= (String)mp.get("Y_POS");
+					 
+					Address2 = commondesc.getAddress(instid, productcode, subproduct, cin,  gentype, "$ADDR2", jdbctemplate); 
+					int Address2Len = Address2.length();
+					outputStream = eracom_out( Address2LineNo, Address2LineNo.length(), "ADDRESS2-LINE-NO", 2, outputStream);
+					outputStream = eracom_out( Address2ColumnNo,Address2ColumnNo.length(), "ADDRESS2-COLUMN-NO", 2, outputStream); 
+					outputStream = eracom_out( Integer.toString(Address2Len), Integer.toString(Address2Len).length(), "ADDRESS2-LEN", 2, outputStream);
+					outputStream = eracom_out( Address2, Address2.length(), "ADDRESS2", 3, outputStream);  
+				}
+					
+				else if( fldkey.equals("ADDRESSTHREE") ){
+					Address3LineNo= (String)mp.get("X_POS");
+					Address3ColumnNo= (String)mp.get("Y_POS"); 
+					Address3 = commondesc.getAddress(instid, productcode, subproduct, cin,  gentype, "$ADDR3", jdbctemplate);
+					
+					int Address3Len = Address3.length();
+					outputStream = eracom_out( Address3LineNo, Address3LineNo.length(), "ADDRESS3-LINE-NO", 2, outputStream);
+					outputStream = eracom_out( Address3ColumnNo,Address3ColumnNo.length(), "ADDRESS3-COLUMN-NO", 2, outputStream); 
+					outputStream = eracom_out( Integer.toString(Address3Len), Integer.toString(Address3Len).length(), "ADDRESS3-LEN", 2, outputStream);
+					outputStream = eracom_out( Address3, Address3.length(), "ADDRESS3", 3, outputStream);
+				}
+				
+				else if( fldkey.equals("ADDRESSFOUR") ){ 
+					Address4LineNo= (String)mp.get("X_POS");
+					Address4ColumnNo= (String)mp.get("Y_POS"); 
+					Address4 = commondesc.getAddress(instid, productcode, subproduct, cin,  gentype, "$ADDR4", jdbctemplate); 
+					
+					int Address4Len = Address4.length();
+					outputStream = eracom_out( Address4LineNo, Address4LineNo.length(), "ADDRESS4-LINE-NO", 2, outputStream);
+					outputStream = eracom_out( Address4ColumnNo,Address4ColumnNo.length(), "ADDRESS4-COLUMN-NO", 2, outputStream); 
+					outputStream = eracom_out( Integer.toString(Address4Len), Integer.toString(Address4Len).length(), "ADDRESS4-LEN", 2, outputStream);
+					outputStream = eracom_out( Address4, Address4.length(), "ADDRESS4", 3, outputStream);
+				}
+				
+				trace("pinconfiguration part .....");   
+					
+				/*else if( fldkey.equals("CUSTID") ){      
+					CustomerIdLineNo = (String)mp.get("X_POS");
+					CustomerIdColumnNo= (String)mp.get("Y_POS");    
+					if( !gentype.equals("INSTANT")){
+						cin = "--";
+					}
+					int customeridlen = cin.length();
+					outputStream = eracom_out( CustomerIdLineNo, CustomerIdLineNo.length(), "CUSTOMER-ID", 2, outputStream);
+					outputStream = eracom_out( CustomerIdColumnNo,CustomerIdColumnNo.length(), "CUSTOMER-ID-COLUMN-NO", 2, outputStream); 
+					outputStream = eracom_out( Integer.toString(customeridlen), Integer.toString(customeridlen).length(), "CUSTOMER-ID-LEN", 2, outputStream);
+					outputStream = eracom_out( cin, cin.length(), "CUSTOMER-ID", 3, outputStream);
+				}  */
+			} 
+			
+			if( !pinconfigured ){
+				trace("!!!!!!!!!!!!!!!!Pin Line or Coloumn not configured!!!!!!!!");
+				addActionError("Pin Line or Coloumn not configured");
+			}
+			
+		} 
+		return outputStream;  
+	} 
+	  
+	
+	
+					
+					
+	public   ByteArrayOutputStream composeCvkData( String CVK, ByteArrayOutputStream outputStream  ) throws IOException{
+		String ReqBuffer = "";
+		int cvk_len = CVK.length();
+		
+		int cvklen = ( cvk_len / 2) + 1;
+		String Len = Integer.toString(cvklen); 
+		
+		
+		eracom_out(Len, 1, "cvk Length", 2, outputStream) ;
+		if(cvk_len == 16)
+		{
+			ReqBuffer += eracom_out("10", 2, "size", 1, outputStream);
+		}
+		else if(cvk_len == 32)
+		{
+			ReqBuffer += eracom_out("11", 2, "size", 1, outputStream);
+			eracom_out( CVK, 32, "CVK", 1, outputStream );
+		}
+		else if(cvk_len == 2)     
+		{
+			trace("coming cvk length-=2");   
+			ReqBuffer += eracom_out("01", 2, "size", 1, outputStream);
+			eracom_out( CVK, 2, "CVK", 1, outputStream );
+		}
+		else     
+		{
+			ReqBuffer += eracom_out("12", 2, "size", 1, outputStream);
+		}
+		
+  
+		return outputStream ; 
+	}
+	
+	
+	
+	public static String fillwithZero(String CVVData) {
+		String zerostr = "";
+		
+		for(int i=0;i< 32 - (CVVData.length() ); i++) {
+			zerostr = zerostr + "0";
+		} 
+		return zerostr;
+	}
+	
+	
+	 
+	public String ComposeCVVLength(  String CVK,  String CHN, String Expiry, String ServiceCode,  ByteArrayOutputStream outputStream ) throws IOException {
+		String ReqBuffer = "";
+		 String CVVData = CHN+Expiry+ServiceCode;
+		trace("CVV DATA "+CVVData+" Length "+CVVData.length());
+		
+		ReqBuffer +=  eracom_out( "EE0802", 6, "Command", 1, outputStream ) ;  
+		ReqBuffer += eracom_out( "00", 2, "FUNCTION-MODIFIER", 1, outputStream );
+		 
+		ReqBuffer += composeCvkData(CVK, outputStream);
+		
+		if(CVVData.length() <= 32 )	{
+			CVVData = CVVData + fillwithZero(CVVData); 
+		} 
+		trace("After zero : " + CVVData );
+		
+		trace("FINAL CVV DATA leng 0 : " + ReqBuffer.length() );
+		ReqBuffer += eracom_out( CVVData, 32, "CVV - Data", 1, outputStream );		 
+		trace("FINAL CVV DATA : " + ReqBuffer );
+		trace("FINAL CVV DATA leng : " + ReqBuffer.length() );
+		return ReqBuffer; 
+	}
+	
+	
+	public   ByteArrayOutputStream  ComposeCVV(  String CVK,  String CHN, String Expiry, String ServiceCode , ByteArrayOutputStream outputStream ) throws IOException	{
+		 
+		 String CVVData = CHN+Expiry+ServiceCode;
+		 trace("CVV DATA "+CVVData+" Length "+CVVData.length());  
+		 eracom_out( "EE0802", 6, "Command", 1, outputStream ) ;  
+		 eracom_out( "00", 2, "FUNCTION-MODIFIER", 1, outputStream ) ; 
+		 composeCvkData(CVK, outputStream); 
+		 
+		// 010100010017ee08020002010463767620000600001360718999000000
+//		                             63767620000600001510718999000000
+		 if(CVVData.length() < 32 ) {
+			CVVData = CVVData + fillwithZero(CVVData); 
+		 } 
+		   
+		 trace("CVVData......"+CVVData);
+		 trace("outputStream---"+outputStream);  
+		 eracom_out( CVVData, 32, "CVV - Data", 1 , outputStream);
+		 
+		 
+		 trace("outputStream---"+outputStream);  
+		 
+		 trace("cvv.............");
+		 //trace( Hex.encodeHex( outputStream.toByteArray() ) );
+	   	 trace("cvv.............");
+			
+	     return outputStream;
+	}
+	
+	public void converttoString(String msg)	{
+		String result = eracom_in( msg, msg.length(), "COMMAND", 1 );		
+		trace("Command is : "+ result);
+	}
+	
+	public static String eracom_in( String msg, int size, String comm, int conv_type ) {
+		String re = "";
+		int offsetsize =0;
+		offsetsize = size;
+		
+		if(conv_type == 1)	{
+			re = bcd_to_ascii( msg, size );
+		} else if(conv_type == 2) {
+			re = "DO";
+		} else if(conv_type == 3) {
+			re = msg; 
+		}
+		return re;
+	}
+	
+	public static String bcd_to_ascii(String msg, int size) {
+		String res = ""; 
+		String value = "";
+		int i = 0;
+		int lvalue = 0,rvalue = 0;
+		char[] toprocess_token = msg.toCharArray();
+		while( value.length() < size ){
+			lvalue = ( ((int)toprocess_token[i]) & 0xf0 ) >> 4 ;
+			if( ( lvalue >= 0 ) && ( lvalue <= 9 ) )
+				lvalue += 48;
+			else
+				lvalue += 87;
+			
+			rvalue = ( (int)toprocess_token[i] ) & 0x0f;
+			if( ( rvalue >= 0 ) && ( rvalue <= 9 ) )
+				rvalue += 48;
+			else
+				rvalue += 87;
+			if( ( (size % 2) != 0 ) && i ==0 )	{
+				value = value + (char)rvalue;
+				i = i + 1;
+				continue;
+			}
+			i = i + 1;
+			value = value + (char)lvalue + (char)rvalue;
+		}	
+		
+		return res = value;
+	}
+	
+	public String getCVVResponse(String res_onse) {
+		String response = res_onse.substring(18,24); 
+		String fresp = response.substring(0,2); 
+		String cvv = "-1";
+		if( fresp.equals("00") ){
+			trace("Test 4 : " + fresp  );
+			cvv = response.substring(2,5);	
+			trace("Gennerated cvv value is : " + cvv );
+			if( cvv.length() < 3 ){
+				return "-1";
+			}
+		} 
+		return cvv;
+	}
+	
+	
+	public String hexa(int num) {
+		  /*  int m = 0;
+		    if( (m = num >>> 4) != 0 ) {
+		        hexa( m );
+		    }
+		    return (char)((m=num & 0x0F)+(m<10 ? 48 : 55));*/
+			
+			return Integer.toHexString( num );
+		}
+	
+	
+	public ByteArrayOutputStream pinVerifiCationSafeNet(  String command, String EPVK, String CHN, String pinblock, String ppk, String pinoffset , String acctblock,   ByteArrayOutputStream outputStream  ) throws Exception {
+		trace("\n-------------- Pin Verification --------------");
+		
+		//ppk  -  pin protect key  
+	
+		
+		DataOutputStream out = null;
+		DataInputStream in = null;
+		
+		
+		try{
+			
+			
+			int PanOffset = 0;//Integer.parseInt( hsmobj.PAN_OFFSET );
+			int  PanLength = 16;//Integer.parseInt( hsmobj.PANVALIDATION_LENGTH );
+			String pinpadchar = "F";//hsmobj.PANPADCHAR;
+			String pinlen = "04"; //hsmobj.PIN_LENGTH;
+			
+			trace("Pan Offset : " + PanOffset );
+			trace("Pan Validation Length : " + PanLength );
+			trace("Pan Pad Char : " + pinpadchar );
+			int len = EPVK.length() / 2 + 1;
+			String hexpvklen = hexa(len);
+			
+			outputStream = eracom_out( command, command.length(), "FunctionCode", 1, outputStream ); 
+			outputStream = eracom_out( "00", 2, "FUNCTION-MODIFIER", 1, outputStream );
+			outputStream = eracom_out( pinblock, pinblock.length(), "PIN-BLOCK", 1, outputStream );
+			
+			
+			
+			int ppklen = ppk.length() / 2 + 1;
+			String hexppklen = hexa(ppklen);
+			
+			outputStream = eracom_out( hexppklen, hexppklen.length(), "PPK-LEN", 1, outputStream );
+			outputStream = eracom_out( "11", 2, "PPK-FORMAT", 1, outputStream );
+			outputStream = eracom_out( ppk, ppk.length(), "PPK-FORMAT", 1, outputStream );
+			outputStream = eracom_out( "01", 2, "PINBLOCK-FORMAT", 1, outputStream );
+			outputStream = eracom_out( acctblock, acctblock.length(), "ACCT-BLOCK", 1, outputStream );
+			
+			outputStream = eracom_out( hexpvklen, hexpvklen.length(), "PVK-LEN", 1, outputStream );
+			
+			if( EPVK.length()  == 16 )
+				outputStream = eracom_out( "10", 2, "PVK-FORMAT", 1, outputStream );
+			else if( EPVK.length()  == 32 )
+				outputStream = eracom_out( "11", 2, "PVK-FORMAT", 1, outputStream );
+			else  
+				outputStream = eracom_out( "12", 2, "PVK-FORMAT", 1, outputStream );
+			
+			outputStream = eracom_out( EPVK, EPVK.length(), "PVK", 1, outputStream );
+			
+			String pandata = CHN.substring(PanOffset, PanLength);
+			if( pandata.length() < 16 ){
+				String repeated = String.format(String.format("%%0%dd", ( 16 -  pandata.length() )), 0).replace("0",pinpadchar);
+				trace("Repeated String : " + repeated );
+				pandata = pandata +repeated;
+				trace("pandata : " + pandata );			
+			}
+			
+			outputStream = eracom_out( pandata, pandata.length(), "PAN-VAL-DATA", 1, outputStream);			
+			outputStream = eracom_out( pinoffset, pinoffset.length(), "PIN-OFFSET-DATA", 1, outputStream);
+			outputStream = eracom_out( pinlen, pinlen.length(), "PIN-LEN", 1, outputStream);
+			
+			/*out.write( outputStream.toByteArray() );
+			trace( new String ( Hex.encodeHex( outputStream.toByteArray() ) ) );
+			out.flush();
+			byte[] response = new byte[18];
+			in.read(response);		
+			trace("----response begin ------");
+			trace( new String ( Hex.encodeHex( response)  ) );
+			trace("----response end------");*/
+			
+		}catch(Exception e ){
+			System.out.println("Exception while verify the pin : " + e.getMessage());
+			e.printStackTrace();
+		} 
+		
+		return outputStream;
+	}
+
+	
+	public ByteArrayOutputStream generateSessionkeyMessage(String command, String TMK, ByteArrayOutputStream outputStream ) throws Exception {
+		
+		outputStream = eracom_out( command, command.length(), "FunctionCode", 1, outputStream ); 
+		outputStream = eracom_out( "00", 2, "FUNCTION-MODIFIER", 1, outputStream );
+		
+		int TMKLEN = TMK.length() / 2 + 1;
+		String hextmklen = hexa(TMKLEN);
+		
+		outputStream = eracom_out( hextmklen, hextmklen.length(), "TMK-LEN", 1, outputStream );
+		outputStream = eracom_out( "11", 2, "TMK-FORMAT", 1, outputStream );
+		outputStream = eracom_out( TMK, TMK.length(), "TMK", 1, outputStream );
+		outputStream = eracom_out( "0200", 4, "KEY FLAGS", 1, outputStream );
+		return outputStream ;
+	}
+
+	
+}

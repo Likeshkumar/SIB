@@ -1,0 +1,36 @@
+@CHARSET "UTF-8";
+a {
+    color:#fff;
+	text-decoration:none;
+}
+
+div.cusmselect{
+	width: 186px;
+}
+p.hida {
+    background: none repeat scroll 0 0 #ffffff;
+    color: #300;
+    font-weight: bold;
+    padding: 4px 6px;
+    text-align: center;
+    word-wrap: break-word;
+    border: 1px solid grey;
+    border-radius:5px;
+	margin:0px;
+}
+div.mutliSelect {    
+    color: blue;
+    height: 96px;
+    overflow: auto;
+	display:none;
+	color: blue;
+}
+div.mutliSelect ul{
+	padding:0px;
+	margin:0px;
+}
+div.mutliSelect ul>li{
+	list-style:none;
+	border-bottom: 1px solid #CCCCCC;
+	margin: 2px;
+}	

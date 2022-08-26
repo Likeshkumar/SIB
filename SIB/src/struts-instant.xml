@@ -1,0 +1,338 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.action.excludePattern" value=".*unfiltered.*,.*\\.nofilter" />
+	<constant name="struts.action.extension" value="do" />
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.devMode" value="false" />
+	<constant name="struts.multipart.maxSize" value="10485760" />
+	<package name="instant" extends="struts-default">
+		<result-types>
+			<result-type name="tiles"
+				class="org.apache.struts2.views.tiles.TilesResult" />
+		</result-types>
+		<interceptors>
+			<interceptor name="mylogging" class="com.ifp.util.SessionInterceptor">
+			</interceptor>
+			
+		
+			<interceptor name="loggerinterceptor" class="com.ifp.util.LoggerInterceptor">
+			</interceptor>
+<interceptor name="NewInter" class="com.ifp.util.NewInter"></interceptor>
+
+			<interceptor name="clickInterceptor" class="com.ifp.util.ClickJackInterceptor">
+			</interceptor>
+
+			<interceptor name="browserCacheInterceptor"
+				class="com.ifp.util.BrowserClearCacheInterceptor">
+			</interceptor>
+			
+			<interceptor name="csrfTokenInterceptor"
+				class="com.ifp.util.CsrfTokenInterceptor">
+			</interceptor>
+			
+			
+
+			<interceptor-stack name="loggingStack">
+				<interceptor-ref name="mylogging" />
+				<interceptor-ref name="NewInter"/>
+				<interceptor-ref name="loggerinterceptor" />
+				<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+				<interceptor-ref name="csrfTokenInterceptor" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+
+			<interceptor-stack name="loadingstack">
+				<interceptor-ref name="basicStack"></interceptor-ref>
+				<interceptor-ref name="completeStack" />
+				<interceptor-ref name="execAndWait">
+					<param name="delay">1000</param>
+					<param name="delaySleepInterval">500</param>
+				</interceptor-ref>
+			</interceptor-stack>
+
+		</interceptors>
+
+
+		<global-results>
+			<!-- <result name="session" type="redirectAction">logoutAction1</result> -->
+			<result name="session" type="tiles">logout</result>
+			<result name="required_home" type="tiles">required_home</result>
+		</global-results>
+
+
+
+		<action name="getSubProdList" class="com.ifp.instant.InstCardorderAction"
+			method="getSubProductList">
+			<interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="defaultStack" />
+		</action>
+		<action name="getAuthSubProdList" class="com.ifp.instant.InstCardorderAction"
+			method="getAuthSubProductList">
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="defaultStack" />
+		</action>
+		<action name="getMaxCardCount" class="com.ifp.instant.InstCardorderAction"
+			method="maxAllowedCard">
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="defaultStack" />
+		</action>
+
+
+
+
+		<action name="*InstCardorderAction" class="com.ifp.instant.InstCardorderAction"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<interceptor-ref name="NewInter"/>
+					<interceptor-ref name="clickInterceptor" />
+					<interceptor-ref name="mylogging" />
+				<interceptor-ref name="browserCacheInterceptor" />
+					<interceptor-ref name="csrfTokenInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<result name="wait">jsp/wait.jsp</result>
+			<result name="instantorder_home" type="tiles">instantorder_home
+			</result>
+			<result name="instauthorder_home" type="tiles">instauthorder_home
+			</result>
+			<result name="instauthorder_view" type="tiles">instauthorder_view
+			</result>
+			<result name="instvieworder_home" type="tiles">instvieworder_home
+			</result>
+			<result name="instvieworder_list" type="tiles">instvieworder_list
+			</result>
+			<result name="editinstcardorder_home" type="tiles">editinstcardorder_home
+			</result>
+			<result name="editinstviewcardorder" type="tiles">editinstviewcardorder
+			</result>
+			<result name="editcardorder_details" type="tiles">editcardorder_details
+			</result>
+			<result name="deletecardorder_home" type="tiles">deletecardorder_home
+			</result>
+			<result name="deletecardorder_viewlist" type="tiles">deletecardorder_viewlist
+			</result>
+		</action>
+
+		<action name="*InstCardProcessAction" class="com.ifp.instant.InstCardProcessAction"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<interceptor-ref name="NewInter"/>
+		<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<result name="wait">jsp/wait.jsp</result>
+			<result name="instcardgen_home" type="tiles">instcardgen_home</result>
+			<result name="instcardgen_list" type="tiles">instcardgen_list</result>
+			<result name="instcardauth_home" type="tiles">instcardauth_home
+			</result>
+			<result name="instcardauth_list" type="tiles">instcardauth_list
+			</result>
+		</action>
+
+		<action name="*InstCardPinProcess" class="com.ifp.instant.InstCardPinProcess"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<interceptor-ref name="NewInter"/>
+					<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">3097152</param>
+				<param name="allowedTypes">
+					image/png,image/gif,image/jpeg
+				</param>
+			</interceptor-ref>
+
+			<result name="instcardpin_home" type="tiles">instcardpin_home</result>
+			<result name="instcardpin_list" type="tiles">instcardpin_list</result>
+			<result name="instpinauth_home" type="tiles">instpinauth_home</result>
+			<result name="instauthdpin_list" type="tiles">instauthdpin_list
+			</result>
+
+
+
+		</action>
+
+
+
+
+		<action name="*InstantOnlyPinGeneration" class="com.ifp.instant.InstantOnlyPinGeneration"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<interceptor-ref name="NewInter"/>
+					<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">3097152</param>
+				<param name="allowedTypes">
+					image/png,image/gif,image/jpeg
+				</param>
+			</interceptor-ref>
+
+			<result name="instcardpinONL_home" type="tiles">instcardpinONL_home
+			</result>
+			<result name="instcardpinONLY_list" type="tiles">instcardpinONLY_list
+			</result>
+			<result name="instpinauthONLY_home" type="tiles">instpinauthONLY_home
+			</result>
+			<result name="instauthdpinONLY_list" type="tiles">instauthdpinONLY_list
+			</result>
+
+
+
+		</action>
+
+		<action name="*InstCardPREProcess" class="com.ifp.instant.InstCardPREProcess"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<interceptor-ref name="NewInter"/>
+					<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<result name="instpreorder_home" type="tiles">instpreorder_home
+			</result>
+			<result name="instcardpre_list" type="tiles">instcardpre_list</result>
+			<result name="instpreauth_home" type="tiles">instpreauth_home</result>
+			<result name="instpreauth_list" type="tiles">instpreauth_list</result>
+			<result name="instpredown_home" type="tiles">instpredown_home</result>
+
+			<!-- <result name="predownload" type="stream"> <param name="contentType">application/octet-stream</param> 
+				<param name="inputName">inputStream</param> <param name="contentDisposition">filename=%{fileName}</param> 
+				<param name="bufferSize">1024</param> </result> -->
+			<!-- <result name="predownloadinst" type="stream"> <param name="contentType">application/octet-stream</param> 
+				<param name="inputName">inputStream</param> <param name="contentDisposition">attachment;filename=%{fileName}</param> 
+				<param name="bufferSize">1024</param> <param name="contentDisposition">attachment;filename="fileABC.txt"</param> 
+				</result> -->
+		</action>
+
+		<action name="*InstReceiveEProcess" class="com.ifp.instant.InstReceiveEProcess"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+					<interceptor-ref name="clickInterceptor" />
+					<interceptor-ref name="NewInter"/>
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<result name="insrecvcard_home" type="tiles">insrecvcard_home</result>
+			<result name="insrecvcard_list" type="tiles">insrecvcard_list</result>
+			<result name="insrecvcardauth_home" type="tiles">insrecvcardauth_home
+			</result>
+			<result name="insrecvcardauth_list" type="tiles">insrecvcardauth_list
+			</result>
+		</action>
+
+		<action name="*InstCardRegisterProcess" class="com.ifp.instant.InstCardRegisterProcess"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<interceptor-ref name="NewInter"/>
+					<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">8097152</param>
+				<param name="allowedTypes">
+					image/png,image/gif,image/jpeg,image/pjpeg
+				</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="instantcardBinlist" type="tiles">instantcardBinlist
+			</result>
+
+			<result name="InstantReissuecardsbinwise" type="tiles">InstantReissuecardsbinwise
+			
+			</result>
+
+			<result name="instmanualmap" type="tiles">instmanualmap</result>
+			<result name="pinotphome" type="tiles">pinotphome</result>
+			<result name="pinotphome1" type="tiles">pinotphome1</result>
+
+			<result name="insregcard_home" type="tiles">insregcard_home</result>
+			<result name="manualentry_home" type="tiles">manualentry_home</result>
+			<result name="instmaporderrefbase" type="tiles">instmaporderrefbase
+			</result>
+			<result name="reissuinsregcard_home" type="tiles">reissuinsregcard_home
+			</result>
+			<result name="inatntreissuehomeorderbase" type="tiles">inatntreissuehomeorderbase
+			</result>
+			<result name="inscustomer_entry" type="tiles">inscustomer_entry
+			</result>
+			<result name="inscustomer_view" type="tiles">inscustomer_view</result>
+			<result name="insrecvcardauth_home" type="tiles">insrecvcardauth_home
+			</result>
+			<result name="insrecvcardauth_list" type="tiles">insrecvcardauth_list
+			</result>
+			<result name="inscustomer_auth" type="tiles">inscustomer_auth</result>
+			<result name="inscustomer_auth_list" type="tiles">inscustomer_auth_list
+			</result>
+			<result name="input" type="tiles">insregcard_home</result>
+			<result name="customer_editview" type="tiles">customer_editview
+			</result>
+		</action>
+
+		<action name="*InstCardActivateProcess" class="com.ifp.instant.InstCardActivateProcess"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<interceptor-ref name="NewInter"/>
+					<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<result name="insactivatecard_home" type="tiles">insactivatecard_home
+			</result>
+			<result name="insactivatecard_list" type="tiles">insactivatecard_list
+			</result>
+			<result name="confirmactivate_home" type="tiles">confirmactivate_home
+			</result>
+			<result name="activate_auth_home" type="tiles">activate_auth_home
+			</result>
+			<result name="activate_auth_list" type="tiles">activate_auth_list
+			</result>
+			<result name="activate_amount_list" type="tiles">activate_amount_list
+			</result>
+			<result name="activecard_list" type="tiles">activecard_list</result>
+		</action>
+
+		<action name="*CardActivation" class="com.ifp.instant.CardActivation"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+					<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<result name="authactivation_home" type="tiles">authactivation_home
+			</result>
+			<result name="activation_home" type="tiles">activation_home</result>
+			<result name="activation_list" type="tiles">activation_list</result>
+			<result name="authactivation_list" type="tiles">authactivation_list
+			</result>
+		</action>
+		
+		
+		<action name="*CustomerNamePrintAction" class="com.ifp.instant.CustomerNamePrintAction"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+					<interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+        			<interceptor-ref name="defaultStack"/>
+			<result name="namePrintHome" type="tiles">namePrintHome</result>
+			<result name="namePrintList" type="tiles">namePrintList</result>
+			
+			<result name="namedownload" type="stream">
+				<param name="contentType">application/octet-stream</param>
+ 				 <param name="inputName">inputStream</param>
+ 				 <param name="contentDisposition">attachment;filename=%{fileName}</param>
+ 				 <param name="bufferSize">1024</param>
+ 				 <!-- <param name="contentDisposition">attachment;filename="fileABC.txt"</param> -->
+			</result>
+
+		</action>
+		
+	</package>
+</struts>

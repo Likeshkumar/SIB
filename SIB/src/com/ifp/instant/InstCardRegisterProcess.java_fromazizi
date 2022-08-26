@@ -1,0 +1,5542 @@
+package com.ifp.instant;
+
+import com.ifg.Config.padss.PadssSecurity;
+import com.ifp.Action.BaseAction;
+import com.ifp.beans.AuditBeans;
+import com.ifp.beans.CardActivationBeans;
+import com.ifp.beans.InstCardRegisterProcessBeans;
+import com.ifp.dao.CardActivationDAO;
+import com.ifp.dao.InstCardRegisterProcessDAO;
+import com.ifp.personalize.PersonalCardReceiveIssueAction;
+import com.ifp.util.CommonDesc;
+import com.ifp.util.CommonUtil;
+import com.ifp.util.IfpTransObj;
+import com.sun.image.codec.jpeg.ImageFormatException;
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGImageDecoder;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.math.BigDecimal;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Properties;
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
+import org.apache.commons.io.FileUtils;
+import org.json.JSONObject;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.transaction.PlatformTransactionManager;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public class InstCardRegisterProcess
+  extends BaseAction
+{
+  private static final long serialVersionUID = -8376161637970676446L;
+  
+  public InstCardRegisterProcess() {}
+  
+  AuditBeans auditbean = new AuditBeans();
+  
+
+  PersonalCardReceiveIssueAction persisspro = new PersonalCardReceiveIssueAction();
+  
+  public AuditBeans getAuditbean() { return auditbean; }
+  
+  private String act;
+  public void setAuditbean(AuditBeans auditbean) { this.auditbean = auditbean; }
+  
+
+  public String getAct()
+  {
+    return act;
+  }
+  
+  public void setAct(String act) { this.act = act; }
+  
+  CommonUtil comutil = new CommonUtil();
+  CommonDesc commondesc = new CommonDesc();
+  InstCardRegisterProcessDAO cardregdao = new InstCardRegisterProcessDAO();
+  InstCardRegisterProcessBeans cardregbean = new InstCardRegisterProcessBeans();
+  private JdbcTemplate jdbctemplate = new JdbcTemplate();
+  private PlatformTransactionManager txManager = new DataSourceTransactionManager();
+  
+  CardActivationDAO cardactdao = new CardActivationDAO();
+  CardActivationBeans cardactbean = new CardActivationBeans();
+  
+  public CardActivationBeans getCardactbean() { return cardactbean; }
+  
+  public void setCardactbean(CardActivationBeans cardactbean) {
+    this.cardactbean = cardactbean;
+  }
+  
+  public CardActivationDAO getCardactdao() { return cardactdao; }
+  
+  public void setCardactdao(CardActivationDAO cardactdao) {
+    this.cardactdao = cardactdao;
+  }
+  
+  public JdbcTemplate getJdbctemplate() { return jdbctemplate; }
+  
+  public void setJdbctemplate(JdbcTemplate jdbctemplate) {
+    this.jdbctemplate = jdbctemplate;
+  }
+  
+  public PlatformTransactionManager getTxManager() { return txManager; }
+  
+  public void setTxManager(PlatformTransactionManager txManager) {
+    this.txManager = txManager;
+  }
+  
+  public String comuserType()
+  {
+    HttpSession session = getRequest().getSession();
+    String usertype = (String)session.getAttribute("USERTYPE");
+    return usertype;
+  }
+  
+  public String comUsername() {
+    HttpSession session = getRequest().getSession();
+    String username = (String)session.getAttribute("USERNAME");
+    return username;
+  }
+  
+  private List branchlist;
+  private List prodlist;
+  public File uploadedphoto;
+  private String uploadedphotoContentType;
+  public File uploadsignature;
+  private String uploadsignatureContentType;
+  public File uploadidproof;
+  private String uploadidproofContentType;
+  public List getBranchlist()
+  {
+    return branchlist;
+  }
+  
+  public void setBranchlist(List branchlist) { this.branchlist = branchlist; }
+  
+  public List getProdlist() {
+    return prodlist;
+  }
+  
+  public void setProdlist(List prodlist) { this.prodlist = prodlist; }
+  
+
+
+
+
+
+
+
+  private static Boolean initmail = Boolean.valueOf(true);
+  private static String parentid = "000";
+  final String regallowedstatus = "09";
+  final String nextstatus = "09";
+  
+  private String cardno;
+  
+  public String getCardno()
+  {
+    return cardno;
+  }
+  
+  public void setCardno(String cardno) { this.cardno = cardno; }
+  
+  public DriverManagerDataSource getConnection()
+  {
+    DriverManagerDataSource datasource = new DriverManagerDataSource();
+    datasource.setDriverClassName("oracle.jdbc.driver.OracleDriver");
+    datasource.setUrl("jdbc:oracle:thin:@172.16.10.14:1521:orcl");
+    datasource.setUsername("dbbl_cbs");
+    datasource.setPassword("dbbl_cbs");
+    return datasource;
+  }
+  
+  DataSource ds = getConnection();
+  private JdbcTemplate jdbctemplate2 = new JdbcTemplate(ds);
+  
+
+  final String CARDACTIVATEDCODE = "09";
+  
+  public CommonUtil getComutil() { return comutil; }
+  
+  public void setComutil(CommonUtil comutil) {
+    this.comutil = comutil;
+  }
+  
+  public CommonDesc getCommondesc() { return commondesc; }
+  
+  public void setCommondesc(CommonDesc commondesc) {
+    this.commondesc = commondesc;
+  }
+  
+  public InstCardRegisterProcessDAO getCardregdao() {
+    return cardregdao;
+  }
+  
+  public void setCardregdao(InstCardRegisterProcessDAO cardregdao) { this.cardregdao = cardregdao; }
+  
+  public InstCardRegisterProcessBeans getCardregbean() {
+    return cardregbean;
+  }
+  
+  public void setCardregbean(InstCardRegisterProcessBeans cardregbean) { this.cardregbean = cardregbean; }
+  
+  public File getUploadedphoto() {
+    return uploadedphoto;
+  }
+  
+  public void setUploadedphoto(File uploadedphoto) { this.uploadedphoto = uploadedphoto; }
+  
+  public String getUploadedphotoContentType()
+  {
+    return uploadedphotoContentType;
+  }
+  
+  public void setUploadedphotoContentType(String uploadedphotoContentType) { this.uploadedphotoContentType = uploadedphotoContentType; }
+  
+  public File getUploadsignature()
+  {
+    return uploadsignature;
+  }
+  
+  public void setUploadsignature(File uploadsignature) { this.uploadsignature = uploadsignature; }
+  
+  public String getUploadsignatureContentType() {
+    return uploadsignatureContentType;
+  }
+  
+  public void setUploadsignatureContentType(String uploadsignatureContentType) { this.uploadsignatureContentType = uploadsignatureContentType; }
+  
+  public File getUploadidproof() {
+    return uploadidproof;
+  }
+  
+  public void setUploadidproof(File uploadidproof) { this.uploadidproof = uploadidproof; }
+  
+  public String getUploadidproofContentType() {
+    return uploadidproofContentType;
+  }
+  
+  public void setUploadidproofContentType(String uploadidproofContentType) { this.uploadidproofContentType = uploadidproofContentType; }
+  
+  public String comInstId() {
+    HttpSession session = getRequest().getSession();
+    String instid = (String)session.getAttribute("Instname");
+    return instid;
+  }
+  
+  public String comUserCode() { HttpSession session = getRequest().getSession();
+    String instid = (String)session.getAttribute("USERID");
+    return instid;
+  }
+  
+  public String comUsername1() {
+    HttpSession session = getRequest().getSession();
+    String username = (String)session.getAttribute("USERNAME");
+    
+    return username;
+  }
+  
+  public String comBranchId()
+  {
+    HttpSession session = getRequest().getSession();
+    String br_id = (String)session.getAttribute("BRANCHCODE");
+    return br_id;
+  }
+  
+  public void validate()
+  {
+    int allowedsize_mb = 10;
+    long allowedsize_bits = allowedsize_mb * 1024 * 1024;
+    if (getUploadedphoto() != null) {
+      trace("uploaded size " + uploadedphoto.length());
+      
+      if (getUploadedphoto().length() > allowedsize_bits) {
+        trace("validated....Could not register. Uploade Photo size is too large ! Select less than 2 MB file");
+        addActionError("Could not register. Uploade Photo size is too large ! Select less than 2 MB file");
+      }
+      
+      if (!getUploadedphotoContentType().contains("image")) {
+        addActionError("Could not register.Uploaded photo is not valid format..");
+        trace("Could not register.Uploaded photo is not valid format ..");
+      }
+    }
+    
+    if (getUploadsignature() != null) {
+      trace("uploaded signature image size : " + uploadsignature.length());
+      if (getUploadsignature().length() > allowedsize_bits) {
+        trace("validated....Could not register. Uploade Singnature image size is too large ! Select less than 2 MB file");
+        addActionError("Could not register. Uploade Photo size is too large ! Select less than 2 MB file");
+      }
+      
+      if (!getUploadsignatureContentType().contains("image")) {
+        addActionError("Could not register.Uploaded photo is not valid format..");
+        trace("Could not register.Uploaded photo is not valid format ..");
+      }
+    }
+    
+
+    if (getUploadidproof() != null) {
+      trace("uploaded id proof size : " + uploadidproof.length());
+      if (getUploadidproof().length() > allowedsize_bits) {
+        trace("validated....Could not register. Uploade ID-Proof size is too large ! Select less than 2 MB file");
+        addActionError("Could not register. Uploade ID-Proof size is too large ! Select less than 2 MB file");
+      }
+      
+      if (!getUploadidproofContentType().contains("image")) {
+        addActionError("Could not register.Uploaded id-proof is not valid format..");
+        trace("Could not register.Uploaded photo is not valid format ..");
+      }
+    }
+  }
+  
+
+  public String ReissuregisterInstCardHome()
+  {
+    trace("Reissu Instant card register ...\n");
+    enctrace("Reissu Instant card register ...\n");
+    HttpSession session = getRequest().getSession();
+    
+    if (comBranchId().equals("000")) {
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", " Please Login With branch User ...");
+      trace("Please Login With branch User ...");
+      return "required_home";
+    }
+    
+    return "reissuinsregcard_home";
+  }
+  
+  public List getcustdetails(String instid, String chn, JdbcTemplate jdbctemplate) throws Exception
+  {
+    List custdetail = null;
+    String custdetailsqry = " SELECT * from IFD_CARD_PRODUCTION where inst_id='" + instid + "' and CARD_NO='" + chn + "'";
+    enctrace("getcarddetailscustomermap : " + custdetailsqry);
+    custdetail = jdbctemplate.queryForList(custdetailsqry);
+    return custdetail;
+  }
+  
+  public String ReissuCustReg() {
+    trace("************Reissu Customer Reisteration Home **************\n\n");
+    enctrace("************Reissu Customer Reisteration Home **************\n\n");
+    
+    HttpSession session = getRequest().getSession();
+    String instid = comInstId();
+    String branchid = comBranchId();
+    
+    System.out.println("keyid::");
+    String card_no = getRequest().getParameter("cardno").trim();
+    System.out.println("card_noaaa::" + card_no);
+    String accountno = getRequest().getParameter("accountno").trim();
+    String processtype = "INSTANT";
+    Boolean kyc = Boolean.valueOf(false);
+    String regtype = getRequest().getParameter("regtype").trim();
+    String custid = "";
+    String subprodid = "";
+    String subproddesc = "";
+    String actiontype = "EDIT";
+    String apptype = (String)session.getAttribute("APPLICATIONTYPE");
+    StringBuffer hcardno = new StringBuffer();
+    String getjsonvalues = "";
+    JSONObject js = null;
+    String name = "";String mobileno = "";String customerid = "";String acctcur = "";String dob = "";String addr1 = "";String addr2 = "";String addr3 = "";
+    
+    try
+    {
+      String act = getRequest().getParameter("act");
+      if (act != null) {
+        session.setAttribute("act", act);
+      }
+      
+
+      String keyid = "";String ecardno = "";
+      PadssSecurity padsssec = new PadssSecurity();
+      
+
+
+      keyid = "1";
+      System.out.println("keyid::" + keyid);
+      List secList = commondesc.getPADSSDetailById(keyid, jdbctemplate);
+      System.out.println("secList::" + secList);
+      Iterator secitr = secList.iterator();
+      if (!secList.isEmpty()) {
+        while (secitr.hasNext())
+        {
+          Map map = (Map)secitr.next();
+          String eDMK = (String)map.get("DMK");
+          String eDPK = (String)map.get("DPK");
+          
+          hcardno = padsssec.getHashedValue(card_no + instid);
+          ecardno = padsssec.getECHN(eDMK, eDPK, card_no);
+        }
+      }
+      
+
+
+
+      String maskedchn = padsssec.getMakedCardno(card_no);
+      System.out.println(branchid + "decrypted card number for encod and maintanance" + ecardno + "clear chn value" + hcardno);
+      
+
+      int cardavailabe = commondesc.getReissuvalidcardavailable(instid, hcardno.toString(), jdbctemplate);
+      
+      System.out.println("sassas" + cardavailabe);
+      if ((cardavailabe == 0) || (card_no.length() != 16))
+      {
+
+
+
+        session.setAttribute("preverr", "E");
+        session.setAttribute("prevmsg", " Entered CardNo Is " + card_no + ", Enter Correct Card Number/Card is not available ..");
+        trace("[ " + card_no + " ]CCard Collect Branch not Configured. ..." + cardavailabe);
+        return "required_home";
+      }
+      
+
+
+      String validbranch = commondesc.getReissuvalidbranch(instid, hcardno.toString(), jdbctemplate);
+      if (validbranch == null)
+      {
+
+        System.out.println(branchid + "decrypted card" + validbranch);
+        session.setAttribute("preverr", "E");
+        session.setAttribute("prevmsg", " " + maskedchn + " Card is Available / Card Collect Branch not Available ..");
+        trace("[ " + card_no + " ]Card Collect Branch not Configured. ...");
+        return "required_home";
+      }
+      
+
+
+      trace("Got validbranch: " + validbranch);
+      
+      int cardrequired = cardregdao.cardstatusforReissu(instid, hcardno.toString(), jdbctemplate);
+      trace("Got regreq: " + cardrequired);
+      
+      if (cardrequired == 2) {
+        session.setAttribute("prevmsg", " " + maskedchn + "  Card is  Already Reissued With New Card Number.. ");
+        session.setAttribute("preverr", "E");
+        trace("[ " + card_no + " ] Card is  Already Reissued With New Card Number..");
+        return "required_home";
+      }
+      
+      if (cardrequired != 1) {
+        session.setAttribute("prevmsg", " " + maskedchn + "  Card is  Active, Mark As Lost/Stolen For Mapping another card number");
+        session.setAttribute("preverr", "E");
+        trace("[ " + card_no + " ]Card is  Active, Mark As Lost/Stolen For Mapping another card number..");
+        return "required_home";
+      }
+      
+
+      List carddet = cardregdao.getReissucarddetails(instid, hcardno.toString(), jdbctemplate);
+      trace("cardforcbs" + carddet);
+      if (carddet.isEmpty())
+      {
+        session.setAttribute("preverr", "E");
+        session.setAttribute("prevmsg", "Could not fetch the details from the insatmcms...");
+      }
+      Iterator itrat = carddet.iterator();
+      
+      while (itrat.hasNext())
+      {
+        Map map = (Map)itrat.next();
+        
+        int WDLAMT = ((BigDecimal)map.get("WDL_AMT")).intValue();
+        int WDLCNT = ((BigDecimal)map.get("WDL_CNT")).intValue();
+        int PURAMT = ((BigDecimal)map.get("PUR_AMT")).intValue();
+        int PURCNT = ((BigDecimal)map.get("PUR_CNT")).intValue();
+        
+
+        cardregbean.setWdl_lmt_amt(WDLAMT);
+        cardregbean.setOrder_ref_no((String)map.get("ORDER_REF_NO"));
+        cardregbean.setChn_msk((String)map.get("MCARD_NO"));
+        cardregbean.setHascard((String)map.get("HCARD_NO"));
+        cardregbean.setEncrptchn((String)map.get("CARD_NO"));
+        cardregbean.setOrg_chn((String)map.get("CHN"));
+        
+
+        cardregbean.setWdl_lmt_cnt(WDLCNT);
+        cardregbean.setPur_lmt_amt(PURAMT);
+        cardregbean.setPur_lmt_cnt(PURCNT);
+        
+        cardregbean.setLmt_based_on((String)map.get("LMT_BASED_ON"));
+        cardregbean.setProd_code((String)map.get("BIN"));
+        cardregbean.setBranchcode((String)map.get("CARD_COLLECT_BRANCH"));
+        cardregbean.setCod_prod(map.get("SUB_PROD_ID").toString().trim());
+        
+        String cardno = (String)map.get("CARD_NO");
+        String productdesc = commondesc.getProductdesc(instid, map.get("PRODUCT_CODE").toString().trim(), jdbctemplate);
+        trace("productdesc==> " + productdesc);
+        cardregbean.setProductdesc(productdesc);
+        String cardtypedesc = commondesc.getCardTypeDesc(instid, (String)map.get("BIN"), jdbctemplate);
+        cardregbean.setCardtypedesc(cardtypedesc);
+        
+        cardregbean.setCardtype(Integer.parseInt(map.get("CARD_TYPE_ID").toString().trim()));
+        
+
+
+        cardregbean.setCustname((String)map.get("FNAME"));
+        cardregbean.setPhoneno((String)map.get("MOBILE"));
+        cardregbean.setCustidno((String)map.get("CIN"));
+        cardregbean.setCard_ccy((String)map.get("ACC_CCY"));
+        cardregbean.setDob((String)map.get("DOB"));
+        cardregbean.setPaddress1((String)map.get("P_PO_BOX"));
+        cardregbean.setPaddress2((String)map.get("P_HOUSE_NO"));
+        cardregbean.setPaddress3((String)map.get("P_STREET_NAME"));
+        cardregbean.setPaddress4((String)map.get("P_WARD_NAME"));
+        
+        cardregbean.setPaddress6((String)map.get("P_DISTRICT"));
+        cardregbean.setCity((String)map.get("P_CITY"));
+        
+        cardregbean.setAccountno((String)map.get("ACCOUNT_NO"));
+      }
+      
+
+
+      setCardno(card_no);
+
+
+
+
+
+    }
+    catch (Exception e)
+    {
+
+
+
+
+
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", "Exception : Could not continue the process");
+      e.printStackTrace();
+      trace("Exception : Could not continue the process..." + e.getMessage());
+      return "required_home";
+    }
+    
+
+    return "reissuinsregcard_home";
+  }
+  
+  public String SaveReissuCustomerReg()
+    throws Exception
+  {
+    trace("********Save Reissue customer details.....*************\n");
+    enctrace("********Save Reissue customer details.....*************\n");
+    String instid = comInstId();
+    
+    IfpTransObj trasact = commondesc.myTranObject("CustomerReisuueRegister", txManager);
+    String acctnumber = "";String accttypevalue = "";String accttype = "";
+    String username = comUsername();
+    String usercode = comUserCode();
+    HttpSession session = getRequest().getSession();
+    StringBuffer newhashcard = new StringBuffer();
+    String loststolencard = getRequest().getParameter("cardno");
+    String newcardno = getRequest().getParameter("newcardno");
+    String oldorgchn = getRequest().getParameter("orgchn");
+    
+    cardregbean.setOrg_chn(oldorgchn);
+    
+
+    System.out.println("newcardnodada::" + newcardno + "oldorgchn" + oldorgchn);
+    String keyid = "";String ecardno = "";
+    PadssSecurity padsssec = new PadssSecurity();
+    
+
+    if (newcardno.length() != 16) {
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", "   Entered New Card Number is " + newcardno + " ,Enter 16 digit Valid Card Number... ");
+      trace("Entered New Card Number is " + newcardno + " Enter 16 digit Valid Card Number...");
+    }
+    
+    keyid = "1";
+    System.out.println("keyid::" + keyid);
+    List secList = commondesc.getPADSSDetailById(keyid, jdbctemplate);
+    System.out.println("secList::" + secList);
+    Iterator secitr = secList.iterator();
+    if (!secList.isEmpty()) {
+      while (secitr.hasNext())
+      {
+        Map map = (Map)secitr.next();
+        String eDMK = (String)map.get("DMK");
+        String eDPK = (String)map.get("DPK");
+        
+        newhashcard = padsssec.getHashedValue(newcardno + instid);
+        ecardno = padsssec.getECHN(eDMK, eDPK, newcardno.toString());
+      }
+    }
+    
+
+
+
+    List listvalfornewcard = commondesc.getcardcollectbranch(instid, newhashcard.toString(), jdbctemplate);
+    Iterator refandcrdbranch = listvalfornewcard.iterator();
+    String orderfornewcard = "";String newcardcollectbranch = "";
+    if (!listvalfornewcard.isEmpty()) {
+      while (refandcrdbranch.hasNext())
+      {
+        Map map1 = (Map)refandcrdbranch.next();
+        orderfornewcard = (String)map1.get("ORDER_REF_NO");
+        newcardcollectbranch = (String)map1.get("CARD_COLLECT_BRANCH");
+      }
+    }
+    
+
+
+    System.out.println("newhashcard::" + newhashcard + "ecardno" + ecardno + "\n" + newcardcollectbranch);
+    
+    if (newcardcollectbranch == null) {
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", " " + newcardno + "Card is not available/Card Collect Branch is not configured ...  ");
+      trace("[ " + newcardno + " ]" + newcardno + "  Card Collect Branch is not configured ");
+      return "required_home";
+    }
+    
+    if (!newcardcollectbranch.equals(comBranchId()))
+    {
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", " " + newcardno + " Card is not Valid to map ..Card Collect Branch is '" + newcardcollectbranch + "' ");
+      trace("[ " + newcardno + " ]" + newcardno + "  Card Collect Branch is '" + newcardcollectbranch + "'");
+      return "required_home";
+    }
+    
+    String oldhcardno = getRequest().getParameter("hashcard");
+    
+    int reissustatusupdate = commondesc.ChangeCustomerStatusReIssueDAO(instid, oldhcardno, "62", jdbctemplate);
+    
+    if (reissustatusupdate < 0)
+    {
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", "Lost/Stolen card is mismatching from DB");
+      trace("[ " + loststolencard + " ]Lost/Stolen card is mismatching from DB....");
+      return "required_home";
+    }
+    
+    if (oldhcardno.equals(newhashcard))
+    {
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", "Lost/Stolen card and  Enterd card number is same  ..");
+      trace("[ " + loststolencard + " ]Lost/Stolen card and  Enterd card number is same  ....");
+      return "required_home";
+    }
+    int validreissucard = commondesc.getcardreissucardvalid(instid, newhashcard.toString(), jdbctemplate);
+    
+    if (validreissucard < 0)
+    {
+
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", " " + newcardno + "  Card is not Valid to map . .");
+      trace("[ " + newcardno + " ]" + newcardno + "  Card is not Valid to map . .");
+      return "required_home";
+    }
+    
+
+    System.out.println("hash card" + newhashcard);
+    
+    cardregbean.setCardno(newhashcard.toString());
+    cardregbean.setCustname(getRequest().getParameter("customername"));
+    
+    String branchcode = getRequest().getParameter("branchcode");
+    System.out.println("branchcode" + branchcode);
+    int bracnh = Integer.parseInt(branchcode);
+    cardregbean.setBranch_code(bracnh);
+    
+    acctnumber = getRequest().getParameter("accountno");
+    
+    cardregbean.setAccountno(getRequest().getParameter("accountno"));
+    
+
+    if (acctnumber.length() == 14)
+    {
+      accttypevalue = acctnumber.substring(4, 6);
+    }
+    else {
+      accttypevalue = acctnumber.substring(5, 7);
+    }
+    
+    accttype = commondesc.getAcctTypeValue(instid, accttypevalue, jdbctemplate);
+    
+    cardregbean.setAccttype(accttype);
+    
+    cardregbean.setHascard(newhashcard.toString());
+    
+    String copro = getRequest().getParameter("codeprod");
+    
+    cardregbean.setCod_prod(copro);
+    String cusid = getRequest().getParameter("customerid");
+    System.out.println("custid" + cusid);
+    int custid = Integer.parseInt(cusid);
+    cardregbean.setCustid(custid);
+    cardregbean.setProd_code(getRequest().getParameter("productcode"));
+    
+    cardregbean.setUsercode(usercode);
+    cardregbean.setUsername(username);
+    
+    String WDLLMTAMT = getRequest().getParameter("wdl_lmt_amt");
+    int WDL_LMT_AMT = Integer.parseInt(WDLLMTAMT);
+    
+    cardregbean.setWdl_lmt_amt(WDL_LMT_AMT);
+    
+    String WDLLMTCNT = getRequest().getParameter("wdl_lmt_cnt");
+    int WDL_LMT_CNT = Integer.parseInt(WDLLMTCNT);
+    
+    cardregbean.setWdl_lmt_cnt(WDL_LMT_CNT);
+    
+    String PURLMTAMT = getRequest().getParameter("pur_lmt_amt");
+    int PUR_LMT_AMT = Integer.parseInt(PURLMTAMT);
+    
+    cardregbean.setPur_lmt_amt(PUR_LMT_AMT);
+    
+
+    String PURLMTCNT = getRequest().getParameter("pur_lmt_cnt");
+    int PUR_LMT_CNT = Integer.parseInt(PURLMTCNT);
+    
+    cardregbean.setPur_lmt_cnt(PUR_LMT_CNT);
+    
+    cardregbean.setOrder_ref_no(getRequest().getParameter("orderreferno"));
+    
+    cardregbean.setLmt_based_on(getRequest().getParameter("lmt_based_on"));
+    cardregbean.setEncrptchn(ecardno);
+    cardregbean.setChn_msk(getRequest().getParameter("chnmask"));
+    
+
+    cardregbean.setEmail(getRequest().getParameter("emailid"));
+    cardregbean.setPaddress1(getRequest().getParameter("address1"));
+    cardregbean.setPaddress2(getRequest().getParameter("address2"));
+    cardregbean.setPaddress3(getRequest().getParameter("address3"));
+    cardregbean.setPaddress4(getRequest().getParameter("address4"));
+    cardregbean.setPaddress5(getRequest().getParameter("address5"));
+    cardregbean.setPaddress6(getRequest().getParameter("address6"));
+    cardregbean.setCountrydesc(getRequest().getParameter("address6"));
+    
+    String dob = getRequest().getParameter("DOB");
+    cardregbean.setDob(dob);
+    
+    cardregbean.setPhoneno(getRequest().getParameter("phonenumber"));
+    cardregbean.setGender(getRequest().getParameter("sex"));
+    cardregbean.setMothername(getRequest().getParameter("mothername"));
+    cardregbean.setCard_ccy(getRequest().getParameter("cardcurr"));
+    String currcode = "";
+    
+    cardregbean.setCard_ccy(getRequest().getParameter("card_ccy"));
+    
+
+    cardregbean.setCardtype(Integer.parseInt(getRequest().getParameter("cardtype").trim()));
+    
+    System.out.println("start to insert customerdet");
+    StringBuilder getLimitType = new StringBuilder();
+    getLimitType.append("select LIMITTYPE from IFD_EZLIMITINFO where LIMIT_RECID in ( ");
+    getLimitType.append("select b.LIMIT_ID from IFD_PRODUCT_MASTER a, IFD_INSTPROD_DETAILS B where A.PRODUCT_CODE in ");
+    getLimitType.append("(select PRODUCT_CODE from IFD_INSTPROD_DETAILS where  SUB_PROD_ID='" + cardregbean.getCod_prod() + "' AND INST_ID='" + instid + "') AND A.PRODUCT_CODE=B.PRODUCT_CODE and B.SUB_PROD_ID='" + cardregbean.getCod_prod() + "'");
+    getLimitType.append("\t\t) and rownum=1 ");
+    
+    enctrace("limitlistqry :" + getLimitType.toString());
+    String limitbasedon = (String)jdbctemplate.queryForObject(getLimitType.toString(), String.class);
+    
+    cardregbean.setLmt_based_on(limitbasedon);
+    
+    StringBuilder ai = new StringBuilder();
+    
+
+    int updateinstcardproces = cardregdao.updateinstcardprocess(instid, usercode, cardregbean, jdbctemplate);
+    int insertinsacctdet = cardregdao.insertinsacctdetails(instid, cardregbean, jdbctemplate);
+    int insertinscustdet = cardregdao.insertinscustdetails(instid, cardregbean, jdbctemplate);
+    int updateezcardinfo = cardregdao.updateordeezcardinfofornewcard(instid, oldhcardno.toString(), jdbctemplate);
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    try
+    {
+      trace("getting count updateinstcardproces insatmcms " + updateinstcardproces + 
+        " \n insertinsacctdet" + insertinsacctdet + " \n insertinscustdet" + insertinscustdet);
+      
+
+
+
+
+
+
+
+      if ((updateinstcardproces > 0) || (insertinsacctdet > 0) || ((insertinscustdet > 0) && (updateezcardinfo > 0))) {
+        txManager.commit(status);
+        addActionMessage(cardregbean.getChn_msk() + " Card Registered Successfully .Waiting for Authorization ");
+        trace("Committed successfully....for the card no " + cardregbean.getChn_msk());
+        
+
+        try
+        {
+          String mcardno = commondesc.getMaskedCardbyproc(instid, cardregbean.getEncrptchn(), "IFD_INST_CARD_PROCESS", "C", jdbctemplate);
+          if (mcardno == null) mcardno = cardregbean.getEncrptchn();
+          auditbean.setActmsg("Reissue card " + newcardno + " is Mapped to New card [ " + mcardno + " ] ");
+          auditbean.setUsercode(usercode);
+          auditbean.setAuditactcode("4104");
+          auditbean.setCardno(mcardno);
+          auditbean.setApplicationid(cardregbean.getOrder_ref_no());
+          
+
+          commondesc.insertAuditTrailPendingCommit(instid, username, auditbean, jdbctemplate, txManager);
+        } catch (Exception audite) { trace("Exception in auditran : " + audite.getMessage());
+        }
+        
+
+      }
+      else
+      {
+        txManager.rollback(status);
+        addActionError("Could not Register the Card " + cardregbean.getChn_msk());
+        trace("Exception : While Register the cards");
+
+      }
+      
+
+    }
+    catch (Exception e)
+    {
+
+      txManager.rollback(status);
+      addActionError("Unable to Register the Cards");
+      trace("Exception : While Register Issue the cards : " + e.getMessage());
+    }
+    
+    return registerInstCardHome();
+  }
+  
+
+
+
+
+
+  String imageId;
+  
+
+
+
+
+  public String registerInstCardHome()
+  {
+    trace("Instant card register ...\n");
+    enctrace("Instant card register ...\n");
+    String instid = comInstId();
+    HttpSession session = getRequest().getSession();
+    
+
+    try
+    {
+      String act = getRequest().getParameter("act");
+      if (act != null) {
+        session.setAttribute("act", act);
+      }
+      
+      if (comBranchId().equals("000")) {
+        session.setAttribute("preverr", "E");
+        session.setAttribute("prevmsg", " Please Login With branch User ...");
+        trace("Please Login With branch User ...");
+        return "required_home";
+      }
+      
+      trace("Getting branchlist....");
+      List branchlist = commondesc.generateBranchList(instid, jdbctemplate);
+      if ((branchlist == null) || (branchlist.isEmpty())) {
+        session.setAttribute("preverr", "E");session.setAttribute("prevmsg", "No Branch Configured....");
+        return "required_home";
+      }
+      cardregbean.setBranchlist(branchlist);
+      
+      trace("Getting product list...");
+      List prodlist = commondesc.getProductList(instid, jdbctemplate, session);
+      if ((prodlist == null) || (prodlist.isEmpty())) {
+        session.setAttribute("preverr", "E");session.setAttribute("prevmsg", "No Product Configured....");
+        return "required_home";
+      }
+      cardregbean.setProdlist(prodlist);
+      
+
+      System.out.println("initmail--" + initmail + " parentid :  " + parentid);
+      if (initmail.booleanValue()) {
+        HttpServletRequest req = getRequest();
+        String menuid = comutil.getUrlMenuId(req, jdbctemplate);
+        if (!menuid.equals("NOREC")) {
+          System.out.println("parentid--" + menuid);
+          parentid = menuid;
+        } else {
+          parentid = "000";
+        }
+        initmail = Boolean.valueOf(false);
+      }
+      
+    }
+    catch (Exception e)
+    {
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", "Exception : Could not continue the registeration process.");
+      e.printStackTrace();
+      trace("Exception : Could not continue the registeration process... " + e.getMessage());
+      return "required_home";
+    }
+    return "insregcard_home";
+  }
+  
+
+
+  public String newCustReg()
+  {
+    trace("************Customer Reisteration Home **************\n\n");
+    enctrace("************Customer Reisteration Home **************\n\n");
+    
+    HttpSession session = getRequest().getSession();
+    String instid = comInstId();
+    String br_id = (String)session.getAttribute("BRANCHCODE");
+    
+    String card_no = getRequest().getParameter("cardno").trim();
+    
+    String accountno = getRequest().getParameter("accountno").trim();
+    String processtype = "INSTANT";
+    Boolean kyc = Boolean.valueOf(false);
+    String regtype = getRequest().getParameter("regtype").trim();
+    String custid = "";
+    String subprodid = "";
+    String subproddesc = "";
+    String actiontype = "EDIT";
+    String apptype = (String)session.getAttribute("APPLICATIONTYPE");
+    StringBuffer hcardno = new StringBuffer();
+    String getjsonvalues = "";
+    JSONObject js = null;
+    String name = "";String mobileno = "";String customerid = "";String acctcur = "";String dob = "";String addr1 = "";String addr2 = "";String addr3 = "";
+    
+    try
+    {
+      if (card_no.length() != 16) {
+        session.setAttribute("preverr", "E");
+        session.setAttribute("prevmsg", "Entered  Card NO is " + card_no + "  ,Enter Valid 16 digit card number..");
+        trace("Entered  " + card_no + "  is less than 16 digit,Kindly Check ...");
+        return "required_home";
+      }
+      
+
+      String act = getRequest().getParameter("act");
+      if (act != null) {
+        session.setAttribute("act", act);
+      }
+      
+
+
+      String keyid = "";String ecardno = "";
+      PadssSecurity padsssec = new PadssSecurity();
+      
+
+
+      keyid = "1";
+      System.out.println("keyid::" + keyid);
+      List secList = commondesc.getPADSSDetailById(keyid, jdbctemplate);
+      System.out.println("secList::" + secList);
+      Iterator secitr = secList.iterator();
+      if (!secList.isEmpty()) {
+        while (secitr.hasNext())
+        {
+          Map map = (Map)secitr.next();
+          String eDMK = (String)map.get("DMK");
+          String eDPK = (String)map.get("DPK");
+          
+          hcardno = padsssec.getHashedValue(card_no + instid);
+          ecardno = padsssec.getECHN(eDMK, eDPK, card_no);
+        }
+      }
+      
+
+
+
+      String maskedchn = padsssec.getMakedCardno(card_no);
+      System.out.println("decrypted card number for encod and maintanance" + ecardno + "clear chn value" + hcardno);
+      
+
+
+
+
+
+
+
+
+      if (card_no.length() != 16) {
+        session.setAttribute("preverr", "E");
+        session.setAttribute("prevmsg", "   Entered Card Number is " + card_no + " Enter 16 digit Valid Card Number... ");
+        trace("Entered Card Number is " + card_no + " Enter 16 digit Valid Card Number...");
+      }
+      
+
+      String validbranch = commondesc.getvalidbranch(instid, hcardno.toString(), jdbctemplate);
+      
+      if (validbranch == null) {
+        session.setAttribute("preverr", "E");
+        session.setAttribute("prevmsg", " " + maskedchn + "  Entered Card Number " + card_no + "  / Cardcollect branch  is not Available ...");
+        trace("[ " + card_no + " ]Card is not valid for this Branch User. ...");
+        return "required_home";
+      }
+      trace("Got validbranch: " + validbranch);
+      if ((!br_id.equals("0000")) && 
+        (!validbranch.equalsIgnoreCase(br_id)))
+      {
+        session.setAttribute("preverr", "E");
+        session.setAttribute("prevmsg", " " + maskedchn + "  Card is not valid for this Branch User....Check with valid Card..");
+        trace("[ " + card_no + " ]Card is not valid for this Branch User. ...");
+        return "required_home";
+      }
+      
+      int cardrequired = cardregdao.cardstatsusformap(instid, hcardno.toString(), jdbctemplate);
+      
+      trace("Got regreq: " + cardrequired);
+      if (cardrequired > 0)
+      {
+        session.setAttribute("preverr", "E");
+        session.setAttribute("prevmsg", " " + maskedchn + "  Card is  Already Mapped with Customer ...Waiting for Authorization...");
+        trace("[ " + card_no + " ]Card is  Already Mapped with Customer .. .Waiting for Authorization ...");
+        return "required_home";
+      }
+      String org_chn = findinprocess(instid, accountno, jdbctemplate);
+      if ((org_chn != null) || (org_chn == ""))
+      {
+
+
+
+
+
+
+
+        session.setAttribute("preverr", "E");
+        session.setAttribute("prevmsg", "Account Already Exist [ " + accountno + " ] with " + org_chn + " Waiting for Cuatomer Mapping Authorization..");
+        trace("[ " + accountno + " ] Account Number Alredy Exist. Registeration not required");
+        return "required_home";
+      }
+      
+      int regreq = cardregdao.checkcustomeridexist(instid, accountno, jdbctemplate);
+      trace("Got regreq: " + regreq);
+      if (regreq > 0)
+      {
+
+
+
+
+
+
+
+        session.setAttribute("preverr", "E");
+        session.setAttribute("prevmsg", "Account Already Exist [ " + accountno + " ] Enter the Account No In the Maintenance to find the card..");
+        trace("[ " + accountno + " ] Account Number Alredy Exist. Registeration not required");
+        return "required_home";
+      }
+      
+
+
+      List carddet = cardregdao.getcarddetails(instid, ecardno, jdbctemplate);
+      trace("cardforcbs" + carddet);
+      if (carddet.isEmpty())
+      {
+        session.setAttribute("preverr", "E");
+        session.setAttribute("prevmsg", "Could not fetch the details from the insatmcms...");
+      }
+      Iterator itrat = carddet.iterator();
+      
+      while (itrat.hasNext())
+      {
+        Map map = (Map)itrat.next();
+        
+        int WDLAMT = ((BigDecimal)map.get("WDL_AMT")).intValue();
+        int WDLCNT = ((BigDecimal)map.get("WDL_CNT")).intValue();
+        int PURAMT = ((BigDecimal)map.get("PUR_AMT")).intValue();
+        int PURCNT = ((BigDecimal)map.get("PUR_CNT")).intValue();
+        
+
+        cardregbean.setWdl_lmt_amt(WDLAMT);
+        cardregbean.setOrder_ref_no((String)map.get("ORDER_REF_NO"));
+        cardregbean.setChn_msk((String)map.get("MCARD_NO"));
+        cardregbean.setHascard((String)map.get("HCARD_NO"));
+        cardregbean.setEncrptchn((String)map.get("CARD_NO"));
+        
+        cardregbean.setWdl_lmt_cnt(WDLCNT);
+        cardregbean.setPur_lmt_amt(PURAMT);
+        cardregbean.setPur_lmt_cnt(PURCNT);
+        
+        cardregbean.setLmt_based_on((String)map.get("LMT_BASED_ON"));
+        cardregbean.setProd_code((String)map.get("BIN"));
+        cardregbean.setCardcollbranch(validbranch.trim());
+        cardregbean.setCod_prod(map.get("SUB_PROD_ID").toString().trim());
+        
+
+        String productdesc = commondesc.getProductdesc(instid, map.get("PRODUCT_CODE").toString().trim(), jdbctemplate);
+        trace("productdesc==> " + productdesc);
+        cardregbean.setProductdesc(productdesc);
+        String cardtypedesc = commondesc.getCardTypeDesc(instid, (String)map.get("BIN"), jdbctemplate);
+        cardregbean.setCardtypedesc(cardtypedesc);
+        
+        cardregbean.setCardtype(Integer.parseInt(map.get("CARD_TYPE_ID").toString().trim()));
+        
+        getjsonvalues = getaccountdetailsfromcbs(instid, accountno, ecardno.toString());
+        System.out.println("getjsonvalues" + getjsonvalues);
+        
+        js = new JSONObject(getjsonvalues);
+        cardregbean.setCustname(js.getString("Name"));
+        cardregbean.setPhoneno(js.getString("Mobile Number"));
+        cardregbean.setCustid(Integer.parseInt(js.getString("Customer ID")));
+        cardregbean.setCard_ccy(js.getString("Account Currency"));
+        cardregbean.setDob(js.getString("DOB"));
+        cardregbean.setPaddress1(js.getString("Address1"));
+        cardregbean.setPaddress2(js.getString("Address2"));
+        cardregbean.setPaddress3(js.getString("Address3"));
+        cardregbean.setPaddress4(js.getString("Address4"));
+        cardregbean.setPaddress5(js.getString("Address5"));
+        cardregbean.setPaddress6(js.getString("Address6"));
+        cardregbean.setCity(js.getString("City"));
+        cardregbean.setCountrydesc(js.getString("Country code"));
+        cardregbean.setAccountno(accountno);
+
+      }
+      
+
+    }
+    catch (Exception e)
+    {
+
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", "Exception : Could not continue the process");
+      e.printStackTrace();
+      trace("Exception : Could not continue the process..." + e.getMessage());
+      return "required_home";
+    }
+    
+    return "inscustomer_view";
+  }
+  
+
+
+
+
+  private File getImageFile(String imageId, String PHOTOTYPE)
+  {
+    Properties prop = commondesc.getCommonDescProperty();
+    String photodir = "";
+    if (PHOTOTYPE.equals("PHOTO")) {
+      photodir = prop.getProperty("PHOTOFILELOCATION");
+    } else if (PHOTOTYPE.equals("SIGNATURE")) {
+      photodir = prop.getProperty("SIGNATUREFILELOCATION");
+    } else if (PHOTOTYPE.equals("IDPROOF")) {
+      photodir = prop.getProperty("IDPROOFLOCATION");
+    }
+    File file = new File(photodir + "/" + imageId);
+    return file;
+  }
+  
+  public String getCustomContentType() {
+    return "image/jpeg";
+  }
+  
+
+  byte[] imageInByte = null;
+  
+  public String getImageId() { return imageId; }
+  
+  public void setImageId(String imageId) {
+    this.imageId = imageId;
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  public void imageAction()
+    throws IOException
+  {
+    System.out.println("New image action");
+    imageId = getRequest().getParameter("imageId");
+    String imagetype = getRequest().getParameter("imagetype");
+    
+    try
+    {
+      File file = getImageFile(imageId, imagetype);
+      JPEGImageDecoder jpegDecoder = JPEGCodec.createJPEGDecoder(new FileInputStream(file));
+      BufferedImage originalImage = jpegDecoder.decodeAsBufferedImage();
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      try {
+        ImageIO.write(originalImage, "jpg", baos);
+      } catch (ImageFormatException ee) {
+        trace("Not jpg file...exception..continuing....");
+        ImageIO.write(originalImage, "png", baos);
+      }
+      
+      baos.flush();
+      imageInByte = baos.toByteArray();
+      baos.close();
+    } catch (Exception e) {
+      trace("Exception : " + e.getMessage());
+      e.printStackTrace();
+    }
+    
+    getResponse().setContentType(getCustomContentType());
+    getResponse().getOutputStream().write(imageInByte);
+    getResponse().getOutputStream().flush();
+  }
+  
+
+  public String getaccountdetailsfromcbs(String instid, String accountno, String ecardno)
+  {
+    trace("********Generate customer details.....*************\n");
+    enctrace("********Generate customer details.....*************\n");
+    HttpSession session = getRequest().getSession();
+    String charset = "UTF-8";
+    String data = "";
+    JSONObject js = new JSONObject();
+    try {
+      URLConnection connection = null;
+      BufferedReader reader = null;
+      StringBuffer stringBuilder = new StringBuffer();
+      InputStreamReader in = null;
+      
+
+
+
+      try
+      {
+        connection = new URL("http://172.18.2.55:8080/ords/azsms/cmsfetch?acc=" + accountno).openConnection();
+        connection.setDoOutput(true);
+        
+
+
+
+        in = new InputStreamReader(connection.getInputStream(), 
+          Charset.defaultCharset());
+        reader = new BufferedReader(in);
+        
+        String line = null;
+        while ((line = reader.readLine()) != null)
+        {
+          stringBuilder.append(line);
+        }
+        System.out.println("output from the required string" + stringBuilder.toString());
+        data = stringBuilder.toString();
+        if (data.contains("Account is not valid,Please enter a valid account")) {
+          addActionError("Entered " + accountno + "Account is not Available in the CBS/Kindly Contact Head Office ...");
+          
+          trace("Could not continue the customer registeration process.." + accountno + ".Account is not valid");
+          String str1 = registerInstCardHome();return str1;
+        }
+        
+        System.out.println("after replacing the pipe symbol value we can get as" + data);
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        String Footer = "|";
+        int cnamepipeendlength = data.indexOf(Footer);
+        String custname = data.substring(0, cnamepipeendlength);
+        System.out.println("custname length     :  " + custname.length());
+        String custname1 = "";String custname2 = "";
+        custname1 = custname.replace(",", "");
+        if (custname.length() > 26) {
+          custname1 = custname.substring(0, 26);
+        }
+        if (custname.length() < 26) {
+          custname1 = custname;
+        }
+        System.out.println("custname     :  " + custname1);
+        custname2 = custname1.replace("'", "");
+        System.out.println("existed qote with '  :  " + custname2);
+        
+
+
+        trace("custname  after remove all special char   :  " + custname2);
+        js.put("Name", custname2);
+        String aftercustremoved = data.substring(custname.length() + 1);
+        System.out.println("after custname removed" + aftercustremoved);
+        
+
+
+
+
+
+        int phonelen = aftercustremoved.indexOf(Footer);
+        String phone = aftercustremoved.substring(0, phonelen);
+        System.out.println("phone length     :  " + phone.length());
+        
+        System.out.println("phone     :  " + phone);
+        js.put("Mobile Number", phone);
+        
+        String s3 = aftercustremoved.substring(phone.length() + 1);
+        System.out.println("after custname and phoneno removed" + s3);
+        
+
+
+        int y2 = s3.indexOf(Footer);
+        String cin = s3.substring(0, y2);
+        System.out.println("cin len     :  " + cin.length());
+        System.out.println("cin     :  " + cin);
+        
+        js.put("Customer ID", cin);
+        
+
+        String s4 = s3.substring(cin.length() + 1);
+        System.out.println("after custphCin RM" + s4);
+        
+
+
+        int y3 = s4.indexOf(Footer);
+        String currency = s4.substring(0, y3);
+        System.out.println("currency len     :  " + currency.length());
+        
+        System.out.println("currency     :  " + currency);
+        
+        js.put("Account Currency", currency);
+        
+
+        String s5 = s4.substring(currency.length() + 1);
+        System.out.println("aftter curr RM" + s5);
+        
+
+
+        int y4 = s5.indexOf(Footer);
+        String dob = s5.substring(0, y4);
+        System.out.println("DOB len     :  " + dob.length());
+        System.out.println("DOB     :  " + dob);
+        
+
+        js.put("DOB", dob);
+        
+        String s6 = s5.substring(dob.length() + 1);
+        System.out.println("dob rem" + s6);
+        
+
+
+
+        String addressdetails = s6.replace("'", "");
+        String[] datas = addressdetails.split(",");
+        
+        trace("custname" + custname1 + "\n phone" + phone + "\n cin" + cin + " \n currency" + currency + 
+          "\n dob" + dob + "\n adda1" + datas[0] + "\n datas[1]-add2" + datas[1] + 
+          "\n datas[2]-add3 " + datas[2] + "\n add4" + datas[3] + 
+          "\n add5" + datas[4] + "\n add6" + datas[5] + 
+          "\n city " + datas[6] + "\n country code" + datas[7]);
+        
+
+
+
+
+
+
+
+
+
+        js.put("Address1", datas[0]);
+        js.put("Address2", datas[1]);
+        js.put("Address3", datas[2]);
+        js.put("Address4", datas[3]);
+        js.put("Address5", datas[4]);
+        js.put("Address6", datas[5]);
+        js.put("City", datas[6]);
+        js.put("Country code", datas[7]);
+        
+        System.out.println("getting json values " + js.toString());
+
+      }
+      catch (Exception e)
+      {
+        System.out.println("Exception Happened" + e.getMessage());
+      }
+      finally {
+        in.close();
+      }
+    }
+    catch (Exception e)
+    {
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", "Exception : Could not continue the customer registeration process...");
+      e.printStackTrace();
+      trace("Exception : while getting the customer details ... " + e.getMessage());
+    }
+    
+    return js.toString();
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  public String viewAndEditRegHome()
+  {
+    trace("View or Edit registeration home....");
+    HttpSession session = getRequest().getSession();
+    
+
+    return "customer_editview";
+  }
+  
+
+
+
+
+
+  public String editViewCustomerAction()
+  {
+    trace("View or Edit registeration home....");
+    HttpSession session = getRequest().getSession();
+    
+    String instid = comInstId();
+    String inputtype = getRequest().getParameter("inputtype");
+    String actiontype = getRequest().getParameter("actiontype");
+    String accountno = getRequest().getParameter("accountno").trim();
+    String cardno = "";
+    String customerid = "";
+    int custid = 0;
+    List appdata = null;
+    String hcardno = "";
+    try {
+      trace("Input type is : " + inputtype);
+      if (inputtype.equals("cardno")) {
+        cardno = getRequest().getParameter("cardno").trim();
+        trace("Getting application number for the cardno[ " + cardno + " ]");
+        appdata = cardregdao.getApplicationNumber(instid, cardno, "IFD_CARD_PRODUCTION", jdbctemplate);
+        if ((appdata == null) || (appdata.isEmpty())) {
+          session.setAttribute("preverr", "E");
+          session.setAttribute("prevmsg", "Could not get Application data for the card number [ " + cardno + " ] ...");
+          trace("Could not get Application data for the card number [ " + cardno + " ] ...");
+        }
+        else {
+          Iterator apitr = appdata.iterator();
+          while (apitr.hasNext()) {
+            Map apmp = (Map)apitr.next();
+            cardregbean.setAppdate((String)apmp.get("APP_DATE"));
+            cardregbean.setAppno((String)apmp.get("APP_NO"));
+          }
+        }
+        
+
+
+        trace("Getting customer id for the cardno [ " + cardno + " ] ");
+        customerid = cardregdao.getCustomerIdByCard(instid, cardno, jdbctemplate);
+        custid = Integer.parseInt(customerid);
+        if (customerid == null) {
+          session.setAttribute("preverr", "E");
+          session.setAttribute("prevmsg", "Could not get customer id for the card number [ " + cardno + " ] ...");
+          trace("Could not get customer id for the card number [ " + cardno + " ] ...");
+          return "required_home";
+        }
+      } else {
+        customerid = getRequest().getParameter("custid").trim();
+        custid = Integer.parseInt(customerid);
+      }
+      trace("Customer id : " + customerid);
+      cardregbean.setCardno(cardno);
+      cardregbean.setCustid(custid);
+      cardregbean.setCusttype("UPDATECUSTOMER");
+      
+      trace("Getting nationality list...");
+      
+
+
+
+
+
+
+
+      trace("Getting document type list...");
+      List documenttypelist = commondesc.gettingDocumnettype(instid, jdbctemplate);
+      if ((documenttypelist == null) || (documenttypelist.isEmpty())) {
+        session.setAttribute("preverr", "E");session.setAttribute("prevmsg", "No document type configured....");
+        trace("No document type configured....");
+        return "required_home";
+      }
+      cardregbean.setDocumenttypelist(documenttypelist);
+      
+      trace("Getting document type list...");
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+      return getaccountdetailsfromcbs(instid, accountno, hcardno);
+    }
+    catch (Exception e) {
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", "Exception : Could not continue the registeration process ");
+      trace("Exception : could not continue the register : " + e.getMessage());
+      e.printStackTrace(); }
+    return "required_home";
+  }
+  
+
+
+
+  public String SaveCustomerReg()
+    throws Exception
+  {
+    trace("********Save customer details.....*************\n");
+    enctrace("********Save customer details.....*************\n");
+    String instid = comInstId();
+    IfpTransObj trasact = commondesc.myTranObject("CustomerRegister", txManager);
+    String acctnumber = "";String accttypevalue = "";String accttype = "";
+    String username = comUsername();
+    String usercode = comUserCode();
+    
+
+
+    String hashcard = getRequest().getParameter("hashcard");
+    System.out.println("hash card" + hashcard);
+    
+    cardregbean.setCardno(hashcard);
+    cardregbean.setCustname(getRequest().getParameter("customername"));
+    
+    String branchcode = getRequest().getParameter("branchcode");
+    System.out.println("branchcode" + branchcode);
+    int bracnh = Integer.parseInt(branchcode);
+    cardregbean.setBranch_code(bracnh);
+    
+    acctnumber = getRequest().getParameter("accountno");
+    
+    cardregbean.setAccountno(getRequest().getParameter("accountno"));
+    
+
+    if (acctnumber.length() == 14)
+    {
+      accttypevalue = acctnumber.substring(4, 6);
+    }
+    else {
+      accttypevalue = acctnumber.substring(5, 7);
+    }
+    
+    accttype = commondesc.getAcctTypeValue(instid, accttypevalue, jdbctemplate);
+    
+    cardregbean.setAccttype(accttype);
+    
+    cardregbean.setHascard(getRequest().getParameter("hashcard"));
+    
+    String copro = getRequest().getParameter("codeprod");
+    
+    cardregbean.setCod_prod(copro);
+    String cusid = getRequest().getParameter("customerid");
+    System.out.println("custid" + cusid);
+    int custid = Integer.parseInt(cusid);
+    cardregbean.setCustid(custid);
+    cardregbean.setProd_code(getRequest().getParameter("productcode"));
+    
+    cardregbean.setUsercode(usercode);
+    cardregbean.setUsername(username);
+    
+    String WDLLMTAMT = getRequest().getParameter("wdl_lmt_amt");
+    int WDL_LMT_AMT = Integer.parseInt(WDLLMTAMT);
+    
+    cardregbean.setWdl_lmt_amt(WDL_LMT_AMT);
+    
+    String WDLLMTCNT = getRequest().getParameter("wdl_lmt_cnt");
+    int WDL_LMT_CNT = Integer.parseInt(WDLLMTCNT);
+    
+    cardregbean.setWdl_lmt_cnt(WDL_LMT_CNT);
+    
+    String PURLMTAMT = getRequest().getParameter("pur_lmt_amt");
+    int PUR_LMT_AMT = Integer.parseInt(PURLMTAMT);
+    
+    cardregbean.setPur_lmt_amt(PUR_LMT_AMT);
+    
+
+    String PURLMTCNT = getRequest().getParameter("pur_lmt_cnt");
+    int PUR_LMT_CNT = Integer.parseInt(PURLMTCNT);
+    
+    cardregbean.setPur_lmt_cnt(PUR_LMT_CNT);
+    
+    cardregbean.setOrder_ref_no(getRequest().getParameter("orderreferno"));
+    
+    cardregbean.setLmt_based_on(getRequest().getParameter("lmt_based_on"));
+    cardregbean.setEncrptchn(getRequest().getParameter("encrptchn"));
+    cardregbean.setChn_msk(getRequest().getParameter("chnmask"));
+    
+
+    cardregbean.setEmail(getRequest().getParameter("emailid"));
+    cardregbean.setPaddress1(getRequest().getParameter("address1"));
+    cardregbean.setPaddress2(getRequest().getParameter("address2"));
+    cardregbean.setPaddress3(getRequest().getParameter("address3"));
+    cardregbean.setPaddress4(getRequest().getParameter("address4"));
+    cardregbean.setPaddress5(getRequest().getParameter("address5"));
+    cardregbean.setPaddress6(getRequest().getParameter("address6"));
+    cardregbean.setCountrydesc(getRequest().getParameter("address6"));
+    
+    String dob = getRequest().getParameter("DOB");
+    cardregbean.setDob(dob);
+    
+    cardregbean.setPhoneno(getRequest().getParameter("phonenumber"));
+    cardregbean.setGender(getRequest().getParameter("sex"));
+    cardregbean.setMothername(getRequest().getParameter("mothername"));
+    cardregbean.setCard_ccy(getRequest().getParameter("cardcurr"));
+    String currcode = "";
+    
+    if (cardregbean.getCard_ccy().equalsIgnoreCase("AFN"))
+    {
+      currcode = "971";
+      cardregbean.setCard_ccy(currcode);
+    } else if (cardregbean.getCard_ccy().equalsIgnoreCase("USD")) {
+      currcode = "840";
+      cardregbean.setCard_ccy(currcode);
+    }
+    else {
+      addActionError("Currcode is Invalid");
+      return registerInstCardHome();
+    }
+    
+    cardregbean.setCardtype(Integer.parseInt(getRequest().getParameter("cardtype").trim()));
+    
+    System.out.println("start to insert customerdet");
+    StringBuilder getLimitType = new StringBuilder();
+    getLimitType.append("select LIMITTYPE from IFD_EZLIMITINFO where LIMIT_RECID in ( ");
+    getLimitType.append("select b.LIMIT_ID from IFD_PRODUCT_MASTER a, IFD_INSTPROD_DETAILS B where A.PRODUCT_CODE in ");
+    getLimitType.append("(select PRODUCT_CODE from IFD_INSTPROD_DETAILS where  SUB_PROD_ID='" + cardregbean.getCod_prod() + "' AND INST_ID='" + instid + "') AND A.PRODUCT_CODE=B.PRODUCT_CODE and B.SUB_PROD_ID='" + cardregbean.getCod_prod() + "'");
+    getLimitType.append("\t\t) and rownum=1 ");
+    
+    enctrace("limitlistqry :" + getLimitType.toString());
+    String limitbasedon = (String)jdbctemplate.queryForObject(getLimitType.toString(), String.class);
+    
+    cardregbean.setLmt_based_on(limitbasedon);
+    
+    StringBuilder ai = new StringBuilder();
+    
+
+    int updateinstcardproces = cardregdao.updatefornewcardreg(instid, usercode, cardregbean, jdbctemplate);
+    int insertinsacctdet = cardregdao.insertinsacctdetails(instid, cardregbean, jdbctemplate);
+    int insertinscustdet = cardregdao.insertinscustdetails(instid, cardregbean, jdbctemplate);
+    
+
+
+
+
+
+
+
+
+
+    try
+    {
+      trace("getting count updateinstcardproces insatmcms " + updateinstcardproces);
+      trace("getting count insert insertinsacctdet " + insertinsacctdet);
+      trace("getting count inseert insertinscustdet " + insertinscustdet);
+      
+
+
+
+
+
+      if ((updateinstcardproces > 0) && (insertinsacctdet > 0) && (insertinscustdet > 0)) {
+        txManager.commit(status);
+        addActionMessage(cardregbean.getChn_msk() + " Card Registered Successfully .Waiting for Authorization ");
+        trace("Committed successfully....for the card no " + cardregbean.getChn_msk());
+        
+
+        try
+        {
+          String mcardno = commondesc.getMaskedCardbyproc(instid, cardregbean.getEncrptchn(), "IFD_INST_CARD_PROCESS", "C", jdbctemplate);
+          if (mcardno == null) mcardno = cardregbean.getEncrptchn();
+          auditbean.setActmsg("Instant card " + mcardno + " Mapped to Account number [ " + acctnumber + " ] from " + branchcode + " ");
+          auditbean.setUsercode(usercode);
+          auditbean.setAuditactcode("4109");
+          auditbean.setCardno(mcardno);
+          auditbean.setApplicationid(cardregbean.getOrder_ref_no());
+          auditbean.setAccoutnno(acctnumber);
+          auditbean.setCustname(getRequest().getParameter("customername"));
+          auditbean.setCardcollectbranch(branchcode);
+          auditbean.setCin(cusid);
+          
+
+
+          commondesc.insertAuditTrailPendingCommit(instid, username, auditbean, jdbctemplate, txManager);
+        } catch (Exception audite) { trace("Exception in auditran : " + audite.getMessage());
+        }
+        
+
+      }
+      else
+      {
+        txManager.rollback(status);
+        addActionError("Could not Register the Card " + cardregbean.getChn_msk());
+        trace("Exception : While Register the cards");
+        return "required_home";
+
+      }
+      
+
+    }
+    catch (Exception e)
+    {
+
+      txManager.rollback(status);
+      addActionError("Unable to Register the Cards");
+      trace("Exception : While Register Issue the cards : " + e.getMessage());
+      return "required_home";
+    }
+    
+    return registerInstCardHome();
+  }
+  
+  public String saveCustDetail()
+  {
+    trace("Save customer details....");
+    enctrace("Save customer details....");
+    HttpSession session = getRequest().getSession();
+    
+    IfpTransObj trasact = commondesc.myTranObject("ADDCUSTOMER", txManager);
+    
+    commondesc.printLog(" save customer details " + getRequest().getParameter("custtype"));
+    String instid = comInstId();
+    String usercod = comUserCode();
+    
+
+    String usernam = comUsername1();
+    
+    String custype = getRequest().getParameter("custtype");
+    String customerid = "";
+    String cardno = getRequest().getParameter("cardno");
+    
+    String photourl = "";String signatureurl = "";String idproofurl = "";
+    String newphotoname = "";String newsignaturename = "";String newidproofname = "";
+    
+    String kycuser = null;
+    String makerid = "";String checkerid = "";String makerdate = "";String mkckflag = "";String ckdate = "";
+    try {
+      String act = (String)session.getAttribute("act");
+      
+      makerid = usercod;
+      checkerid = makerid;
+      mkckflag = "P";
+      ckdate = "sysdate";
+      makerdate = "SYSDATE";
+      
+      if (act != null) {
+        if (act.equals("M")) {
+          makerid = usercod;
+          mkckflag = "M";
+          ckdate = "TO_DATE('01-JAN-1900', 'DD-MON-YYYY')";
+          makerdate = "SYSDATE";
+          cardregbean.setMakerid(makerid);
+        }
+        else {
+          makerid = usercod;
+          checkerid = makerid;
+          mkckflag = "P";
+          ckdate = "sysdate";
+          makerdate = "SYSDATE";
+        }
+      }
+      
+
+      String hashcard = getRequest().getParameter("hashcard");
+      System.out.println("hash card" + hashcard);
+      
+      cardregbean.setCardno(hashcard);
+      
+      cardregbean.setFirstname(getRequest().getParameter("customername"));
+      String branchcode = getRequest().getParameter("branchcode");
+      System.out.println("branchcode" + branchcode);
+      int bracnh = Integer.parseInt(branchcode);
+      cardregbean.setBranch_code(bracnh);
+      
+      cardregbean.setAccountno(getRequest().getParameter("accountno"));
+      cardregbean.setHascard(getRequest().getParameter("hashcard"));
+      
+      String copro = getRequest().getParameter("codeprod");
+      
+      cardregbean.setCod_prod(copro);
+      String cusid = getRequest().getParameter("customerid");
+      int custid = Integer.parseInt(cusid);
+      cardregbean.setCustid(custid);
+      cardregbean.setProd_code(getRequest().getParameter("productcode"));
+      
+
+
+      cardregbean.setMakerid(makerid);
+      cardregbean.setMakerdate(makerdate);
+      cardregbean.setCheckerdate(ckdate);
+      cardregbean.setCheckerid(checkerid);
+      cardregbean.setMkckflag(mkckflag);
+      
+      cardregbean.setFirstname(getRequest().getParameter("customername"));
+      
+      cardregbean.setMothername(getRequest().getParameter("mothername"));
+      cardregbean.setGender(getRequest().getParameter("gender"));
+      
+
+
+
+
+
+
+      cardregbean.setDob(getRequest().getParameter("dob"));
+      
+      cardregbean.setPhoneno(getRequest().getParameter("phonenumber"));
+      cardregbean.setEmail(getRequest().getParameter("emailid"));
+      
+      cardregbean.setResaddress1(getRequest().getParameter("address1"));
+      cardregbean.setResaddress2(getRequest().getParameter("address2"));
+      cardregbean.setResaddress3(getRequest().getParameter("address3"));
+      
+
+
+
+      commondesc.printLog("getRequest().getParameter(residentreq) " + getRequest().getParameter("residentreq"));
+      System.out.println("getRequest().getParameter(residentreq) " + getRequest().getParameter("residentreq"));
+      if (getRequest().getParameter("residentreq") == null) {
+        commondesc.printLog(" residren req check box checked ");
+        System.out.println(" residren req check box checked ");
+        cardregbean.setPaddress1(getRequest().getParameter("paddress1"));
+        cardregbean.setPaddress2(getRequest().getParameter("paddress2"));
+        cardregbean.setPaddress3(getRequest().getParameter("paddress3"));
+        cardregbean.setPaddress4(getRequest().getParameter("paddress4"));
+        cardregbean.setPaddress5(getRequest().getParameter("paddress5"));
+      }
+      cardregbean.setKycuser("1");
+      trace("Getting customer id ");
+      trace("Register type : " + custype);
+      
+      if (custype.equals("new")) {
+        customerid = commondesc.cinnumberGeneratoer(instid, jdbctemplate);
+        
+
+        commondesc.printLog("The CIN Generated is : " + customerid);
+        if ((customerid.equals("E")) || (customerid.equals("N"))) {
+          session.setAttribute("preverr", "E");
+          session.setAttribute("prevmsg", "Error While Getting The CIN ");
+          return registerInstCardHome();
+        }
+        kycuser = "0";
+        cardregbean.setCustid(custid);
+        
+        if (getUploadedphoto() != null) {
+          newphotoname = customerid + "_" + commondesc.getDateTimeStamp() + ".jpg";
+        }
+        
+        if (getUploadsignature() != null) {
+          newsignaturename = customerid + "_" + commondesc.getDateTimeStamp() + ".jpg";
+        }
+        
+        if (getUploadidproof() != null) {
+          newidproofname = customerid + "_" + commondesc.getDateTimeStamp() + ".jpg";
+        }
+        
+        cardregbean.setPhotourl(newphotoname);
+        cardregbean.setSignatureurl(newsignaturename);
+        cardregbean.setIdproofurl(newidproofname);
+        
+        int newcustmove = cardregdao.insertCustomerDetailsProduction(instid, customerid, cardregbean, jdbctemplate);
+        trace("Inserting customer details....for the customer id [ " + customerid + " ] Got : " + newcustmove);
+        if (newcustmove != 1) {
+          txManager.rollback(status);
+          session.setAttribute("preverr", "E");
+          session.setAttribute("prevmsg", "Could not move the data to production for the card [" + cardno + "] ");
+          trace("Could not move the data to production for the card [" + cardno + "] ");
+          return registerInstCardHome();
+        }
+        trace("Updating account link....");
+        int updcardlink = cardregdao.updateCardAccountLink(instid, cardno, customerid, jdbctemplate);
+        trace("Got : " + updcardlink);
+        if (updcardlink < 0) {
+          txManager.rollback(status);
+          session.setAttribute("preverr", "E");
+          session.setAttribute("prevmsg", "Could not update the account link...");
+          trace("Could not update the account link...");
+          return registerInstCardHome();
+        }
+        trace("Updating new customerid ");
+        int updcustid = cardregdao.updateCardOriginalCustid(instid, cardno, customerid, jdbctemplate);
+        trace("Got : " + updcustid);
+        if (updcustid < 0) {
+          txManager.rollback(status);
+          session.setAttribute("preverr", "E");
+          session.setAttribute("prevmsg", "Could not update customer ..");
+          trace("Could no update customer id ...got rolled back...");
+          return registerInstCardHome();
+        }
+      } else if (custype.equals("kyc")) {
+        customerid = getRequest().getParameter("custid");
+        trace("Update customer prodcution...");
+        
+        if (getUploadedphoto() != null) {
+          newphotoname = customerid + "_" + commondesc.getDateTimeStamp() + ".jpg";
+        }
+        
+        if (getUploadsignature() != null) {
+          newsignaturename = customerid + "_" + commondesc.getDateTimeStamp() + ".jpg";
+        }
+        
+        if (getUploadidproof() != null) {
+          newidproofname = customerid + "_" + commondesc.getDateTimeStamp() + ".jpg";
+        }
+        cardregbean.setPhotourl(newphotoname);
+        cardregbean.setSignatureurl(newsignaturename);
+        cardregbean.setIdproofurl(newidproofname);
+        
+        int updcust = cardregdao.updateCustomerProduction(instid, customerid, cardregbean, jdbctemplate);
+        trace("Got : " + updcust);
+        if (updcust < 0) {
+          txManager.rollback(status);
+          session.setAttribute("preverr", "E");
+          session.setAttribute("prevmsg", "Could not update customer ..");
+          trace("Could not update customer ...got rolled back");
+          return registerInstCardHome();
+        }
+        
+        int updmobileno = commondesc.updateMobileNumberToProduction(instid, cardno, cardregbean.getPhoneno(), jdbctemplate);
+        trace("Updating Mobile Number to prodcution...");
+        if (updmobileno < 0) {
+          txManager.rollback(status);
+          session.setAttribute("preverr", "E");
+          session.setAttribute("prevmsg", "Could not able to update mobile number....");
+          trace("Could not update customer ...got rolled back");
+          return registerInstCardHome();
+        }
+      }
+      
+
+
+
+
+
+
+
+
+
+
+
+      Properties prop = commondesc.getCommonDescProperty();
+      String photodir = prop.getProperty("PHOTOFILELOCATION");
+      
+      File photodirfile = new File(photodir);
+      if (!photodirfile.exists()) {
+        photodirfile.mkdir();
+      }
+      
+      String signaturedir = prop.getProperty("SIGNATUREFILELOCATION");
+      File signaturedirfile = new File(signaturedir);
+      if (!signaturedirfile.exists()) {
+        signaturedirfile.mkdir();
+      }
+      
+      String idproofdir = prop.getProperty("IDPROOFLOCATION");
+      File idproofdirfile = new File(photodir);
+      if (!idproofdirfile.exists()) {
+        idproofdirfile.mkdir();
+      }
+      
+
+      if (uploadedphoto != null) {
+        File fileToCreate = new File(photodirfile, newphotoname);
+        FileUtils.copyFile(uploadedphoto, fileToCreate);
+        photourl = newphotoname;
+        cardregbean.setPhotourl(photourl);
+      }
+      
+
+      if (uploadsignature != null) {
+        File fileToCreate = new File(signaturedirfile, newsignaturename);
+        FileUtils.copyFile(uploadsignature, fileToCreate);
+        signatureurl = newsignaturename;
+      }
+      
+      if (uploadidproof != null) {
+        File fileToCreate = new File(idproofdir, newidproofname);
+        FileUtils.copyFile(uploadidproof, fileToCreate);
+        idproofurl = newidproofname;
+      }
+      
+      cardregbean.setKycuser(kycuser);
+      
+
+
+      trace("Update customer id count....");
+      int updatecin = cardregdao.updateCustomerIdCount(instid, jdbctemplate);
+      if (updatecin < 0) {
+        txManager.rollback(status);
+        session.setAttribute("preverr", "E");session.setAttribute("prevmsg", "Could not update the customer id.");
+        trace("Could not update the customer id.");
+        return registerInstCardHome();
+      }
+      
+      txManager.commit(status);
+      session.setAttribute("preverr", "S");
+      session.setAttribute("prevmsg", " Customer Registered Successfully for the card [ " + cardno + " ]. Generated Customer id is  " + customerid);
+      trace("Committed successfully....");
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      session.setAttribute("preverr", "S");
+      session.setAttribute("prevmsg", "KYC Done Successfully. Card number [ " + cardno + " ]  Customer id[ " + customerid + " ]");
+      trace("KYC Done Successfully. Card number [ " + cardno + " ]  Customer id[ " + customerid + " ] \n\n");
+      return registerInstCardHome();
+    }
+    catch (Exception e) {
+      txManager.rollback(status);
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", "Exception: Unable to register customer....");
+      trace("Exception : could not register customer : " + e.getMessage());
+      e.printStackTrace();
+    }
+    return registerInstCardHome();
+  }
+  
+  public String authInstCustomerHome() {
+    String instid = comInstId();
+    
+    HttpSession session = getRequest().getSession();
+    
+    String usertype = comuserType();
+    List pers_prodlist = null;List br_list = null;
+    String inst_id = comInstId();
+    
+    String br_id = comBranchId();
+    
+
+    if (br_id.equals("000"))
+    {
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", " Please Login With Branch User...");
+      return "required_home";
+    }
+    
+    String processtype = "INST";String processstatus = "06";String mkck_status = "M";
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    try
+    {
+      int x = commondesc.reqCheck().requiredCheck(instid, session, jdbctemplate);
+      if (x < 0) {
+        return "required_home";
+      }
+      
+      System.out.println("Inst Id===>" + inst_id + "  Branch Code ===>" + br_id);
+      if (usertype.equals("INSTADMIN")) {
+        System.out.println("Branch list start");
+        br_list = commondesc.InstgetBranchCodefmProcess(inst_id, processstatus, mkck_status, jdbctemplate);
+        System.out.println("Branch list " + br_list);
+        if (!br_list.isEmpty()) {
+          setBranchlist(br_list);
+          System.out.println("Branch list is not empty");
+        }
+        else
+        {
+          addActionError("No Cards Waiting For Card Issuance ... ");
+          System.out.println("Branch List is empty ");
+          return "required_home";
+        }
+      }
+      
+      pers_prodlist = commondesc.InstgetProductListBySelected(inst_id, processstatus, mkck_status, jdbctemplate);
+      if (!pers_prodlist.isEmpty()) {
+        setProdlist(pers_prodlist);
+        session.setAttribute("curerr", "S");
+        session.setAttribute("curmsg", "");
+        System.out.println("Product List is ===> " + pers_prodlist);
+      }
+      else {
+        System.out.println("No Product Details Found ");
+        session.setAttribute("curerr", "E");
+        session.setAttribute("curmsg", " No Product Details Found ");
+      }
+      
+    }
+    catch (Exception e)
+    {
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", "Excption : could not continue the process ");
+      e.printStackTrace();
+      trace("Exception : while authorize customer : " + e.getMessage());
+      return "required_home";
+    }
+    return "inscustomer_auth";
+  }
+  
+  public String authInstCustomerList() throws Exception {
+    HttpSession session = getRequest().getSession();
+    
+    String card_status = "06";
+    String mkckstatus = "M";String processtype = "INST";
+    String datefld = "ISSUE_DATE";
+    String instid = comInstId();
+    String branch = getRequest().getParameter("branchcode");
+    String prodcode = getRequest().getParameter("cardtype");
+    
+    String fromdate = getRequest().getParameter("fromdate");
+    String todate = getRequest().getParameter("todate");
+    
+
+    String filtercond = commondesc.filtercondcollectbranch(prodcode, branch, fromdate, todate, datefld);
+    
+
+
+
+    List waitingforcardpin = cardactdao.authgetCardActivationWaitingCards(instid, prodcode, card_status, processtype, filtercond, jdbctemplate);
+    trace("waitingforcardpin" + waitingforcardpin);
+    if (waitingforcardpin.isEmpty()) {
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", " No records found for custauth");
+      return authInstCustomerHome();
+    }
+    
+    ListIterator awtitr = waitingforcardpin.listIterator();
+    String product_desc = commondesc.getProductdesc(instid, prodcode, jdbctemplate);
+    while (awtitr.hasNext()) {
+      Map awtmp = (Map)awtitr.next();
+      String subproductode = (String)awtmp.get("SUB_PROD_ID");
+      String custid = (String)awtmp.get("CIN");
+      trace("customerid " + custid);
+      String MAKER_ID = (String)awtmp.get("MAKER_ID");
+      
+
+      if (custid.isEmpty()) {
+        session.setAttribute("preverr", "E");
+        session.setAttribute("prevmsg", " No records found for custauth ..");
+        return authInstCustomerHome();
+      }
+      
+      String accountno = commondesc.getAccounno(instid, custid, jdbctemplate);
+      
+      String subprod_desc = commondesc.getSubProductdesc(instid, subproductode, jdbctemplate);
+      String getusrname = commondesc.getusrname(instid, MAKER_ID, jdbctemplate);
+      awtmp.put("mkuser", getusrname);
+      awtmp.put("accountno", accountno);
+      awtmp.put("SUBPRODUCUT_DESC", subprod_desc);
+      awtmp.put("PRODUCUT_DESC", product_desc);
+    }
+    cardregbean.setInstorderlist(waitingforcardpin);
+    return "inscustomer_auth_list";
+  }
+  
+  public synchronized String InstconfirmCardissueorders()
+  {
+    trace("*****confirmCardissueorders*****");enctrace("*****confirmCardissueorders*****");
+    HttpSession session = getRequest().getSession();
+    IfpTransObj transact = commondesc.myTranObject("CONFIRMISSUE", txManager);
+    
+
+    String instid = comInstId();
+    String userid = comUserCode();
+    String username = comUsername1();
+    
+    String update_qury = "";
+    String actiontype = "INST";
+    String[] Hashchn = getRequest().getParameterValues("instorderrefnum");
+    
+
+
+    int ordercount = Hashchn.length;
+    int updatecount = 0;
+    int personalcardissue = 0;
+    String padssenable = commondesc.checkPadssEnable(instid, jdbctemplate);
+    
+    String keyid = commondesc.getSecurityKeyid(instid, jdbctemplate);
+    PadssSecurity padsssec = new PadssSecurity();
+    String eDMK = "";String eDPK = "";
+    try {
+      List secList = commondesc.getPADSSDetailById(keyid, jdbctemplate);
+      Iterator secitr = secList.iterator();
+      while (secitr.hasNext())
+      {
+        Map map = (Map)secitr.next();
+        eDMK = (String)map.get("DMK");
+        eDPK = (String)map.get("DPK");
+      }
+    }
+    catch (Exception e1) {
+      e1.printStackTrace();
+      return authInstCustomerHome();
+    }
+    
+    String cafflag = "";
+    int update_status = 0;int del_process = 0;int del_pin = 0;int update_product = 0;int updezcardinfo = 0;int upd_process = -1;
+    String cardstatus = "09";
+    String switchstatus = commondesc.getSwitchCardStatus(instid, cardstatus, jdbctemplate);
+    String statusmsg = "";
+    
+    String tablename = "IFD_INST_CARD_PROCESS";
+    try {
+      for (int i = 0; i < ordercount;)
+      {
+        cafflag = commondesc.gettingInstCAFstatus(Hashchn[i], padssenable, instid, jdbctemplate);
+        trace("CAF REC STATUS : " + cafflag);
+        trace("hashedacardbo:::" + Hashchn[i]);
+        
+        if (getRequest().getParameter("authorize") != null)
+        {
+
+          statusmsg = "Card Issued Successfully";
+          if (cafflag.equals("D")) {
+            trace("DAMAGE CARD PART...................");
+            StringBuilder update_production = new StringBuilder();
+            update_production.append("UPDATE IFD_CARD_PRODUCTION SET CARD_STATUS='" + cardstatus + "', STATUS_CODE='" + switchstatus + "',MKCK_STATUS = 'P' ,  ISSUE_DATE=(SYSDATE),ACTIVE_DATE=(sysdate),MAKER_ID='" + userid + "', ");
+            update_production.append("MAKER_DATE=(sysdate) WHERE INST_ID='" + instid + "' ");
+            if (padssenable.equals("Y")) {
+              update_production.append("AND HCARD_NO='" + Hashchn[i] + "' ");
+            } else {
+              update_production.append("AND CARD_NO='" + Hashchn[i] + "' ");
+            }
+            
+            enctrace("update_production :" + update_production.toString());
+            update_product = jdbctemplate.update(update_production.toString());
+            
+
+            StringBuilder updEzcard = new StringBuilder();
+            updEzcard.append("UPDATE EZCARDINFO set ");
+            updEzcard.append("PANSEQNO = '00' ");
+            updEzcard.append(",STATUS = '" + switchstatus + "' WHERE CHN = '" + Hashchn[i] + "' AND INSTID='" + instid + "'");
+            
+            trace("updEzcard :" + updEzcard.toString());
+            updezcardinfo = jdbctemplate.update(updEzcard.toString());
+            
+
+            StringBuilder deletefromProcess = new StringBuilder();
+            
+            deletefromProcess.append("DELETE FROM IFD_INST_CARD_PROCESS WHERE INST_ID='" + instid + "' ");
+            
+            if (padssenable.equals("Y")) {
+              deletefromProcess.append("AND HCARD_NO='" + Hashchn[i] + "' ");
+            } else {
+              deletefromProcess.append("AND CARD_NO='" + Hashchn[i] + "' ");
+            }
+            
+            enctrace("deletefromProcess::::::::" + deletefromProcess.toString());
+            
+            trace("update_product :" + update_product + " del_process :" + del_process);
+            del_process = jdbctemplate.update(deletefromProcess.toString());
+            
+
+
+
+
+            if ((update_product > 0) && (del_process > 0) && (updezcardinfo > 0)) {
+              String mifpcode = "DAMAGE";
+              updatecount++;
+            } else {
+              System.out.println("Process Breaked ====> 1");
+              break;
+            }
+            
+
+
+            trace("..................DAMAGE CARD PART");
+          }
+          
+
+
+
+
+
+          if (cafflag.equals("NR"))
+          {
+            trace("Reissued card with new card . . .");
+            StringBuilder reissuecardupdate_production = new StringBuilder();
+            String usedchnnNEWreissedcard = "";String orgchn = "";String orderfornewcard = "";String newhcardno = "";
+            String usedecardno = "";String cardcon = "";String newhencyptedcardno = "";String cardnumber = "";
+            String PIN_OFFSET = "";String EXPIRYDATE = "";String cardtype = "";
+            StringBuffer usedhcardno = new StringBuffer();
+            List carddet = cardregdao.getrejectcarddetailsforResissue(instid, Hashchn[i], jdbctemplate);
+            trace("cardforcbs" + carddet);
+            int ezcustomerid = 0;
+            Iterator itrat = carddet.iterator();
+            
+            while (itrat.hasNext())
+            {
+              Map map = (Map)itrat.next();
+              orderfornewcard = (String)map.get("ORDER_REF_NO");
+              cardtype = (String)map.get("CARD_TYPE_ID");
+              
+              newhcardno = (String)map.get("HCARD_NO");
+              newhencyptedcardno = (String)map.get("CARD_NO");
+              EXPIRYDATE = map.get("EXPIRYDATE").toString();
+              PIN_OFFSET = (String)map.get("PIN_OFFSET");
+              orgchn = (String)map.get("ORG_CHN");
+              usedchnnNEWreissedcard = (String)map.get("USED_CHN");
+            }
+            
+
+            usedhcardno = padsssec.getHashedValue(usedchnnNEWreissedcard + instid);
+            usedecardno = padsssec.getECHN(eDMK, eDPK, usedchnnNEWreissedcard);
+            trace("usedhcardno reissue" + usedhcardno.toString());
+            
+            String binno = "SELECT PRODUCT_CODE FROM IFD_INST_CARD_PROCESS WHERE ORG_CHN='" + orgchn + "' ";
+            
+
+            String binnumber = (String)jdbctemplate.queryForObject(binno, String.class);
+            String statuscode = "";
+            if (binnumber.equals("5018171005")) {
+              statuscode = "97";
+            }
+            else
+            {
+              statuscode = "53";
+            }
+            
+
+
+            if (padssenable.equals("Y")) { cardcon = "HCARD_NO";cardnumber = newhcardno; } else { cardcon = "CARD_NO";cardnumber = newhencyptedcardno;
+            }
+            String deletefromProcess = "";
+            
+
+            String movetoproduction = "INSERT INTO IFD_CARD_PRODUCTION (INST_ID,ORDER_REF_NO,BIN,CARD_NO,HCARD_NO,MCARD_NO,ACCOUNT_NO,ACCTTYPE_ID, ACCTSUB_TYPE_ID, ACC_CCY,CIN,CARD_TYPE_ID,SUB_PROD_ID,PRODUCT_CODE,BRANCH_CODE,CARD_STATUS,CAF_REC_STATUS,STATUS_CODE,CARD_CCY,PC_FLAG,ORDER_FLAG,ORG_CHN,USED_CHN,GENERATED_DATE,EXPIRY_DATE,APP_NO,APP_DATE,PIN_DATE,PRE_DATE,PRE_FILE,REG_DATE,RECV_DATE,ISSUE_DATE,ACTIVE_DATE,MAKER_ID,MAKER_DATE,CHECKER_ID,CHECKER_DATE,MKCK_STATUS,SERVICE_CODE,FEE_CODE,LIMIT_ID,PRIVILEGE_CODE,WDL_AMT,WDL_CNT,PUR_AMT,PUR_CNT,ECOM_AMT,ECOM_CNT,EMB_NAME,ENC_NAME,COURIER_ID,AUTH_DATE,ADDON_FLAG,ADDON_CNT,REISSUE_DATE,REISSUE_CNT,REPIN_DATE,REPIN_CNT,DAMAGE_DATE,BLOCK_DATE,HOT_GENDATE,CLOSE_DATE,PIN_OFFSET,PIN_RETRY_CNT,AUTO_ACCT_FLAG,OLD_PIN_OFFSET,CVV1,CVV2,ICVV,MOBILENO,CARD_REF_NO,CARDISSUETYPE,RENEWALFLAG,CARD_COLLECT_BRANCH)(SELECT INST_ID,ORDER_REF_NO,BIN,CARD_NO,HCARD_NO,MCARD_NO,ACCT_NO,ACCTTYPE_ID, ACCTSUB_TYPE_ID, ACC_CCY, CIN,CARD_TYPE_ID,SUB_PROD_ID,PRODUCT_CODE,BRANCH_CODE,'05','A','50',CARD_CCY,PC_FLAG,ORDER_FLAG,ORG_CHN,USED_CHN,GENERATED_DATE,EXPIRY_DATE,APP_NO,APP_DATE,PIN_DATE,PRE_DATE,PRE_FILE,REG_DATE,RECV_DATE,(SYSDATE),SYSDATE,'" + 
+            
+
+
+              userid + "',(SYSDATE),CHECKER_ID,CHECKER_DATE,'P',SERVICE_CODE,FEE_CODE,LIMIT_ID,PRIVILEGE_CODE,WDL_AMT,WDL_CNT,PUR_AMT,PUR_CNT,ECOM_AMT," + 
+              "ECOM_CNT,EMB_NAME,ENC_NAME,COURIER_ID,AUTH_DATE,'','0',SYSDATE,'1',SYSDATE,'0',SYSDATE,SYSDATE,SYSDATE,sysdate,PIN_OFFSET,'0',AUTO_ACCT_FLAG,OLD_PIN_OFFSET,CVV1,CVV2,ICVV,MOBILENO,CARD_REF_NO,CARDISSUETYPE,RENEWALFLAG,CARD_COLLECT_BRANCH FROM  IFD_INST_CARD_PROCESS" + 
+              " WHERE INST_ID='" + instid + "' AND " + cardcon + "='" + cardnumber + "')";
+            enctrace("movetoproduction _reissue: " + movetoproduction);
+            
+            StringBuilder crdinf_3 = new StringBuilder();
+            crdinf_3.append("INSERT INTO EZCARDINFO ");
+            crdinf_3.append("(INSTID, CHN, CARDTYPE, CUSTID, TXNGROUPID, LIMITFLG, EXPIRYDATE, STATUS, PINOFFSET, OLDPINOFFSET, TPINOFFSET, OLDTPINOFFSET, PINRETRYCOUNT, TPINRETRYCOUNT, PVKI, LASTTXNDATE, LASTTXNTIME,CVV, PANSEQNO ) ");
+            crdinf_3.append(" SELECT INSTID,'" + newhcardno + "' ,'" + cardtype + "' ,CUSTID,TXNGROUPID,LIMITFLG,TO_DATE('" + EXPIRYDATE + "','MM/DD/YYYY'),'" + statuscode + "','" + PIN_OFFSET + "' ,OLDPINOFFSET,TPINOFFSET,OLDTPINOFFSET,PINRETRYCOUNT,TPINRETRYCOUNT, PVKI, LASTTXNDATE, LASTTXNTIME,CVV, PANSEQNO FROM ");
+            crdinf_3.append("  EZCARDINFO WHERE CHN='" + usedhcardno + "' AND STATUS='62'");
+            enctrace("crdinf_3:::::" + crdinf_3.toString());
+            
+            String deleteinstprocess = "DELETE FROM IFD_INST_CARD_PROCESS WHERE HCARD_NO='" + newhcardno + "'";
+            String oldorderno = "SELECT ORDER_REF_NO FROM IFD_CARD_PRODUCTION WHERE ORG_CHN='" + usedchnnNEWreissedcard + "' ";
+            enctrace("oldorderno:::::" + oldorderno + "\n" + deleteinstprocess);
+            String orderforoldcar = (String)jdbctemplate.queryForObject(oldorderno, String.class);
+            
+
+            int updateezauthrel = cardregdao.updateordeezauthrelfornewcard(instid, newhcardno.toString(), usedhcardno.toString(), jdbctemplate);
+            
+            int ezcardinfo = jdbctemplate.update(crdinf_3.toString());
+            int production_insert = jdbctemplate.update(movetoproduction);
+            int delteinstprocess = jdbctemplate.update(deleteinstprocess);
+            
+            trace(updateezauthrel + "_" + ezcardinfo + "_" + production_insert + "_" + delteinstprocess);
+            if ((updateezauthrel > 0) && (ezcardinfo > 0) && (production_insert > 0) && (delteinstprocess > 0)) {
+              updatecount++;
+              trace("updatecount for new reissue cards" + updatecount);
+            }
+          }
+          
+
+
+
+          if (cafflag.equals("DE"))
+          {
+
+            trace("DAMAGE CARD ATE WITH EXPIRY DATE...................");
+            
+
+            StringBuilder update_production = new StringBuilder();
+            update_production.append("UPDATE IFD_CARD_PRODUCTION SET CARD_STATUS='" + cardstatus + "', STATUS_CODE='" + switchstatus + "',MKCK_STATUS = 'P' ,  ISSUE_DATE=(SYSDATE),ACTIVE_DATE=(sysdate),MAKER_ID='" + userid + "', ");
+            update_production.append("MAKER_DATE=(sysdate) WHERE INST_ID='" + instid + "' ");
+            if (padssenable.equals("Y")) {
+              update_production.append("AND HCARD_NO='" + Hashchn[i] + "' AND INST_ID='" + instid + "'");
+            } else {
+              update_production.append("AND CARD_NO='" + Hashchn[i] + "' AND INST_ID='" + instid + "'");
+            }
+            
+            trace("update_production :" + update_production.toString());
+            update_product = jdbctemplate.update(update_production.toString());
+            
+            StringBuilder updEzcard = new StringBuilder();
+            updEzcard.append("UPDATE EZCARDINFO set ");
+            updEzcard.append("EXPIRYDATE = (SELECT EXPIRY_DATE from IFD_INST_CARD_PROCESS where ");
+            updEzcard.append("HCARD_NO='" + Hashchn[i] + "' AND INSTID='" + instid + "')");
+            updEzcard.append(",STATUS = '" + switchstatus + "',PANSEQNO = '00'  WHERE CHN = '" + Hashchn[i] + "' AND INSTID='" + instid + "'");
+            
+            trace("updEzcard :" + updEzcard.toString());
+            updezcardinfo = jdbctemplate.update(updEzcard.toString());
+            
+            StringBuilder deletefromProcess = new StringBuilder();
+            
+            deletefromProcess.append("DELETE FROM IFD_INST_CARD_PROCESS WHERE INST_ID='" + instid + "' ");
+            
+            if (padssenable.equals("Y")) {
+              deletefromProcess.append("AND HCARD_NO='" + Hashchn[i] + "' ");
+            } else {
+              deletefromProcess.append("AND CARD_NO='" + Hashchn[i] + "' ");
+            }
+            
+            trace("update_product :" + update_product + " del_process :" + del_process);
+            del_process = jdbctemplate.update(deletefromProcess.toString());
+            
+
+
+
+
+            if ((update_product > 0) && (del_process > 0) && (updezcardinfo > 0)) {
+              String mifpcode = "DAMAGE";
+              updatecount++;
+            } else {
+              System.out.println("Process Breaked ====> 1");
+              break;
+            }
+            
+
+
+            trace("..................DAMAGE CARD PART");
+          }
+          
+
+
+
+
+          if (cafflag.equals("A"))
+          {
+            System.out.println("############################################################################" + cafflag);
+            
+
+
+
+            try
+            {
+              personalcardissue = InstpersonalCardIssuence(Hashchn[i], padssenable, instid, userid, tablename, jdbctemplate);
+              trace("prersnalcard issuance getting count " + personalcardissue);
+              
+              if (personalcardissue > 0) {
+                updatecount++;
+              }
+              
+              trace("checking the update count value " + updatecount);
+
+
+
+
+            }
+            catch (Exception e)
+            {
+
+
+
+              trace("Exception in personalcardissue::::" + e);
+              e.printStackTrace();
+              break;
+            }
+            trace("Issuing the card....got : " + personalcardissue);
+
+
+
+
+          }
+          else if (cafflag.equals("S"))
+          {
+
+            enctrace("#################################");
+            enctrace("####### REISSSUE CARD ###" + Hashchn[i]);
+            
+            String padsscond = "";
+            if (padssenable.equals("Y")) padsscond = "HCARD_NO='" + Hashchn[i] + "'"; else { padsscond = "CARD_NO='" + Hashchn[i] + "'";
+            }
+            String custcin = commondesc.fchCustomerId(instid, padssenable, Hashchn[i], "IFD_INST_CARD_PROCESS", jdbctemplate);
+            trace("Got the customer id : " + custcin);
+            System.out.println("CUSTOMERN NUMBER IS =====> " + custcin);
+            int res_1 = 0;int res_2 = 0;int res_3 = 0;int res_4 = 0;int res_5 = 0;
+            String deletefromProcess = "DELETE FROM IFD_INST_CARD_PROCESS WHERE INST_ID='" + instid + "' AND " + padsscond;
+            
+            String reissuedate = "''";String reissue_count = "0";String repindate = "''";String repincount = "0";String damgedate = "''";String blockdate = "''";String hotdate = "''";String closedte = "''";String pinretry_count = "0";
+            String active_date = "''";
+            
+            String status_code = commondesc.getSwitchCardStatus(instid, cardstatus, jdbctemplate);
+            String movetoproduction = "INSERT INTO IFD_CARD_PRODUCTION (INST_ID,ORDER_REF_NO,BIN,CARD_NO,HCARD_NO, MCARD_NO,ACCOUNT_NO,ACCTTYPE_ID, ACCTSUB_TYPE_ID, ACC_CCY,CIN,CARD_TYPE_ID,SUB_PROD_ID,PRODUCT_CODE,BRANCH_CODE,CARD_STATUS,CAF_REC_STATUS,STATUS_CODE,CARD_CCY,PC_FLAG,ORDER_FLAG,ORG_CHN,USED_CHN,GENERATED_DATE,EXPIRY_DATE,APP_NO,APP_DATE,PIN_DATE,PRE_DATE,PRE_FILE,REG_DATE,RECV_DATE,ISSUE_DATE,ACTIVE_DATE,MAKER_ID,MAKER_DATE,CHECKER_ID,CHECKER_DATE,MKCK_STATUS,SERVICE_CODE,FEE_CODE,LIMIT_ID,PRIVILEGE_CODE,WDL_AMT,WDL_CNT,PUR_AMT,PUR_CNT,ECOM_AMT,ECOM_CNT,EMB_NAME,ENC_NAME,COURIER_ID,AUTH_DATE,ADDON_FLAG,ADDON_CNT,REISSUE_DATE,REISSUE_CNT,REPIN_DATE,REPIN_CNT,DAMAGE_DATE,BLOCK_DATE,HOT_GENDATE,CLOSE_DATE,PIN_OFFSET,PIN_RETRY_CNT,AUTO_ACCT_FLAG,OLD_PIN_OFFSET,CVV1,CVV2,ICVV,MOBILENO,CARD_REF_NO)(SELECT INST_ID,ORDER_REF_NO,BIN,CARD_NO,HCARD_NO, MCARD_NO,ACCT_NO ,ACCTTYPE_ID, ACCTSUB_TYPE_ID, ACC_CCY,CIN,CARD_TYPE_ID,SUB_PROD_ID,PRODUCT_CODE,BRANCH_CODE,'" + 
+            
+
+              cardstatus + "',CAF_REC_STATUS," + status_code + ",CARD_CCY,PC_FLAG,ORDER_FLAG,ORG_CHN,USED_CHN,GENERATED_DATE,EXPIRY_DATE,APP_NO,APP_DATE,PIN_DATE,PRE_DATE," + 
+              "PRE_FILE,REG_DATE,RECV_DATE,(SYSDATE),SYSDATE,'" + userid + "',(SYSDATE),CHECKER_ID,CHECKER_DATE,MKCK_STATUS,SERVICE_CODE,FEE_CODE,LIMIT_ID,PRIVILEGE_CODE,WDL_AMT,WDL_CNT,PUR_AMT,PUR_CNT,ECOM_AMT," + 
+              "ECOM_CNT,EMB_NAME,ENC_NAME,COURIER_ID,AUTH_DATE,'','0'," + reissuedate + ",'" + reissue_count + "'," + repindate + ",'" + repincount + "'," + damgedate + "," + blockdate + "," + hotdate + "," + closedte + ",PIN_OFFSET,'" + pinretry_count + "',AUTO_ACCT_FLAG,OLD_PIN_OFFSET,CVV1,CVV2,ICVV,'',CARD_REF_NO FROM IFD_INST_CARD_PROCESS " + 
+              "WHERE INST_ID='" + instid + "' AND " + padsscond + ")";
+            enctrace("movetoproduction---- > " + movetoproduction);
+            
+
+            String INSTID_1 = "";String CHN_1 = "";String ACCOUNTNO_1 = "";String ACCOUNTTYPE_1 = "";String ACCOUNTFLAG_1 = "";String ACCOUNTPRIORITY_1 = "";String CURRCODE_1 = "";
+            String INSTID_3 = "";String CHN_3 = "";String CARDTYPE_3 = "";String CUSTID_3 = "";String TXNGROUPID_3 = "";String LIMITFLAG_3 = "";String EXPIRYDATE_3 = "";String STATUS = "";String PINOFFSET_3 = "";String OLDPINOFFSET_3 = "";String TPINOFFSET_3 = "";String OLDTPINOFFSET_3 = "";String PINRETRYCOUNT_3 = "";String TPINRETRYCOUNT_3 = "";String PVKI_3 = "";String LASTTXNDATE_3 = "";String LASTTXNTIME_3 = "";String PANSEQNO_3 = "";
+            
+
+
+            StringBuilder mv = new StringBuilder();
+            
+            mv.append("SELECT ");
+            
+
+            mv.append("'" + instid + "' INSTID_1, '" + Hashchn[i] + "' CHN_1,AI.ACCOUNTNO ACCOUNTNO_1,AI.ACCTTYPE_ID ACCOUNTTYPE_1,PCP.PC_FLAG ACCOUNTFLAG_1,'1' ACCOUNTPRIORITY_1 ,AI.ACCT_CURRENCY CURRCODE_1, ");
+            
+
+
+
+            if (padssenable.equals("Y")) {
+              mv.append("'" + instid + "' INSTID_3, PCP.HCARD_NO CHN_3, PCP.CARD_TYPE_ID CARDTYPE_3,'" + custcin + "' CUSTID_3,'01' TXNGROUPID_3, ");
+            }
+            else
+            {
+              mv.append("'" + instid + "' INSTID_3, PCP.CARD_NO CHN_3, PCP.CARD_TYPE_ID CARDTYPE_3,'" + custcin + "' CUSTID_3,'01' TXNGROUPID_3, ");
+            }
+            mv.append("(SELECT CARD_FLAG FROM IFD_GLOBAL_CARDDETAILS WHERE LIMIT_TYPE = AI.ACCOUNTTYPE) LIMITFLAG_3,  ");
+            mv.append("TO_CHAR(PCP.EXPIRY_DATE,'MM/DD/YYYY')  EXPIRYDATE_3,'" + status_code + "' STATUS , NVL(PCP.PIN_OFFSET,0)  PINOFFSET_3, NVL(PCP.OLD_PIN_OFFSET,0) OLDPINOFFSET_3, ");
+            mv.append("'0' TPINOFFSET_3,'0' OLDTPINOFFSET_3,NVL(PIN_RETRY_COUNT,0) PINRETRYCOUNT_3,'0' TPINRETRYCOUNT_3, '0' PVKI_3,  ");
+            mv.append("TO_CHAR(SYSDATE,'MM/DD/YYYY') LASTTXNDATE_3,TO_CHAR(SYSDATE,'HH24MISS')  LASTTXNTIME_3, '00' PANSEQNO_3 ");
+            
+
+            mv.append(" FROM IFD_CUSTOMERINFO CI ,IFD_ACCOUNTINFO AI ,IFD_INST_CARD_PROCESS PCP ");
+            mv.append("WHERE ");
+            
+            mv.append("(CI.CIN = AI.CIN AND AI.CIN = PCP.CIN AND PCP.CIN = CI.CIN and pcp.acct_no=ai.ACCOUNTNO) AND ");
+            mv.append("(CI.INST_ID = AI.INST_ID AND AI.INST_ID = PCP.INST_ID AND PCP.INST_ID = CI.INST_ID) ");
+            mv.append("AND CI.INST_ID='" + instid + "' AND AI.INST_ID='" + instid + "' AND PCP.INST_ID='" + instid + "'  ");
+            mv.append("AND CI.CIN='" + custcin + "' AND AI.CIN='" + custcin + "' AND PCP.CIN='" + custcin + "' AND " + padsscond + " ");
+            
+            enctrace("Move to Production CafRec status SS-----------------------------------\n");
+            enctrace(mv.toString());
+            
+
+            List movetoSwitchP = jdbctemplate.queryForList(mv.toString());
+            Iterator custitr = movetoSwitchP.iterator();
+            while (custitr.hasNext())
+            {
+              Map mp = (Map)custitr.next();
+              
+              INSTID_1 = (String)mp.get(" INSTID_1 ");
+              CHN_1 = (String)mp.get("CHN_1");
+              ACCOUNTNO_1 = (String)mp.get("ACCOUNTNO_1");
+              ACCOUNTTYPE_1 = (String)mp.get("ACCOUNTTYPE_1");
+              ACCOUNTFLAG_1 = "1";
+              
+              ACCOUNTPRIORITY_1 = (String)mp.get("ACCOUNTPRIORITY_1");
+              CURRCODE_1 = (String)mp.get("CURRCODE_1");
+              
+              CHN_3 = mp.get("CHN_3").toString();
+              CARDTYPE_3 = mp.get("CARDTYPE_3").toString();
+              CUSTID_3 = mp.get("CUSTID_3").toString();
+              TXNGROUPID_3 = mp.get("TXNGROUPID_3").toString();
+              LIMITFLAG_3 = mp.get("LIMITFLAG_3").toString();
+              EXPIRYDATE_3 = mp.get("EXPIRYDATE_3").toString();
+              STATUS = mp.get("STATUS").toString();
+              PINOFFSET_3 = mp.get("PINOFFSET_3").toString();
+              OLDPINOFFSET_3 = mp.get("OLDPINOFFSET_3").toString();
+              TPINOFFSET_3 = mp.get("TPINOFFSET_3").toString();
+              OLDTPINOFFSET_3 = mp.get("OLDTPINOFFSET_3").toString();
+              PINRETRYCOUNT_3 = mp.get("PINRETRYCOUNT_3").toString();
+              TPINRETRYCOUNT_3 = mp.get("TPINRETRYCOUNT_3").toString();
+              PVKI_3 = mp.get("PVKI_3").toString();
+              LASTTXNDATE_3 = mp.get("LASTTXNDATE_3").toString();
+              LASTTXNTIME_3 = mp.get("LASTTXNTIME_3").toString();
+              PANSEQNO_3 = mp.get("PANSEQNO_3").toString();
+            }
+            
+
+            StringBuilder crdinf_3 = new StringBuilder();
+            crdinf_3.append("INSERT INTO EZCARDINFO ");
+            crdinf_3.append("(INSTID, CHN, CARDTYPE, CUSTID, TXNGROUPID, LIMITFLG, EXPIRYDATE, STATUS, PINOFFSET, OLDPINOFFSET, TPINOFFSET, OLDTPINOFFSET, PINRETRYCOUNT, TPINRETRYCOUNT, PVKI, LASTTXNDATE, LASTTXNTIME,CVV, PANSEQNO) ");
+            crdinf_3.append("VALUES ");
+            crdinf_3.append("('" + instid + "','" + CHN_3 + "','" + CARDTYPE_3 + "','" + CUSTID_3 + "','" + TXNGROUPID_3 + "','" + LIMITFLAG_3 + "',TO_DATE('" + EXPIRYDATE_3 + "','MM/DD/YYYY'),'" + STATUS + "','" + PINOFFSET_3 + "','" + OLDPINOFFSET_3 + "',");
+            crdinf_3.append("'" + TPINOFFSET_3 + "','" + OLDTPINOFFSET_3 + "','" + PINRETRYCOUNT_3 + "','" + TPINRETRYCOUNT_3 + "','" + PVKI_3 + "',TO_DATE('" + LASTTXNDATE_3 + "','MM/DD/YYYY'),'" + LASTTXNTIME_3 + "'  ,'0' ,");
+            crdinf_3.append("'" + PANSEQNO_3 + "' )");
+            
+            enctrace("crdinf_3:::::" + crdinf_3.toString());
+            
+
+
+            StringBuilder authrel_1 = new StringBuilder();
+            authrel_1.append("INSERT INTO EZAUTHREL ");
+            authrel_1.append("(INSTID, CHN, ACCOUNTNO, ACCOUNTTYPE, ACCOUNTFLAG, ACCOUNTPRIORITY, CURRCODE) ");
+            authrel_1.append("VALUES ");
+            authrel_1.append("('" + instid + "','" + CHN_1 + "','" + ACCOUNTNO_1 + "','" + ACCOUNTTYPE_1 + "','" + ACCOUNTFLAG_1 + "','" + ACCOUNTPRIORITY_1 + "','" + CURRCODE_1 + "') ");
+            enctrace("authrel_1::::" + authrel_1.toString());
+            
+
+            res_3 = jdbctemplate.update(crdinf_3.toString());
+            
+            res_1 = jdbctemplate.update(authrel_1.toString());
+            
+
+
+
+
+            int production_insert = jdbctemplate.update(movetoproduction);
+            int deletefromprocess = jdbctemplate.update(deletefromProcess);
+            
+
+
+
+            enctrace("\n--------------------------------------Move to Production Query CAF REC S");
+            trace("result :::::::::::" + res_1 + res_3 + production_insert + deletefromprocess);
+            if ((res_1 > 0) && (res_3 > 0) && (production_insert > 0) && (deletefromprocess > 0))
+            {
+              trace("PROCESS COMPLETED");
+              updatecount++;
+            }
+            else
+            {
+              System.out.println("Error While Insert and Delete ");
+              break;
+
+
+
+
+            }
+            
+
+
+
+
+
+          }
+          else if (cafflag.equals("AC"))
+          {
+
+            enctrace("#################################");
+            enctrace("####### REISSSUE CARD ###" + Hashchn[i]);
+            
+            String custcin = commondesc.fchCustomerId(instid, padssenable, Hashchn[i], "IFD_INST_CARD_PROCESS", jdbctemplate);
+            trace("Got the customer id : " + custcin);
+            System.out.println("CUSTOMERN NUMBER IS =====> " + custcin);
+            
+            int res_1 = 0;int res_2 = 0;int res_3 = 0;int res_4 = 0;int res_5 = 0;
+            
+            String deletefromProcess = "";
+            if (padssenable.equals("Y")) {
+              deletefromProcess = "DELETE FROM IFD_INST_CARD_PROCESS WHERE INST_ID='" + instid + "' AND HCARD_NO='" + Hashchn[i] + "' ";
+            }
+            else {
+              deletefromProcess = "DELETE FROM IFD_INST_CARD_PROCESS WHERE INST_ID='" + instid + "' AND CARD_NO='" + Hashchn[i] + "' ";
+            }
+            enctrace("deletefromProcess::" + deletefromProcess);
+            
+            String reissuedate = "''";String reissue_count = "0";String repindate = "''";String repincount = "0";String damgedate = "''";String blockdate = "''";String hotdate = "''";String closedte = "''";String pinretry_count = "0";
+            String active_date = "''";
+            String status_code = commondesc.getSwitchCardStatus(instid, cardstatus, jdbctemplate);
+            StringBuilder movetoproduction = new StringBuilder();
+            movetoproduction.append("INSERT INTO IFD_CARD_PRODUCTION (INST_ID,ORDER_REF_NO,BIN,CARD_NO,HCARD_NO, MCARD_NO,ACCOUNT_NO,ACCTTYPE_ID, ACCTSUB_TYPE_ID, ACC_CCY,CIN,CARD_TYPE_ID,SUB_PROD_ID,PRODUCT_CODE,BRANCH_CODE,CARD_STATUS,CAF_REC_STATUS,STATUS_CODE,CARD_CCY,PC_FLAG,ORDER_FLAG,ORG_CHN,USED_CHN,GENERATED_DATE,");
+            movetoproduction.append("EXPIRY_DATE,APP_NO,APP_DATE,PIN_DATE,PRE_DATE,PRE_FILE,REG_DATE,RECV_DATE,ISSUE_DATE,ACTIVE_DATE,MAKER_ID,MAKER_DATE,CHECKER_ID,CHECKER_DATE,MKCK_STATUS,SERVICE_CODE,FEE_CODE,LIMIT_ID,PRIVILEGE_CODE,WDL_AMT,WDL_CNT,PUR_AMT,PUR_CNT,ECOM_AMT,");
+            movetoproduction.append("ECOM_CNT,EMB_NAME,ENC_NAME,COURIER_ID,AUTH_DATE,ADDON_FLAG,ADDON_CNT,REISSUE_DATE,REISSUE_CNT,REPIN_DATE,REPIN_CNT,DAMAGE_DATE,BLOCK_DATE,HOT_GENDATE,CLOSE_DATE,PIN_OFFSET,PIN_RETRY_CNT,AUTO_ACCT_FLAG,OLD_PIN_OFFSET,CVV1,CVV2,ICVV,MOBILENO,CARD_REF_NO)");
+            movetoproduction.append("(SELECT INST_ID,ORDER_REF_NO,BIN,CARD_NO,HCARD_NO, MCARD_NO,ACCT_NO ,ACCTTYPE_ID, ACCTSUB_TYPE_ID, ACC_CCY,CIN,CARD_TYPE_ID,SUB_PROD_ID,PRODUCT_CODE,BRANCH_CODE,'" + cardstatus + "',CAF_REC_STATUS," + status_code + ",CARD_CCY,PC_FLAG,ORDER_FLAG,ORG_CHN,USED_CHN,GENERATED_DATE,EXPIRY_DATE,APP_NO,APP_DATE,PIN_DATE,PRE_DATE,");
+            movetoproduction.append("PRE_FILE,REG_DATE,RECV_DATE,(SYSDATE),SYSDATE,'" + userid + "',(SYSDATE),CHECKER_ID,CHECKER_DATE,MKCK_STATUS,SERVICE_CODE,FEE_CODE,LIMIT_ID,PRIVILEGE_CODE,WDL_AMT,WDL_CNT,PUR_AMT,PUR_CNT,ECOM_AMT,");
+            movetoproduction.append("ECOM_CNT,EMB_NAME,ENC_NAME,COURIER_ID,AUTH_DATE,'','0'," + reissuedate + ",'" + reissue_count + "'," + repindate + ",'" + repincount + "'," + damgedate + "," + blockdate + "," + hotdate + "," + closedte + ",PIN_OFFSET,'" + pinretry_count + "',AUTO_ACCT_FLAG,OLD_PIN_OFFSET,CVV1,CVV2,ICVV,'',CARD_REF_NO FROM IFD_INST_CARD_PROCESS ");
+            if (padssenable.equals("Y")) {
+              movetoproduction.append("WHERE INST_ID='" + instid + "' AND HCARD_NO='" + Hashchn[i] + "')");
+            } else {
+              movetoproduction.append("WHERE INST_ID='" + instid + "' AND CARD_NO='" + Hashchn[i] + "')");
+            }
+            enctrace("movetoproduction---- > " + movetoproduction);
+            
+
+
+            String INSTID_1 = "";String CHN_1 = "";String ACCOUNTNO_1 = "";String ACCOUNTTYPE_1 = "";String ACCOUNTFLAG_1 = "";String ACCOUNTPRIORITY_1 = "";String CURRCODE_1 = "";
+            String INSTID_3 = "";String CHN_3 = "";String CARDTYPE_3 = "";String CUSTID_3 = "";String TXNGROUPID_3 = "";String LIMITFLAG_3 = "";String EXPIRYDATE_3 = "";String STATUS = "";String PINOFFSET_3 = "";String OLDPINOFFSET_3 = "";String TPINOFFSET_3 = "";String OLDTPINOFFSET_3 = "";String PINRETRYCOUNT_3 = "";String TPINRETRYCOUNT_3 = "";String PVKI_3 = "";String LASTTXNDATE_3 = "";String LASTTXNTIME_3 = "";String PANSEQNO_3 = "";
+            
+
+
+            StringBuilder mv = new StringBuilder();
+            
+            mv.append("SELECT ");
+            
+
+            mv.append("'" + instid + "' INSTID_1, '" + Hashchn[i] + "' CHN_1,AI.ACCOUNTNO ACCOUNTNO_1,AI.ACCTTYPE_ID ACCOUNTTYPE_1,PCP.PC_FLAG ACCOUNTFLAG_1,'1' ACCOUNTPRIORITY_1 ,AI.ACCT_CURRENCY CURRCODE_1, ");
+            
+
+
+
+            mv.append("'" + instid + "' INSTID_3, '" + Hashchn[i] + "' CHN_3, PCP.CARD_TYPE_ID CARDTYPE_3,'" + custcin + "' CUSTID_3,'01' TXNGROUPID_3, ");
+            mv.append("(SELECT CARD_FLAG FROM IFD_GLOBAL_CARDDETAILS WHERE LIMIT_TYPE = AI.ACCOUNTTYPE) LIMITFLAG_3,  ");
+            mv.append("TO_CHAR(PCP.EXPIRY_DATE,'MM/DD/YYYY')  EXPIRYDATE_3,'" + status_code + "' STATUS , NVL(PCP.PIN_OFFSET,0) PINOFFSET_3, NVL(PCP.OLD_PIN_OFFSET,0) OLDPINOFFSET_3, ");
+            mv.append("'0' TPINOFFSET_3,'0' OLDTPINOFFSET_3,NVL(PIN_RETRY_COUNT,0) PINRETRYCOUNT_3,'0' TPINRETRYCOUNT_3, '0' PVKI_3,  ");
+            mv.append("TO_CHAR(SYSDATE,'MM/DD/YYYY') LASTTXNDATE_3,TO_CHAR(SYSDATE,'HH24MISS')  LASTTXNTIME_3, '00' PANSEQNO_3 ");
+            
+
+            mv.append(" FROM IFD_CUSTOMERINFO CI ,IFD_ACCOUNTINFO AI ,IFD_INST_CARD_PROCESS PCP ");
+            
+            mv.append(" WHERE (CI.CIN = AI.CIN AND AI.CIN = PCP.CIN AND PCP.CIN = CI.CIN) AND ");
+            mv.append("(CI.INST_ID = AI.INST_ID AND AI.INST_ID = PCP.INST_ID AND PCP.INST_ID = CI.INST_ID and pcp.acct_no=ai.ACCOUNTNO) ");
+            mv.append("AND CI.INST_ID='" + instid + "' AND AI.INST_ID='" + instid + "' AND PCP.INST_ID='" + instid + "'  ");
+            mv.append("AND CI.CIN='" + custcin + "' AND AI.CIN='" + custcin + "' AND PCP.CIN='" + custcin + "' ");
+            if (padssenable.equals("Y")) {
+              mv.append("AND PCP.INST_ID='" + instid + "' AND PCP.HCARD_NO='" + Hashchn[i] + "'");
+            } else {
+              mv.append("AND PCP.INST_ID='" + instid + "' AND PCP.CARD_NO='" + Hashchn[i] + "'");
+            }
+            
+            enctrace("Move to Production CafRec status SS-----------------------------------\n");
+            enctrace(mv.toString());
+            enctrace("Move to Production CafRec status SS New-----------------------------------\n" + mv.toString());
+            
+            List movetoSwitchP = jdbctemplate.queryForList(mv.toString());
+            Iterator custitr = movetoSwitchP.iterator();
+            while (custitr.hasNext())
+            {
+              Map mp = (Map)custitr.next();
+              
+              INSTID_1 = (String)mp.get(" INSTID_1 ");
+              CHN_1 = (String)mp.get("CHN_1");
+              ACCOUNTNO_1 = (String)mp.get("ACCOUNTNO_1");
+              ACCOUNTTYPE_1 = (String)mp.get("ACCOUNTTYPE_1");
+              
+              ACCOUNTFLAG_1 = "1";
+              ACCOUNTPRIORITY_1 = (String)mp.get("ACCOUNTPRIORITY_1");
+              CURRCODE_1 = (String)mp.get("CURRCODE_1");
+              
+              CHN_3 = mp.get("CHN_3").toString();
+              CARDTYPE_3 = mp.get("CARDTYPE_3").toString();
+              CUSTID_3 = mp.get("CUSTID_3").toString();
+              TXNGROUPID_3 = mp.get("TXNGROUPID_3").toString();
+              LIMITFLAG_3 = mp.get("LIMITFLAG_3").toString();
+              EXPIRYDATE_3 = mp.get("EXPIRYDATE_3").toString();
+              STATUS = mp.get("STATUS").toString();
+              PINOFFSET_3 = mp.get("PINOFFSET_3").toString();
+              OLDPINOFFSET_3 = mp.get("OLDPINOFFSET_3").toString();
+              TPINOFFSET_3 = mp.get("TPINOFFSET_3").toString();
+              OLDTPINOFFSET_3 = mp.get("OLDTPINOFFSET_3").toString();
+              PINRETRYCOUNT_3 = mp.get("PINRETRYCOUNT_3").toString();
+              TPINRETRYCOUNT_3 = mp.get("TPINRETRYCOUNT_3").toString();
+              PVKI_3 = mp.get("PVKI_3").toString();
+              LASTTXNDATE_3 = mp.get("LASTTXNDATE_3").toString();
+              LASTTXNTIME_3 = mp.get("LASTTXNTIME_3").toString();
+              PANSEQNO_3 = mp.get("PANSEQNO_3").toString();
+            }
+            
+            StringBuilder crdinf_3 = new StringBuilder();
+            crdinf_3.append("INSERT INTO EZCARDINFO ");
+            crdinf_3.append("(INSTID, CHN, CARDTYPE, CUSTID, TXNGROUPID, LIMITFLG, EXPIRYDATE, STATUS, PINOFFSET, OLDPINOFFSET, TPINOFFSET, OLDTPINOFFSET, PINRETRYCOUNT, TPINRETRYCOUNT, PVKI, LASTTXNDATE, LASTTXNTIME,CVV, PANSEQNO) ");
+            crdinf_3.append("VALUES ");
+            crdinf_3.append("('" + instid + "','" + CHN_3 + "','" + CARDTYPE_3 + "','" + CUSTID_3 + "','" + TXNGROUPID_3 + "','" + LIMITFLAG_3 + "',TO_DATE('" + EXPIRYDATE_3 + "','MM/DD/YYYY'),'" + STATUS + "','" + PINOFFSET_3 + "','" + OLDPINOFFSET_3 + "',");
+            crdinf_3.append("'" + TPINOFFSET_3 + "','" + OLDTPINOFFSET_3 + "','" + PINRETRYCOUNT_3 + "','" + TPINRETRYCOUNT_3 + "','" + PVKI_3 + "',TO_DATE('" + LASTTXNDATE_3 + "','MM/DD/YYYY'),'" + LASTTXNTIME_3 + "'  ,'0' ,");
+            crdinf_3.append("'" + PANSEQNO_3 + "' )");
+            
+            enctrace("crdinf_3:::::" + crdinf_3.toString());
+            
+            res_3 = jdbctemplate.update(crdinf_3.toString());
+            
+            StringBuilder authrel_1 = new StringBuilder();
+            authrel_1.append("INSERT INTO EZAUTHREL ");
+            authrel_1.append("(INSTID, CHN, ACCOUNTNO, ACCOUNTTYPE, ACCOUNTFLAG, ACCOUNTPRIORITY, CURRCODE) ");
+            authrel_1.append("VALUES ");
+            authrel_1.append("('" + instid + "','" + CHN_1 + "','" + ACCOUNTNO_1 + "','" + ACCOUNTTYPE_1 + "','" + ACCOUNTFLAG_1 + "','" + ACCOUNTPRIORITY_1 + "','" + CURRCODE_1 + "') ");
+            enctrace("authrel_1::::" + authrel_1.toString());
+            
+
+            res_1 = jdbctemplate.update(authrel_1.toString());
+            
+
+
+
+
+            int production_insert = jdbctemplate.update(movetoproduction.toString());
+            int deletefromprocess = jdbctemplate.update(deletefromProcess);
+            
+
+
+
+            enctrace("\n--------------------------------------Move to Production Query CAF REC S");
+            trace("result :::::::::::" + res_1 + res_3 + production_insert + deletefromprocess);
+            if ((res_1 > 0) && (res_3 > 0) && (production_insert > 0) && (deletefromprocess > 0))
+            {
+              trace("PROCESS COMPLETED");
+              updatecount++;
+            }
+            else
+            {
+              System.out.println("Error While Insert and Delete ");
+              addActionError("Unable to continue process ....");
+              return authInstCustomerHome();
+
+
+
+
+            }
+            
+
+
+
+
+
+          }
+          else if (cafflag.equals("BN"))
+          {
+
+            enctrace("#################################");
+            enctrace("####### BULK RENUED WITH NEW card ###" + Hashchn[i]);
+            trace("####### BULK RENUED WITH NEW card ###" + Hashchn[i]);
+            
+            String custcin = commondesc.fchCustomerId(instid, padssenable, Hashchn[i], "IFD_INST_CARD_PROCESS", jdbctemplate);
+            trace("Got the customer id : " + custcin);
+            System.out.println("CUSTOMERN NUMBER IS =====> " + custcin);
+            
+            int res_1 = 0;int res_2 = 0;int res_3 = 0;int res_4 = 0;int res_5 = 0;
+            
+            String deletefromProcess = "";
+            if (padssenable.equals("Y")) {
+              deletefromProcess = "DELETE FROM IFD_INST_CARD_PROCESS WHERE INST_ID='" + instid + "' AND HCARD_NO='" + Hashchn[i] + "' ";
+            }
+            else {
+              deletefromProcess = "DELETE FROM IFD_INST_CARD_PROCESS WHERE INST_ID='" + instid + "' AND CARD_NO='" + Hashchn[i] + "' ";
+            }
+            enctrace("deletefromProcess::" + deletefromProcess);
+            
+            String reissuedate = "''";String reissue_count = "0";String repindate = "''";String repincount = "0";String damgedate = "''";String blockdate = "''";String hotdate = "''";String closedte = "''";String pinretry_count = "0";
+            String active_date = "''";
+            String status_code = commondesc.getSwitchCardStatus(instid, cardstatus, jdbctemplate);
+            StringBuilder movetoproduction = new StringBuilder();
+            movetoproduction.append("INSERT INTO IFD_CARD_PRODUCTION (INST_ID,ORDER_REF_NO,BIN,CARD_NO,HCARD_NO, MCARD_NO,ACCOUNT_NO,ACCTTYPE_ID, ACCTSUB_TYPE_ID, ACC_CCY,CIN,CARD_TYPE_ID,SUB_PROD_ID,PRODUCT_CODE,BRANCH_CODE,CARD_STATUS,CAF_REC_STATUS,STATUS_CODE,CARD_CCY,PC_FLAG,ORDER_FLAG,ORG_CHN,USED_CHN,GENERATED_DATE,");
+            movetoproduction.append("EXPIRY_DATE,APP_NO,APP_DATE,PIN_DATE,PRE_DATE,PRE_FILE,REG_DATE,RECV_DATE,ISSUE_DATE,ACTIVE_DATE,MAKER_ID,MAKER_DATE,CHECKER_ID,CHECKER_DATE,MKCK_STATUS,SERVICE_CODE,FEE_CODE,LIMIT_ID,PRIVILEGE_CODE,WDL_AMT,WDL_CNT,PUR_AMT,PUR_CNT,ECOM_AMT,");
+            movetoproduction.append("ECOM_CNT,EMB_NAME,ENC_NAME,COURIER_ID,AUTH_DATE,ADDON_FLAG,ADDON_CNT,REISSUE_DATE,REISSUE_CNT,REPIN_DATE,REPIN_CNT,DAMAGE_DATE,BLOCK_DATE,HOT_GENDATE,CLOSE_DATE,PIN_OFFSET,PIN_RETRY_CNT,AUTO_ACCT_FLAG,OLD_PIN_OFFSET,CVV1,CVV2,ICVV,MOBILENO,CARD_REF_NO)");
+            movetoproduction.append("(SELECT INST_ID,ORDER_REF_NO,BIN,CARD_NO,HCARD_NO, MCARD_NO,ACCT_NO ,ACCTTYPE_ID, ACCTSUB_TYPE_ID, ACC_CCY,CIN,CARD_TYPE_ID,SUB_PROD_ID,PRODUCT_CODE,BRANCH_CODE,'" + cardstatus + "',CAF_REC_STATUS," + status_code + ",CARD_CCY,PC_FLAG,ORDER_FLAG,ORG_CHN,USED_CHN,GENERATED_DATE,EXPIRY_DATE,APP_NO,APP_DATE,PIN_DATE,PRE_DATE,");
+            movetoproduction.append("PRE_FILE,REG_DATE,RECV_DATE,(SYSDATE),SYSDATE,'" + userid + "',(SYSDATE),CHECKER_ID,CHECKER_DATE,MKCK_STATUS,SERVICE_CODE,FEE_CODE,LIMIT_ID,PRIVILEGE_CODE,WDL_AMT,WDL_CNT,PUR_AMT,PUR_CNT,ECOM_AMT,");
+            movetoproduction.append("ECOM_CNT,EMB_NAME,ENC_NAME,COURIER_ID,AUTH_DATE,'','0'," + reissuedate + ",'" + reissue_count + "'," + repindate + ",'" + repincount + "'," + damgedate + "," + blockdate + "," + hotdate + "," + closedte + ",PIN_OFFSET,'" + pinretry_count + "',AUTO_ACCT_FLAG,OLD_PIN_OFFSET,CVV1,CVV2,ICVV,'',CARD_REF_NO FROM IFD_INST_CARD_PROCESS ");
+            if (padssenable.equals("Y")) {
+              movetoproduction.append("WHERE INST_ID='" + instid + "' AND HCARD_NO='" + Hashchn[i] + "')");
+            } else {
+              movetoproduction.append("WHERE INST_ID='" + instid + "' AND CARD_NO='" + Hashchn[i] + "')");
+            }
+            enctrace("movetoproduction---- > " + movetoproduction);
+            
+
+
+            String INSTID_1 = "";String CHN_1 = "";String ACCOUNTNO_1 = "";String ACCOUNTTYPE_1 = "";String ACCOUNTFLAG_1 = "";String ACCOUNTPRIORITY_1 = "";String CURRCODE_1 = "";
+            String INSTID_3 = "";String CHN_3 = "";String CARDTYPE_3 = "";String CUSTID_3 = "";String TXNGROUPID_3 = "";String LIMITFLAG_3 = "";String EXPIRYDATE_3 = "";String STATUS = "";String PINOFFSET_3 = "";String OLDPINOFFSET_3 = "";String TPINOFFSET_3 = "";String OLDTPINOFFSET_3 = "";String PINRETRYCOUNT_3 = "";String TPINRETRYCOUNT_3 = "";String PVKI_3 = "";String LASTTXNDATE_3 = "";String LASTTXNTIME_3 = "";String PANSEQNO_3 = "";
+            
+
+
+            StringBuilder mv = new StringBuilder();
+            
+            mv.append("SELECT ");
+            
+
+            mv.append("'" + instid + "' INSTID_1, '" + Hashchn[i] + "' CHN_1,AI.ACCOUNTNO ACCOUNTNO_1,AI.ACCTTYPE_ID ACCOUNTTYPE_1,PCP.PC_FLAG ACCOUNTFLAG_1,'1' ACCOUNTPRIORITY_1 ,AI.ACCT_CURRENCY CURRCODE_1, ");
+            
+
+
+
+            mv.append("'" + instid + "' INSTID_3, '" + Hashchn[i] + "' CHN_3, PCP.CARD_TYPE_ID CARDTYPE_3,'" + custcin + "' CUSTID_3,'01' TXNGROUPID_3, ");
+            mv.append("(SELECT CARD_FLAG FROM IFD_GLOBAL_CARDDETAILS WHERE LIMIT_TYPE = AI.ACCOUNTTYPE) LIMITFLAG_3,  ");
+            mv.append("TO_CHAR(PCP.EXPIRY_DATE,'MM/DD/YYYY')  EXPIRYDATE_3,'" + status_code + "' STATUS , NVL(PCP.PIN_OFFSET,0) PINOFFSET_3, NVL(PCP.OLD_PIN_OFFSET,0) OLDPINOFFSET_3, ");
+            mv.append("'0' TPINOFFSET_3,'0' OLDTPINOFFSET_3,NVL(PIN_RETRY_COUNT,0) PINRETRYCOUNT_3,'0' TPINRETRYCOUNT_3, '0' PVKI_3,  ");
+            mv.append("TO_CHAR(SYSDATE,'MM/DD/YYYY') LASTTXNDATE_3,TO_CHAR(SYSDATE,'HH24MISS')  LASTTXNTIME_3, '00' PANSEQNO_3 ");
+            
+
+            mv.append(" FROM IFD_CUSTOMERINFO CI ,IFD_ACCOUNTINFO AI ,IFD_INST_CARD_PROCESS PCP ");
+            mv.append("WHERE");
+            
+            mv.append("(CI.CIN = AI.CIN AND AI.CIN = PCP.CIN AND PCP.CIN = CI.CIN) AND ");
+            mv.append("(CI.INST_ID = AI.INST_ID AND AI.INST_ID = PCP.INST_ID AND PCP.INST_ID = CI.INST_ID and pcp.acct_no=ai.ACCOUNTNO) ");
+            mv.append("AND CI.INST_ID='" + instid + "' AND AI.INST_ID='" + instid + "' AND PCP.INST_ID='" + instid + "'  ");
+            mv.append("AND CI.CIN='" + custcin + "' AND AI.CIN='" + custcin + "' AND PCP.CIN='" + custcin + "' ");
+            if (padssenable.equals("Y")) {
+              mv.append("AND PCP.INST_ID='" + instid + "' AND PCP.HCARD_NO='" + Hashchn[i] + "'");
+            } else {
+              mv.append("AND PCP.INST_ID='" + instid + "' AND PCP.CARD_NO='" + Hashchn[i] + "'");
+            }
+            
+            enctrace("Move to Production CafRec status BN-----------------------------------\n");
+            enctrace(mv.toString());
+            enctrace("Move to Production CafRec status BN New-----------------------------------\n" + mv.toString());
+            
+            List movetoSwitchP = jdbctemplate.queryForList(mv.toString());
+            Iterator custitr = movetoSwitchP.iterator();
+            while (custitr.hasNext())
+            {
+              Map mp = (Map)custitr.next();
+              
+              INSTID_1 = (String)mp.get(" INSTID_1 ");
+              CHN_1 = (String)mp.get("CHN_1");
+              ACCOUNTNO_1 = (String)mp.get("ACCOUNTNO_2");
+              ACCOUNTTYPE_1 = (String)mp.get("ACCOUNTTYPE_1");
+              
+              ACCOUNTFLAG_1 = "1";
+              ACCOUNTPRIORITY_1 = (String)mp.get("ACCOUNTPRIORITY_1");
+              CURRCODE_1 = (String)mp.get("CURRCODE_1");
+              
+              CHN_3 = mp.get("CHN_3").toString();
+              CARDTYPE_3 = mp.get("CARDTYPE_3").toString();
+              CUSTID_3 = mp.get("CUSTID_3").toString();
+              TXNGROUPID_3 = mp.get("TXNGROUPID_3").toString();
+              LIMITFLAG_3 = mp.get("LIMITFLAG_3").toString();
+              EXPIRYDATE_3 = mp.get("EXPIRYDATE_3").toString();
+              STATUS = mp.get("STATUS").toString();
+              PINOFFSET_3 = mp.get("PINOFFSET_3").toString();
+              OLDPINOFFSET_3 = mp.get("OLDPINOFFSET_3").toString();
+              TPINOFFSET_3 = mp.get("TPINOFFSET_3").toString();
+              OLDTPINOFFSET_3 = mp.get("OLDTPINOFFSET_3").toString();
+              PINRETRYCOUNT_3 = mp.get("PINRETRYCOUNT_3").toString();
+              TPINRETRYCOUNT_3 = mp.get("TPINRETRYCOUNT_3").toString();
+              PVKI_3 = mp.get("PVKI_3").toString();
+              LASTTXNDATE_3 = mp.get("LASTTXNDATE_3").toString();
+              LASTTXNTIME_3 = mp.get("LASTTXNTIME_3").toString();
+              PANSEQNO_3 = mp.get("PANSEQNO_3").toString();
+            }
+            
+            StringBuilder crdinf_3 = new StringBuilder();
+            crdinf_3.append("INSERT INTO EZCARDINFO ");
+            crdinf_3.append("(INSTID, CHN, CARDTYPE, CUSTID, TXNGROUPID, LIMITFLG, EXPIRYDATE, STATUS, PINOFFSET, OLDPINOFFSET, TPINOFFSET, OLDTPINOFFSET, PINRETRYCOUNT, TPINRETRYCOUNT, PVKI, LASTTXNDATE, LASTTXNTIME,CVV, PANSEQNO) ");
+            crdinf_3.append("VALUES ");
+            crdinf_3.append("('" + instid + "','" + CHN_3 + "','" + CARDTYPE_3 + "','" + CUSTID_3 + "','" + TXNGROUPID_3 + "','" + LIMITFLAG_3 + "',TO_DATE('" + EXPIRYDATE_3 + "','MM/DD/YYYY'),'" + STATUS + "','" + PINOFFSET_3 + "','" + OLDPINOFFSET_3 + "',");
+            crdinf_3.append("'" + TPINOFFSET_3 + "','" + OLDTPINOFFSET_3 + "','" + PINRETRYCOUNT_3 + "','" + TPINRETRYCOUNT_3 + "','" + PVKI_3 + "',TO_DATE('" + LASTTXNDATE_3 + "','MM/DD/YYYY'),'" + LASTTXNTIME_3 + "'  ,'0' ,");
+            crdinf_3.append("'" + PANSEQNO_3 + "' )");
+            
+            enctrace("crdinf_3:::::" + crdinf_3.toString());
+            
+            res_3 = jdbctemplate.update(crdinf_3.toString());
+            
+            StringBuilder authrel_1 = new StringBuilder();
+            authrel_1.append("INSERT INTO EZAUTHREL ");
+            authrel_1.append("(INSTID, CHN, ACCOUNTNO, ACCOUNTTYPE, ACCOUNTFLAG, ACCOUNTPRIORITY, CURRCODE) ");
+            authrel_1.append("VALUES ");
+            authrel_1.append("('" + instid + "','" + CHN_1 + "','" + ACCOUNTNO_1 + "','" + ACCOUNTTYPE_1 + "','" + ACCOUNTFLAG_1 + "','" + ACCOUNTPRIORITY_1 + "','" + CURRCODE_1 + "') ");
+            enctrace("authrel_1::::" + authrel_1.toString());
+            
+
+            res_1 = jdbctemplate.update(authrel_1.toString());
+            
+
+
+
+
+            int production_insert = jdbctemplate.update(movetoproduction.toString());
+            int deletefromprocess = jdbctemplate.update(deletefromProcess);
+            
+
+
+
+            enctrace("\n--------------------------------------Move to Production Query CAF REC S");
+            trace("result :::::::::::" + res_1 + res_3 + production_insert + deletefromprocess);
+            if ((res_1 > 0) && (res_3 > 0) && (production_insert > 0) && (deletefromprocess > 0))
+            {
+              trace("PROCESS COMPLETED");
+              updatecount++;
+            }
+            else
+            {
+              System.out.println("Error While Insert and Delete ");
+              addActionError("Unable to continue process ....");
+              return authInstCustomerHome();
+            }
+          }
+          
+
+
+
+
+
+
+
+
+
+
+          if (cafflag.equals("BR"))
+          {
+
+            trace("BULK RENUAL CARD ATE WITH EXPIRY DATE...................");
+            
+
+            StringBuilder update_production = new StringBuilder();
+            update_production.append("UPDATE IFD_CARD_PRODUCTION SET CARD_STATUS='" + cardstatus + "', STATUS_CODE='" + switchstatus + "',MKCK_STATUS = 'P' ,  ISSUE_DATE=(SYSDATE),ACTIVE_DATE=(sysdate),MAKER_ID='" + userid + "', ");
+            update_production.append("MAKER_DATE=(sysdate) WHERE INST_ID='" + instid + "' ");
+            if (padssenable.equals("Y")) {
+              update_production.append("AND HCARD_NO='" + Hashchn[i] + "' AND INST_ID='" + instid + "'");
+            } else {
+              update_production.append("AND CARD_NO='" + Hashchn[i] + "' AND INST_ID='" + instid + "'");
+            }
+            
+            trace("update_production :" + update_production.toString());
+            update_product = jdbctemplate.update(update_production.toString());
+            
+            StringBuilder updEzcard = new StringBuilder();
+            updEzcard.append("UPDATE EZCARDINFO set ");
+            updEzcard.append("EXPIRYDATE = (SELECT EXPIRY_DATE from IFD_INST_CARD_PROCESS where ");
+            updEzcard.append("HCARD_NO='" + Hashchn[i] + "' AND INSTID='" + instid + "')");
+            updEzcard.append(",STATUS = '" + switchstatus + "' WHERE CHN = '" + Hashchn[i] + "' AND INSTID='" + instid + "'");
+            
+            trace("updEzcard :" + updEzcard.toString());
+            updezcardinfo = jdbctemplate.update(updEzcard.toString());
+            
+            if ((update_product > 0) && (updezcardinfo > 0))
+            {
+              updatecount++;
+            } else {
+              System.out.println("Process Breaked ====> 1");
+              break;
+            }
+          }
+          
+
+
+
+
+
+
+
+          String F_cardno = "";
+          String F_hcardno = "";
+          String F_mcardno = "";
+          String F_accountno = "";
+          String F_caf_rec_status = "";
+          String F_feeid = "";
+          String Fee_cardno = "";
+          if (padssenable.equals("Y")) {
+            Fee_cardno = "HCARD_NO='" + Hashchn[i] + "'";
+          } else {
+            Fee_cardno = "CARD_NO='" + Hashchn[i] + "'";
+          }
+          String acctsubtype = "";String F_branchcode = "";
+          
+          System.out.println("getting card number value " + Fee_cardno);
+          List feedetails = commondesc.getfeedetailsinproc(instid, Fee_cardno, jdbctemplate);
+          Iterator custitr = feedetails.iterator();
+          while (custitr.hasNext()) {
+            Map mp = (Map)custitr.next();
+            F_cardno = (String)mp.get("CARD_NO");
+            F_hcardno = (String)mp.get("HCARD_NO");
+            F_mcardno = (String)mp.get("MCARD_NO");
+            F_accountno = (String)mp.get("ACCT_NO");
+            System.out.println("getting account number value " + F_accountno);
+            if (F_accountno.length() == 14) {
+              acctsubtype = F_accountno.substring(4, 6);
+            }
+            else {
+              acctsubtype = F_accountno.substring(5, 7);
+            }
+            trace("getting acctsubtype value " + acctsubtype);
+            F_caf_rec_status = (String)mp.get("CAF_REC_STATUS");
+            F_feeid = (String)mp.get("FEE_CODE");
+            F_branchcode = (String)mp.get("BRANCH_CODE");
+          }
+          
+          System.out.println("getting accounttype value " + acctsubtype);
+          String checkvalidqry = "SELECT COUNT(1) as CNT FROM IFD_FEE_SKIP_DETAILS WHERE ACCT_SUBTYPE_ID='" + acctsubtype + "'";
+          String cnt = (String)jdbctemplate.queryForObject(checkvalidqry, String.class);
+          if ("0".equalsIgnoreCase(cnt)) {
+            String renewalflag = "";
+            List<Map<String, Object>> getrenewalflag = commondesc.getRenewalFlagByProd(instid, Fee_cardno, jdbctemplate);
+            if (!getrenewalflag.isEmpty()) {
+              renewalflag = (String)((Map)getrenewalflag.get(0)).get("RENEWALFLAG");
+              if (renewalflag == null) {
+                renewalflag = "N";
+              }
+            }
+            if (renewalflag.equalsIgnoreCase("Y")) {
+              F_caf_rec_status = "BN";
+            }
+            trace("renewalflag" + renewalflag);
+            
+
+
+
+
+            String F_TAXGLACCOUNTNO = "";
+            String F_GLACCOUNTNO = "";
+            List checkfeedetails = commondesc.feeinsertactivity(instid, F_cardno, F_hcardno, F_mcardno, F_accountno, cafflag, F_feeid, userid, jdbctemplate);
+            if (!checkfeedetails.isEmpty()) {
+              trace("checkfeedetails" + checkfeedetails);
+              Iterator itr = checkfeedetails.iterator();
+              HashMap mp = (HashMap)itr.next();
+              
+              String actualamt = (String)mp.get("FEEAMT");
+              int taxpercent = 10;
+              int taxamt = Integer.parseInt(actualamt) / 100 * taxpercent;
+              int custdebitamt = Integer.parseInt(actualamt) - taxamt;
+              
+              String custamt = String.valueOf(custdebitamt);
+              String taxamount = String.valueOf(taxamt);
+              String branchcode = F_branchcode;
+              int checkinsertfeedet = commondesc.insertfeedetails(instid, F_cardno, F_hcardno, F_mcardno, F_accountno, cafflag, F_feeid, userid, mp, jdbctemplate);
+              trace("checking fee values " + checkinsertfeedet);
+              if (checkinsertfeedet != 1) {
+                txManager.rollback(status);
+                trace("Fee Details rollbacked Successfully");
+                session.setAttribute("preverr", "E");
+                session.setAttribute("prevmsg", "Fee Details not updated ");
+                return "authcardissuehome";
+              }
+              
+              int glcheckinsertfeedet = commondesc.glinsertfeedetails(instid, F_cardno, F_hcardno, F_mcardno, F_GLACCOUNTNO, F_caf_rec_status, F_feeid, userid, mp, custamt, branchcode, jdbctemplate);
+              trace("checkingglfeeinsert " + glcheckinsertfeedet);
+              if (glcheckinsertfeedet != 1) {
+                txManager.rollback(status);
+                trace("Fee Details rollbacked Successfully");
+                session.setAttribute("preverr", "E");
+                session.setAttribute("prevmsg", "Fee Details not updated ");
+                return "authcardissuehome";
+              }
+              int taxinsertfeedet = commondesc.taxinsertfeedetails(instid, F_cardno, F_hcardno, F_mcardno, F_TAXGLACCOUNTNO, F_caf_rec_status, F_feeid, userid, mp, taxamount, branchcode, jdbctemplate);
+              trace("insert taxinsert fee det " + taxinsertfeedet);
+              if (taxinsertfeedet != 1) {
+                txManager.rollback(status);
+                trace("Fee Details rollbacked Successfully");
+                session.setAttribute("preverr", "E");
+                session.setAttribute("prevmsg", "Fee Details not updated ");
+                return "authcardissuehome";
+              }
+            }
+          }
+          trace("..................BULK RENUAL EXPIRY DATE ");
+          
+
+          try
+          {
+            String cond = "";
+            if (padssenable.equals("Y")) {
+              cond = "H";
+            } else {
+              cond = "C";
+            }
+            
+
+            String mcardno = commondesc.getMaskedCardNoFromProd(instid, Hashchn[i], cond, jdbctemplate);
+            if (mcardno == null) mcardno = Hashchn[i];
+            auditbean.setActmsg(statusmsg + "Issued Card [ " + mcardno + " ]");
+            
+            auditbean.setAuditactcode("0206");
+            auditbean.setCardno(mcardno);
+            auditbean.setCardnumber(Hashchn[i]);
+            auditbean.setChecker(username);
+            auditbean.setCardcollectbranch(comBranchId());
+            
+            commondesc.insertAuditTrailPendingCommit(instid, userid, auditbean, jdbctemplate, txManager);
+            
+            commondesc.updatecheckerdata(instid, username, auditbean, jdbctemplate, txManager);
+
+
+
+
+
+
+
+
+
+
+          }
+          catch (Exception audite)
+          {
+
+
+
+
+
+
+
+
+
+
+            trace("Exception in auditran : " + audite.getMessage());
+          }
+        }
+        else
+        {
+          trace("**************InstpersonalCardIssuence**************");enctrace("**************InstpersonalCardIssuence**************");
+          
+          trace("Activation the card number : " + Hashchn[i]);
+          
+          String CARDNORMALSTATUS = "05";
+          cardstatus = "05";
+          String custcin = "";String productionhcardno = "";
+          String remarks = getRequest().getParameter("remarks");
+          String usedchnnNEWreissedcard = "";String orgchn = "";String orderfornewcard = "";String newhcardno = "";
+          String usedecardno = "";String cardcon = "";String newhencyptedcardno = "";String cardnumber = "";
+          String PIN_OFFSET = "";String EXPIRYDATE = "";String cardtype = "";
+          StringBuffer usedhcardno = new StringBuffer();
+          
+          List carddet = cardregdao.getrejectcarddetailsforResissue(instid, Hashchn[i], jdbctemplate);
+          trace("cardforcbs" + carddet);
+          int ezcustomerid = 0;
+          Iterator itrat = carddet.iterator();
+          
+          while (itrat.hasNext())
+          {
+            Map map = (Map)itrat.next();
+            orderfornewcard = (String)map.get("ORDER_REF_NO");
+            cardtype = (String)map.get("CARDTYPE");
+            
+            newhcardno = (String)map.get("HCARD_NO");
+            newhencyptedcardno = (String)map.get("CARD_NO");
+            EXPIRYDATE = map.get("EXPIRYDATE").toString();
+            PIN_OFFSET = (String)map.get("PIN_OFFSET");
+            orgchn = (String)map.get("ORG_CHN");
+            usedchnnNEWreissedcard = (String)map.get("USED_CHN");
+          }
+          
+          usedhcardno = padsssec.getHashedValue(usedchnnNEWreissedcard + instid);
+          usedecardno = padsssec.getECHN(eDMK, eDPK, usedchnnNEWreissedcard);
+          
+
+          if (padssenable.equals("Y")) {
+            custcin = commondesc.persfchCustomerId(instid, padssenable, Hashchn[i], "IFD_INST_CARD_PROCESS", jdbctemplate);
+          } else {
+            custcin = commondesc.persfchCustomerId(instid, padssenable, Hashchn[i], "IFD_INST_CARD_PROCESS", jdbctemplate);
+          }
+          
+
+
+
+          if (padssenable.equals("Y")) cardcon = "HCARD_NO"; else { cardcon = "CARD_NO";
+          }
+          String deletefromaccount = "";String deletefromcust = "";
+          StringBuilder update_production = new StringBuilder();
+          StringBuilder update_process = new StringBuilder();
+          StringBuilder update_productiontab = new StringBuilder();
+          
+
+          int cardvailablle = commondesc.getcarddetailshcard(instid, padssenable, usedchnnNEWreissedcard, "IFD_INST_CARD_PROCESS", jdbctemplate);
+          
+          if (cardvailablle > 0)
+          {
+
+            int updateproduction = 0;int updateprocess = 0;
+            update_productiontab.append("UPDATE IFD_CARD_PRODUCTION  SET  CARD_STATUS='03', STATUS_CODE='74' ");
+            update_productiontab.append(" WHERE INST_ID='" + instid + "' AND ORG_CHN ='" + usedchnnNEWreissedcard + "'");
+            
+            update_process.append("UPDATE IFD_INST_CARD_PROCESS  SET  CARD_STATUS='05', MKCK_STATUS='P' ,CAF_REC_STATUS='A'");
+            update_process.append(" WHERE INST_ID='" + instid + "' AND ORG_CHN ='" + orgchn + "'");
+            enctrace("fdf" + update_process + "\n" + update_productiontab);
+            
+
+            updateproduction = jdbctemplate.update(update_productiontab.toString());
+            updateprocess = jdbctemplate.update(update_process.toString());
+            
+            trace("sssssssss" + updateproduction + "updateprocess" + updateprocess);
+            if ((updateproduction > 0) && (updateprocess > 0)) {
+              update_production.append("UPDATE EZCARDINFO  SET  STATUS='74' ");
+              update_production.append(" WHERE CHN in (select hcard_no from ifd_card_production where INSTID='" + instid + "' AND ORG_CHN ='" + usedchnnNEWreissedcard + "')");
+            }
+            
+            trace("dsafds" + update_production);
+          }
+          else
+          {
+            int deleteifdaccount = 0;int deleteifdcust = 0;
+            deletefromaccount = "DELETE FROM IFD_ACCOUNTINFO WHERE INST_ID='" + instid + "' and cin='" + custcin + "'";
+            deletefromcust = "DELETE FROM IFD_CUSTOMERINFO WHERE INST_ID='" + instid + "' and cin='" + custcin + "'";
+            
+            deleteifdaccount = jdbctemplate.update(deletefromaccount);
+            if (deleteifdaccount > 0) {
+              deleteifdcust = jdbctemplate.update(deletefromcust);
+              if (deleteifdcust > 0) {
+                update_production.append("UPDATE " + tablename + " SET ACCT_NO='',ACCTTYPE_ID='', CARD_STATUS='" + cardstatus + "', STATUS_CODE='',MKCK_STATUS = 'P',CHECKER_DATE=(SYSDATE),CHECKER_ID='" + userid + "', ");
+                update_production.append("CIN='',REMARKS='" + remarks + "' WHERE INST_ID='" + instid + "' and " + cardcon + "='" + Hashchn[i] + "'");
+              }
+            }
+          }
+          
+
+
+
+
+          enctrace("update query for instcard processs " + update_production);
+          
+
+          int deleteifdcust = -1;int deleteifdaccount = -1;int deauth_updprocess = -1;
+          
+
+          try
+          {
+            deauth_updprocess = jdbctemplate.update(update_production.toString());
+            
+
+            System.out.println("result :::::::::::" + deauth_updprocess + deleteifdaccount + deleteifdcust);
+            trace("result :::::::::::" + deauth_updprocess + deleteifdaccount + deleteifdcust);
+            if (deauth_updprocess > 0)
+            {
+
+
+              updatecount++;
+              statusmsg = "Card Rejected Successfully";
+              
+              try
+              {
+                String cond = "";
+                if (padssenable.equals("Y")) {
+                  cond = "H";
+                } else {
+                  cond = "C";
+                }
+                String mcardno = commondesc.getMaskedCardNoFromProd(instid, Hashchn[i], cond, jdbctemplate);
+                if (mcardno == null) mcardno = Hashchn[i];
+                auditbean.setActmsg(statusmsg + "Issued Card [ " + mcardno + " ]");
+                auditbean.setUsercode(userid);
+                auditbean.setAuditactcode("0206");
+                auditbean.setCardno(mcardno);
+                auditbean.setCardnumber(Hashchn[i]);
+                auditbean.setRemarks(remarks);
+                
+                commondesc.insertAuditTrailPendingCommit(instid, userid, auditbean, jdbctemplate, txManager);
+              } catch (Exception audite) { trace("Exception in auditran : " + audite.getMessage());
+              }
+            }
+            i++;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          }
+          catch (Exception e)
+          {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            trace("Exception in moving production :: 2:::" + e);
+
+
+
+
+
+
+          }
+          
+
+
+
+
+
+        }
+        
+
+
+
+
+
+      }
+      
+
+
+
+
+
+
+    }
+    catch (Exception e)
+    {
+
+
+
+
+
+
+      trace("Error While Execute the Query ---->" + e.getMessage());
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", "Unable to continue the process");
+      e.printStackTrace();
+    }
+    
+    trace("ordercount == ordercount:::" + ordercount);
+    trace("updatecount == updatecount:::" + updatecount);
+    if (ordercount == updatecount)
+    {
+      txManager.commit(status);
+      trace("Order Status Updated Successfully and Commited ");
+      session.setAttribute("preverr", "S");
+      session.setAttribute("prevmsg", statusmsg);
+
+    }
+    else
+    {
+      txManager.rollback(status);
+      trace("Txn Got Rollbacked ---->");
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", "Card Status not updated ");
+    }
+    
+    setAct((String)session.getAttribute("ACTIONTYPE"));
+    return authInstCustomerHome();
+  }
+  
+  public synchronized int InstpersonalCardIssuence(String cardno, String padssenable, String instid, String maker_id, String tablename, JdbcTemplate jdbctemplate) throws Exception
+  {
+    trace("**************InstpersonalCardIssuence**************");enctrace("**************InstpersonalCardIssuence**************");
+    int issue_status = -1;int custinfo_move = -1;int delete_status = -1;int custinfo_status = -1;
+    
+    trace("Activation the card number : " + cardno);
+    String reissuedate = "''";String reissue_count = "0";String repindate = "''";String repincount = "0";String damgedate = "''";String blockdate = "''";String hotdate = "''";String closedte = "''";String pinretry_count = "0";
+    String active_date = "''";
+    String status_code = commondesc.getSwitchCardStatus(instid, "09", jdbctemplate);
+    String userid = comUserCode();
+    trace("checking switch status code" + status_code);
+    
+
+
+
+
+
+
+
+
+    String cardstatus = "09";
+    String switchstatus = commondesc.getSwitchCardStatus(instid, cardstatus, jdbctemplate);
+    
+
+
+    String cardissuetype = null;
+    
+    if (padssenable.equals("Y")) {
+      cardissuetype = commondesc.getCardIssueTypeByCard(instid, padssenable, cardno, "INSTANT", jdbctemplate);
+    } else {
+      cardissuetype = commondesc.getCardIssueTypeByCard(instid, padssenable, cardno, "INSTANT", jdbctemplate);
+    }
+    
+    trace("Getting cardissuetype...got :  " + cardissuetype);
+    
+    String custcin = "";
+    if (padssenable.equals("Y")) {
+      custcin = commondesc.persfchCustomerId(instid, padssenable, cardno, "IFD_INST_CARD_PROCESS", jdbctemplate);
+    } else {
+      custcin = commondesc.persfchCustomerId(instid, padssenable, cardno, "IFD_INST_CARD_PROCESS", jdbctemplate);
+    }
+    
+    trace("Got the customer id : " + custcin);
+    System.out.println("CUSTOMERN NUMBER IS =====> " + custcin);
+    
+    String acctno = null;
+    int acctinfo_insert = -1;
+    int acctpriority = -1;
+    if ((cardissuetype != null) && (cardissuetype.equals("$SUPLIMENT"))) {
+      acctpriority = 2;
+      
+
+
+
+      acctinfo_insert = 1;
+    }
+    else {
+      trace("coming into card issuance");
+      acctpriority = 1;
+      
+
+      String INSTID_1 = "";String CHN_1 = "";String BIN = "";String ACCOUNTNO_1 = "";String ACCOUNTTYPE_1 = "";String ACCOUNTFLAG_1 = "";String ACCOUNTPRIORITY_1 = "";String CURRCODE_1 = "";
+      String INSTID_2 = "";String ACCOUNTNO_2 = "";String ACCOUNTTYPE_2 = "";String CURRCODE_2 = "";String AVAILBAL_2 = "";String LEDGERBAL_2 = "";String LIMITFLAG_2 = "1";String STATUS_2 = "";String TXNGROUPID_2 = "";String LASTTXNDATE_2 = "";String LASTTXNTIME_2 = "";String BRANCHCODE_2 = "";String PRODUCTCODE_2 = "";
+      String INSTID_3 = "";String CHN_3 = "";String CARDTYPE_3 = "";String CUSTID_3 = "";String TXNGROUPID_3 = "";String LIMITFLAG_3 = "1";String EXPIRYDATE_3 = "";String STATUS = "";String PINOFFSET_3 = "";String OLDPINOFFSET_3 = "";String TPINOFFSET_3 = "";String OLDTPINOFFSET_3 = "";String PINRETRYCOUNT_3 = "";String TPINRETRYCOUNT_3 = "";String PVKI_3 = "";String LASTTXNDATE_3 = "";String LASTTXNTIME_3 = "";String PANSEQNO_3 = "";
+      String INSTID_4 = "";String CUSTID_4 = "";String NAME_4 = "";String DOB_4 = "";String SPOUSENAME_4 = "";String ADDRESS1_4 = "";String ADDRESS2_4 = "";String ADDRESS3_4 = "";String OFFPHONE_4 = "";String MOBILE_4 = "";String EMAIL_4 = "";String RESPHONE_4 = "";
+      String LIMITRECID_5 = "";String cardcon1 = "";
+      int res_1 = 0;int res_2 = 0;int res_3 = 0;int res_4 = 0;int res_5 = 0;
+      StringBuilder mv = new StringBuilder();
+      
+      mv.append("SELECT ");
+      
+
+      if (padssenable.equals("Y")) {
+        mv.append("'" + instid + "' INSTID_1, PCP.HCARD_NO CHN_1,AI.ACCOUNTNO ACCOUNTNO_1,PCP.BIN,AI.ACCTTYPE_ID ACCOUNTTYPE_1,PCP.CARDISSUETYPE ACCOUNTFLAG_1,'1' ACCOUNTPRIORITY_1 ,AI.ACCT_CURRENCY CURRCODE_1, ");
+      } else {
+        mv.append("'" + instid + "' INSTID_1, PCP.CARD_NO CHN_1,AI.ACCOUNTNO ACCOUNTNO_1,PCP.BIN,AI.ACCTTYPE_ID ACCOUNTTYPE_1,PCP.CARDISSUETYPE ACCOUNTFLAG_1,'1' ACCOUNTPRIORITY_1 ,AI.ACCT_CURRENCY CURRCODE_1, ");
+      }
+      if (padssenable.equals("Y")) cardcon1 = "HCARD_NO"; else { cardcon1 = "CARD_NO";
+      }
+      
+
+      mv.append("'" + instid + "' INSTID_2, AI.ACCOUNTNO ACCOUNTNO_2, AI.ACCTTYPE_ID ACCOUNTTYPE_2, AI.ACCT_CURRENCY CURRCODE_2, '0' AVAILBAL_2, '0' LEDGERBAL_2,  ");
+      mv.append("(SELECT ACCT_FLAG FROM IFD_GLOBAL_CARDDETAILS WHERE LIMIT_TYPE = AI.ACCOUNTTYPE) LIMITFLAG_2, '" + status_code + "' STATUS_2,  ");
+      mv.append("'01' TXNGROUPID_2, TO_CHAR(SYSDATE,'MM/DD/YYYY') LASTTXNDATE_2,TO_CHAR(SYSDATE,'HH24MISS')  LASTTXNTIME_2,  ");
+      mv.append("PCP.BRANCH_CODE BRANCHCODE_2, AI.ACCTSUB_TYPE_ID PRODUCTCODE_2, ");
+      
+
+
+      if (padssenable.equals("Y")) {
+        mv.append("'" + instid + "' INSTID_3, PCP.HCARD_NO CHN_3, PCP.CARD_TYPE_ID CARDTYPE_3,'" + custcin + "' CUSTID_3,'01' TXNGROUPID_3, ");
+      } else {
+        mv.append("'" + instid + "' INSTID_3, PCP.CARD_NO CHN_3, PCP.CARD_TYPE_ID CARDTYPE_3,'" + custcin + "' CUSTID_3,'01' TXNGROUPID_3, ");
+      }
+      mv.append("(SELECT CARD_FLAG FROM IFD_GLOBAL_CARDDETAILS WHERE LIMIT_TYPE = AI.ACCOUNTTYPE) LIMITFLAG_3,  ");
+      mv.append("TO_CHAR(PCP.EXPIRY_DATE,'MM/DD/YYYY')  EXPIRYDATE_3,'" + status_code + "' STATUS , NVL(PCP.PIN_OFFSET,0)  PINOFFSET_3, NVL(PCP.OLD_PIN_OFFSET,0) OLDPINOFFSET_3, ");
+      mv.append("'0' TPINOFFSET_3,'0' OLDTPINOFFSET_3,NVL(PCP.PIN_RETRY_COUNT,0) PINRETRYCOUNT_3,'0' TPINRETRYCOUNT_3, '0' PVKI_3,  ");
+      mv.append("TO_CHAR(SYSDATE,'MM/DD/YYYY') LASTTXNDATE_3,TO_CHAR(SYSDATE,'HH24MISS')  LASTTXNTIME_3, '00' PANSEQNO_3, ");
+      
+
+
+      mv.append("'" + instid + "' INSTID_4,'" + custcin + "' CUSTID_4, CI.FNAME NAME_4, CI.DOB  DOB_4,CI.SPOUCE_NAME SPOUSENAME_4, ");
+      mv.append("CI.C_HOUSE_NO ADDRESS1_4, CI.C_STREET_NAME ADDRESS2_4,CI.C_CITY ADDRESS3_4, CI.C_PHONE1 OFFPHONE_4,CI.MOBILE MOBILE_4, ");
+      mv.append("CI.E_MAIL  EMAIL_4 ,CI.C_PHONE2 RESPHONE_4, PCP.LIMIT_ID LIMIT_RECORDID_5 FROM ");
+      
+      mv.append(" IFD_CUSTOMERINFO CI ,IFD_ACCOUNTINFO AI ,IFD_INST_CARD_PROCESS PCP ");
+      mv.append("WHERE  ");
+      
+      mv.append("(CI.CIN = AI.CIN AND AI.CIN = PCP.CIN AND PCP.CIN = CI.CIN) AND ");
+      mv.append("(CI.INST_ID = AI.INST_ID AND AI.INST_ID = PCP.INST_ID AND PCP.INST_ID = CI.INST_ID) ");
+      mv.append("AND CI.INST_ID='" + instid + "' AND AI.INST_ID='" + instid + "' AND PCP.INST_ID='" + instid + "'  ");
+      mv.append("AND CI.CIN='" + custcin + "' AND AI.CIN='" + custcin + "' AND PCP.CIN='" + custcin + "' AND " + cardcon1 + "='" + cardno + "' ");
+      
+      enctrace("Move to Production Query-----------------------------------\n" + mv.toString());
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      List movetoSwitchP = jdbctemplate.queryForList(mv.toString());
+      Iterator custitr = movetoSwitchP.iterator();
+      while (custitr.hasNext())
+      {
+        Map mp = (Map)custitr.next();
+        
+        INSTID_1 = (String)mp.get(" INSTID_1 ");
+        CHN_1 = (String)mp.get("CHN_1");
+        ACCOUNTNO_1 = (String)mp.get("ACCOUNTNO_1");
+        ACCOUNTTYPE_1 = (String)mp.get("ACCOUNTTYPE_1");
+        ACCOUNTFLAG_1 = (String)mp.get("ACCOUNTFLAG_1");
+        BIN = (String)mp.get("BIN");
+        
+        ACCOUNTPRIORITY_1 = (String)mp.get("ACCOUNTPRIORITY_1");
+        CURRCODE_1 = (String)mp.get("CURRCODE_1");
+        INSTID_2 = (String)mp.get("INSTID_2");
+        ACCOUNTNO_2 = (String)mp.get("ACCOUNTNO_2");
+        ACCOUNTTYPE_2 = (String)mp.get("ACCOUNTTYPE_2");
+        CURRCODE_2 = (String)mp.get("CURRCODE_2");
+        AVAILBAL_2 = (String)mp.get("AVAILBAL_2");
+        LEDGERBAL_2 = (String)mp.get("LEDGERBAL_2");
+        LIMITFLAG_2 = (String)mp.get("LIMITFLAG_2");
+        
+
+        STATUS_2 = "50";
+        TXNGROUPID_2 = (String)mp.get("TXNGROUPID_2");
+        LASTTXNDATE_2 = (String)mp.get("LASTTXNDATE_2");
+        LASTTXNTIME_2 = (String)mp.get("LASTTXNTIME_2");
+        BRANCHCODE_2 = (String)mp.get("BRANCHCODE_2");
+        PRODUCTCODE_2 = (String)mp.get("PRODUCTCODE_2");
+        
+        System.out.println("1" + mp.get("INSTID_3").toString());
+        System.out.println("2" + mp.get("INSTID_3").toString());
+        System.out.println("4" + mp.get("CHN_3").toString());
+        System.out.println("5" + mp.get("CARDTYPE_3").toString());
+        System.out.println("6" + mp.get("CUSTID_3").toString());
+        System.out.println("7" + mp.get("TXNGROUPID_3").toString());
+        System.out.println("8" + mp.get("LIMITFLAG_3").toString());
+        System.out.println("8" + mp.get("EXPIRYDATE_3").toString());
+        System.out.println("9" + mp.get("STATUS").toString());
+        System.out.println("0" + mp.get("PINOFFSET_3").toString());
+        System.out.println("1" + mp.get("OLDPINOFFSET_3").toString());
+        System.out.println("3" + mp.get("TPINOFFSET_3").toString());
+        System.out.println("5" + mp.get("OLDTPINOFFSET_3").toString());
+        System.out.println("6" + mp.get("PINRETRYCOUNT_3").toString());
+        System.out.println("7" + mp.get("TPINRETRYCOUNT_3").toString());
+        
+
+        CHN_3 = mp.get("CHN_3").toString();
+        CARDTYPE_3 = mp.get("CARDTYPE_3").toString();
+        CUSTID_3 = mp.get("CUSTID_3").toString();
+        TXNGROUPID_3 = mp.get("TXNGROUPID_3").toString();
+        LIMITFLAG_3 = mp.get("LIMITFLAG_3").toString();
+        
+        EXPIRYDATE_3 = mp.get("EXPIRYDATE_3").toString();
+        STATUS = mp.get("STATUS").toString();
+        PINOFFSET_3 = mp.get("PINOFFSET_3").toString();
+        OLDPINOFFSET_3 = mp.get("OLDPINOFFSET_3").toString();
+        TPINOFFSET_3 = mp.get("TPINOFFSET_3").toString();
+        OLDTPINOFFSET_3 = mp.get("OLDTPINOFFSET_3").toString();
+        PINRETRYCOUNT_3 = mp.get("PINRETRYCOUNT_3").toString();
+        TPINRETRYCOUNT_3 = mp.get("TPINRETRYCOUNT_3").toString();
+        PVKI_3 = mp.get("PVKI_3").toString();
+        LASTTXNDATE_3 = mp.get("LASTTXNDATE_3").toString();
+        LASTTXNTIME_3 = mp.get("LASTTXNTIME_3").toString();
+        PANSEQNO_3 = mp.get("PANSEQNO_3").toString();
+        
+
+        INSTID_4 = mp.get("INSTID_4").toString();
+        CUSTID_4 = mp.get("CUSTID_4").toString();
+        NAME_4 = (String)mp.get("NAME_4");
+        DOB_4 = (String)mp.get("DOB_4");
+        SPOUSENAME_4 = (String)mp.get("SPOUSENAME_4");
+        ADDRESS1_4 = (String)mp.get("ADDRESS1_4");
+        ADDRESS2_4 = (String)mp.get("ADDRESS2_4");
+        ADDRESS3_4 = (String)mp.get("ADDRESS3_4");
+        OFFPHONE_4 = (String)mp.get("OFFPHONE_4");
+        MOBILE_4 = (String)mp.get("MOBILE_4");
+        EMAIL_4 = (String)mp.get("EMAIL_4");
+        RESPHONE_4 = (String)mp.get("RESPHONE_4");
+        LIMITRECID_5 = (String)mp.get("LIMIT_RECORDID_5");
+      }
+      
+      String cardcon = "";
+      if (padssenable.equals("Y")) cardcon = "HCARD_NO"; else { cardcon = "CARD_NO";
+      }
+      String deletefromProcess = "";
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      if (BIN.equals("900404")) {
+        cardstatus = "05";
+        STATUS = "53";
+        status_code = "53";
+        switchstatus = "53";
+      }
+      else if (BIN.equals("501817")) {
+        cardstatus = "05";
+        STATUS = "97";
+        status_code = "97";
+        switchstatus = "97";
+      }
+      
+
+
+      String movetoproduction = "INSERT INTO IFD_CARD_PRODUCTION (INST_ID,ORDER_REF_NO,BIN,CARD_NO,HCARD_NO,MCARD_NO,ACCOUNT_NO,ACCTTYPE_ID, ACCTSUB_TYPE_ID, ACC_CCY,CIN,CARD_TYPE_ID,SUB_PROD_ID,PRODUCT_CODE,BRANCH_CODE,CARD_STATUS,CAF_REC_STATUS,STATUS_CODE,CARD_CCY,PC_FLAG,ORDER_FLAG,ORG_CHN,USED_CHN,GENERATED_DATE,EXPIRY_DATE,APP_NO,APP_DATE,PIN_DATE,PRE_DATE,PRE_FILE,REG_DATE,RECV_DATE,ISSUE_DATE,ACTIVE_DATE,MAKER_ID,MAKER_DATE,CHECKER_ID,CHECKER_DATE,MKCK_STATUS,SERVICE_CODE,FEE_CODE,LIMIT_ID,PRIVILEGE_CODE,WDL_AMT,WDL_CNT,PUR_AMT,PUR_CNT,ECOM_AMT,ECOM_CNT,EMB_NAME,ENC_NAME,COURIER_ID,AUTH_DATE,ADDON_FLAG,ADDON_CNT,REISSUE_DATE,REISSUE_CNT,REPIN_DATE,REPIN_CNT,DAMAGE_DATE,BLOCK_DATE,HOT_GENDATE,CLOSE_DATE,PIN_OFFSET,PIN_RETRY_CNT,AUTO_ACCT_FLAG,OLD_PIN_OFFSET,CVV1,CVV2,ICVV,MOBILENO,CARD_REF_NO,CARDISSUETYPE,RENEWALFLAG,CARD_COLLECT_BRANCH)(SELECT INST_ID,ORDER_REF_NO,BIN,CARD_NO,HCARD_NO,MCARD_NO,ACCT_NO,ACCTTYPE_ID, ACCTSUB_TYPE_ID, ACC_CCY, CIN,CARD_TYPE_ID,SUB_PROD_ID,PRODUCT_CODE,BRANCH_CODE,'09',CAF_REC_STATUS," + 
+      
+
+        status_code + ",CARD_CCY,PC_FLAG,ORDER_FLAG,ORG_CHN,USED_CHN,GENERATED_DATE,EXPIRY_DATE,APP_NO,APP_DATE,PIN_DATE,PRE_DATE," + 
+        "PRE_FILE,REG_DATE,RECV_DATE,(SYSDATE),SYSDATE,MAKER_ID,(SYSDATE),'" + userid + "',CHECKER_DATE,'P',SERVICE_CODE,FEE_CODE,LIMIT_ID,PRIVILEGE_CODE,WDL_AMT,WDL_CNT,PUR_AMT,PUR_CNT,ECOM_AMT," + 
+        "ECOM_CNT,EMB_NAME,ENC_NAME,COURIER_ID,AUTH_DATE,'','0'," + reissuedate + ",'" + reissue_count + "'," + repindate + ",'" + repincount + "'," + damgedate + "," + blockdate + "," + hotdate + "," + closedte + ",PIN_OFFSET,'" + pinretry_count + "',AUTO_ACCT_FLAG,OLD_PIN_OFFSET,CVV1,CVV2,ICVV,MOBILENO,CARD_REF_NO,CARDISSUETYPE,RENEWALFLAG,CARD_COLLECT_BRANCH FROM  IFD_INST_CARD_PROCESS" + 
+        " WHERE INST_ID='" + instid + "' AND " + cardcon + "='" + cardno + "')";
+      enctrace("movetoproduction : " + movetoproduction);
+      enctrace("deletefromProcess   " + deletefromProcess);
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+      String custexistqry = "SELECT COUNT(*) as cnt FROM EZCUSTOMERINFO WHERE CUSTID= '" + custcin + "'";
+      String custcount = (String)jdbctemplate.queryForObject(custexistqry, String.class);
+      StringBuilder cinf_4 = new StringBuilder();
+      cinf_4.append("INSERT INTO EZCUSTOMERINFO ");
+      cinf_4.append("(INSTID, CUSTID, NAME, DOB, SPOUSENAME, ADDRESS1, ADDRESS2, ADDRESS3, OFFPHONE, MOBILE, EMAIL, RESPHONE) ");
+      cinf_4.append("VALUES ");
+      cinf_4.append("('" + instid + "','" + CUSTID_4 + "','" + NAME_4 + "',SYSDATE,'" + SPOUSENAME_4 + "', ");
+      cinf_4.append("'" + ADDRESS1_4 + "','" + ADDRESS2_4 + "','" + ADDRESS3_4 + "','" + OFFPHONE_4 + "','" + MOBILE_4 + "','" + EMAIL_4 + "','" + RESPHONE_4 + "') ");
+      
+      enctrace("cinf_4:::::" + cinf_4.toString());
+      try
+      {
+        if ("0".equalsIgnoreCase(custcount))
+          res_4 = jdbctemplate.update(cinf_4.toString()); else {
+          res_4 = 1;
+        }
+      } catch (Exception e) {
+        trace("Exception in moving production :: 1:::::::" + e);
+        return -1;
+      }
+      
+      StringBuilder crdinf_3 = new StringBuilder();
+      crdinf_3.append("INSERT INTO EZCARDINFO ");
+      crdinf_3.append("(INSTID, CHN, CARDTYPE, CUSTID, TXNGROUPID, LIMITFLG, EXPIRYDATE, STATUS, PINOFFSET, OLDPINOFFSET, TPINOFFSET, OLDTPINOFFSET, PINRETRYCOUNT, TPINRETRYCOUNT, PVKI, LASTTXNDATE, LASTTXNTIME,CVV, PANSEQNO) ");
+      crdinf_3.append("VALUES ");
+      crdinf_3.append("('" + instid + "','" + CHN_3 + "','" + CARDTYPE_3 + "','" + CUSTID_3 + "','" + TXNGROUPID_3 + "','" + LIMITFLAG_3 + "',TO_DATE('" + EXPIRYDATE_3 + "','MM/DD/YYYY'),'" + STATUS + "','" + PINOFFSET_3 + "','" + OLDPINOFFSET_3 + "',");
+      crdinf_3.append("'" + TPINOFFSET_3 + "','" + OLDTPINOFFSET_3 + "','" + PINRETRYCOUNT_3 + "','" + TPINRETRYCOUNT_3 + "','" + PVKI_3 + "',TO_DATE('" + LASTTXNDATE_3 + "','MM/DD/YYYY'),'" + LASTTXNTIME_3 + "'  ,'0' ,");
+      crdinf_3.append("'" + PANSEQNO_3 + "' )");
+      
+      enctrace("crdinf_3:::::" + crdinf_3.toString());
+      try
+      {
+        res_3 = jdbctemplate.update(crdinf_3.toString());
+      }
+      catch (Exception e) {
+        trace("Exception in moving production :: 1:::::::" + e);
+        return -1;
+      }
+      
+      String acctexistqry = "SELECT COUNT(*) as cnt FROM EZACCOUNTINFO WHERE ACCOUNTNO= '" + ACCOUNTNO_2 + "'";
+      String acctexist = (String)jdbctemplate.queryForObject(acctexistqry, String.class);
+      StringBuilder ezac_2 = new StringBuilder();
+      ezac_2.append("INSERT INTO EZACCOUNTINFO ");
+      ezac_2.append("(INSTID, ACCOUNTNO, ACCOUNTTYPE, CURRCODE, AVAILBAL, LEDGERBAL, LIMITFLAG, STATUS, TXNGROUPID, LASTTXNDATE, LASTTXNTIME, BRANCHCODE, PRODUCTCODE) ");
+      ezac_2.append("VALUES ");
+      ezac_2.append("('" + instid + "','" + ACCOUNTNO_2 + "','" + ACCOUNTTYPE_2 + "','" + CURRCODE_2 + "','" + AVAILBAL_2 + "','" + LEDGERBAL_2 + "','" + LIMITFLAG_2 + "','" + STATUS_2 + "',");
+      ezac_2.append("'" + TXNGROUPID_2 + "',TO_DATE('" + LASTTXNDATE_2 + "','MM/DD/YYYY'),'" + LASTTXNTIME_2 + "','" + BRANCHCODE_2 + "','" + PRODUCTCODE_2 + "' )");
+      enctrace("ezac_2::::" + ezac_2.toString());
+      
+      try
+      {
+        if ("0".equalsIgnoreCase(acctexist))
+          res_2 = jdbctemplate.update(ezac_2.toString()); else {
+          res_2 = 1;
+        }
+      }
+      catch (Exception e) {
+        trace("Exception in moving production :: 1:::::::" + e);
+        return -1;
+      }
+      
+
+
+      StringBuilder authrel_1 = new StringBuilder();
+      authrel_1.append("INSERT INTO EZAUTHREL ");
+      authrel_1.append("(INSTID, CHN, ACCOUNTNO, ACCOUNTTYPE, ACCOUNTFLAG, ACCOUNTPRIORITY, CURRCODE,CHNFLAG) ");
+      authrel_1.append("VALUES ");
+      authrel_1.append("('" + instid + "','" + CHN_1 + "','" + ACCOUNTNO_1 + "','" + ACCOUNTTYPE_1 + "','" + ACCOUNTFLAG_1 + "','" + ACCOUNTPRIORITY_1 + "','" + CURRCODE_1 + "','" + ACCOUNTFLAG_1 + "') ");
+      enctrace("authrel_1::::" + authrel_1.toString());
+      
+      try
+      {
+        res_1 = jdbctemplate.update(authrel_1.toString());
+      }
+      catch (Exception e) {
+        trace("Exception in moving production :: 1:::::::" + e);
+        return -1;
+      }
+      
+
+
+
+
+
+      String INSTID_5 = "";String LIMITTYPE_5 = "";String LIMITID_5 = "";String TXNCODE_5 = "";String CURRCODE_5 = "";String AMOUNT_5 = "";String COUNT_5 = "";String WAMOUNT_5 = "";String WCOUNT_5 = "";String MAMOUNT_5 = "";String MCOUNT_5 = "";String YAMOUNT_5 = "";String YCOUNT_5 = "";String LIMITDATE_5 = "";
+      
+      StringBuilder accinfo_5 = new StringBuilder();
+      accinfo_5.append("SELECT ");
+      
+
+      accinfo_5.append("INSTID INSTID_5, CASE  LIMITTYPE ");
+      accinfo_5.append("WHEN 'CDTP'  THEN 'CARD' ");
+      accinfo_5.append("WHEN 'CARD' THEN 'CARD' ");
+      accinfo_5.append("WHEN 'ACTP'  THEN 'ACCT' ");
+      accinfo_5.append("WHEN 'ACCT' THEN 'ACCT' END LIMITTYPE_5 ,");
+      accinfo_5.append("CASE  LIMITTYPE ");
+      if (padssenable.equals("Y")) {
+        accinfo_5.append(" WHEN 'CDTP'  THEN '" + cardno + "'");
+        accinfo_5.append(" WHEN 'CARD' THEN '" + cardno + "' ");
+      }
+      
+
+
+      accinfo_5.append(" WHEN 'ACTP'  THEN '" + ACCOUNTNO_2 + "' ");
+      accinfo_5.append(" WHEN 'ACCT' THEN '" + ACCOUNTNO_2 + "' END LIMITID_5 ,");
+      accinfo_5.append(" TXNCODE TXNCODE_5, CURRCODE CURRCODE_5, AMOUNT AMOUNT_5, COUNT COUNT_5, ");
+      accinfo_5.append("WAMOUNT WAMOUNT_5, WCOUNT WCOUNT_5, MAMOUNT MAMOUNT_5, MCOUNT MCOUNT_5, YAMOUNT YAMOUNT_5, YCOUNT YCOUNT_5, ");
+      accinfo_5.append("(select TO_CHAR(AUTH_DATE,'DD-MON-YYYY') from IFD_LIMIT_DESC where INSTID='" + instid + "' AND LIMIT_ID='" + LIMITRECID_5 + "') LIMITDATE_5 FROM IFD_EZLIMITINFO ");
+      accinfo_5.append("WHERE INSTID='" + instid + "' AND LIMIT_RECID = '" + LIMITRECID_5 + "'");
+      
+      enctrace("accinfo_5:::::" + accinfo_5.toString());
+      
+
+
+
+      List movetoAccuminfo = jdbctemplate.queryForList(accinfo_5.toString());
+      trace("movetoAccuminfo:::::::::::" + movetoAccuminfo.size() + ":::::::" + movetoAccuminfo);
+      Iterator accitr = movetoAccuminfo.iterator();
+      int as = 0;int incCount = 0;
+      while (accitr.hasNext())
+      {
+        System.out.println("testing :::::::::::::::::::::::1" + as++);
+        incCount++;
+        
+        Map mp2 = (Map)accitr.next();
+        INSTID_5 = mp2.get("INSTID_5").toString();
+        System.out.println("testing :::::::::::::::::::::::2" + as++);
+        LIMITTYPE_5 = mp2.get("LIMITTYPE_5").toString();
+        System.out.println("testing :::::::::::::::::::::::3" + as++);
+        LIMITID_5 = mp2.get("LIMITID_5").toString();
+        System.out.println("testing :::::::::::::::::::::::4" + mp2.get("LIMITID_5").toString());
+        TXNCODE_5 = mp2.get("TXNCODE_5").toString();
+        System.out.println("testing :::::::::::TXNCODE_5::::::::::::4" + mp2.get("TXNCODE_5").toString());
+        
+        CURRCODE_5 = mp2.get("CURRCODE_5").toString();
+        System.out.println("testing :::::::::::currr::::::::::" + mp2.get("CURRCODE_5").toString());
+        AMOUNT_5 = mp2.get("AMOUNT_5").toString();
+        System.out.println("testing :::::::::::::::::::::::" + as++);
+        COUNT_5 = mp2.get("COUNT_5").toString();
+        System.out.println("testing :::::::::::::::::::::::" + as++);
+        WAMOUNT_5 = mp2.get("WAMOUNT_5").toString();
+        System.out.println("testing :::::::::::::::::::::::" + as++);
+        WCOUNT_5 = mp2.get("WCOUNT_5").toString();
+        System.out.println("testing :::::::::::::::::::::::" + as++);
+        MAMOUNT_5 = mp2.get("MAMOUNT_5").toString();
+        System.out.println("testing :::::::::::::::::::::::" + as++);
+        MCOUNT_5 = mp2.get("MCOUNT_5").toString();
+        System.out.println("testing :::::::::::::::::::::::" + as++);
+        YAMOUNT_5 = mp2.get("YAMOUNT_5").toString();
+        YCOUNT_5 = mp2.get("YCOUNT_5").toString();
+        System.out.println("testing :::::::::::::::::::::::" + as++);
+        LIMITDATE_5 = mp2.get("LIMITDATE_5").toString();
+        System.out.println("testing :::::::::::::::::::::::" + as++);
+        
+
+
+
+        String getres_5Query = persisspro.getres_5Query(instid, LIMITTYPE_5, LIMITID_5, TXNCODE_5, CURRCODE_5, AMOUNT_5, COUNT_5, WAMOUNT_5, WCOUNT_5, MAMOUNT_5, MCOUNT_5, YAMOUNT_5, YCOUNT_5, LIMITDATE_5);
+        
+        enctrace("getres_5Query::" + getres_5Query);
+        try
+        {
+          res_5 = jdbctemplate.update(getres_5Query.toString());
+        }
+        catch (Exception e) {
+          trace("Exception in moving production :: 1:::::::" + e);
+          return -1;
+        }
+      }
+      
+
+
+
+
+
+
+
+      StringBuilder update_production = new StringBuilder();
+      update_production.append("UPDATE IFD_CARD_PRODUCTION SET CARD_STATUS='" + cardstatus + "', STATUS_CODE='" + switchstatus + "',MKCK_STATUS = 'P' ,  ISSUE_DATE=(SYSDATE),ACTIVE_DATE=(sysdate),MAKER_ID='" + userid + "', ");
+      update_production.append("MAKER_DATE=(sysdate) WHERE INST_ID='" + instid + "' and " + cardcon + "='" + cardno + "'");
+      
+      enctrace("update query for instcard processs " + update_production);
+      
+
+
+
+
+
+
+
+
+
+      StringBuilder deleteifdinstproc = new StringBuilder();
+      
+      deleteifdinstproc.append("DELETE FROM IFD_INST_CARD_PROCESS WHERE INST_ID='" + instid + "' ");
+      
+      if (padssenable.equals("Y")) {
+        deleteifdinstproc.append("AND HCARD_NO='" + cardno + "' ");
+      } else {
+        deleteifdinstproc.append("AND CARD_NO='" + cardno + "' ");
+      }
+      
+      int production_insert = -1;int upd_process = -1;int del_process = -1;
+      
+
+
+
+
+
+
+      try
+      {
+        production_insert = jdbctemplate.update(movetoproduction);
+        del_process = jdbctemplate.update(deleteifdinstproc.toString());
+        upd_process = jdbctemplate.update(update_production.toString());
+      }
+      catch (Exception e)
+      {
+        trace("Exception in moving production :: 2:::" + e);
+        return -1;
+      }
+      
+
+
+      enctrace("\n--------------------------------------Move to Production Query");
+      
+      trace("result :::::::::::" + res_1 + res_2 + res_3 + res_4 + res_5 + upd_process + production_insert + del_process);
+      if ((res_1 > 0) && (res_2 > 0) && (res_3 > 0) && (res_4 > 0) && (res_5 > 0) && (upd_process > 0) && (production_insert > 0) && (del_process > 0))
+      {
+        trace("PROCESS COMPLETED");
+        issue_status = 1;
+      }
+      else
+      {
+        issue_status = -1;
+      }
+    }
+    
+
+
+
+
+    return issue_status;
+  }
+  
+
+  public String authInstCustomer()
+  {
+    IfpTransObj transact = commondesc.myTranObject("AUTHCUST", txManager);
+    HttpSession session = getRequest().getSession();
+    String instid = comInstId();
+    try {
+      String[] chnlist = getRequest().getParameterValues("instorderrefnum");
+      int cardcnt = 0;
+      for (int i = 0; i < chnlist.length; i++) {
+        String chn = chnlist[i].toString();
+        
+        int x = cardregdao.updateAuthStatus(instid, chn, "09", jdbctemplate);
+        if (x < 0) {
+          session.setAttribute("preverr", "E");
+          session.setAttribute("prevmsg", " Could not authorzie the card ");
+          return "required_home";
+        }
+        cardcnt++;
+      }
+      
+      txManager.commit(status);
+      session.setAttribute("preverr", "S");
+      session.setAttribute("prevmsg", cardcnt + " Card(s)  Authorized successfully");
+      commondesc.printLog("Committed successfully ");
+    }
+    catch (Exception e) {
+      session.setAttribute("preverr", "E");
+      session.setAttribute("prevmsg", " Error while authorize the instatnt customer reg");
+      trace(" Error while authorize the instatnt customer reg " + e.getMessage());
+      e.printStackTrace();
+    }
+    return authInstCustomerHome();
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  public String findinprocess(String instid, String accountno, JdbcTemplate jdbctemplate)
+  {
+    String org_chn = null;String processinst = null;String productionavilable = null;String secondaryaccount = null;
+    try {
+      String originaclchn = "SELECT ORG_CHN FROM IFD_INST_CARD_PROCESS WHERE INST_ID='" + instid + "' AND ACCT_NO='" + accountno + "'";
+      processinst = (String)jdbctemplate.queryForObject(originaclchn, String.class);
+      System.out.println("processinst" + processinst);
+    }
+    catch (EmptyResultDataAccessException localEmptyResultDataAccessException) {}
+    
+
+    return processinst;
+  }
+}

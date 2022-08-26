@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="suresh" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="7d9f878d-0cc7-4bbf-9933-1f38f6f77798">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="order_ref_no" class="java.lang.String"/>
+	<field name="product_name" class="java.lang.String"/>
+	<field name="order_date" class="java.lang.String"/>
+	<field name="DATE" class="java.lang.String"/>
+	<field name="cardcount" class="java.lang.String"/>
+	<field name="title" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="28" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="1cad6acc-f683-42f3-8b94-f67a4e0d21b8" x="364" y="4" width="179" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="764f3e89-052c-4e49-ba55-e677be1589ae" x="190" y="8" width="154" height="16"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CARD ORDER REPORT]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="26" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="34" splitType="Stretch">
+			<line>
+				<reportElement uuid="0ab782a8-b75b-4b43-81f7-36d0eee785f8" x="16" y="30" width="514" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="d5d45693-cba2-4b5d-8011-8c1981c37b02" x="43" y="9" width="100" height="20"/>
+				<textElement>
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ORDER REF NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3309590b-bb02-4be5-9193-7c4d1eafe8b9" x="414" y="8" width="100" height="20"/>
+				<textElement>
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ORDER DATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6d6225f5-ed2c-4fce-8320-2c51f0a374f6" x="244" y="8" width="100" height="20"/>
+				<textElement>
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRODUCT NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2b40f43f-168b-4aec-ab07-9d41c1a4120c" x="154" y="9" width="72" height="21"/>
+				<textElement>
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CARD COUNT]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement uuid="af494f88-8de8-4641-82b9-c52c78dece64" x="43" y="3" width="84" height="18"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{order_ref_no}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7356b379-081a-4c1e-8657-677cb0e2d34d" x="416" y="5" width="77" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{order_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="27d2d04f-2c4d-420b-8643-7327b9036d78" x="240" y="3" width="90" height="18"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{product_name}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="0ab782a8-b75b-4b43-81f7-36d0eee785f8" x="19" y="18" width="514" height="1"/>
+			</line>
+			<textField>
+				<reportElement uuid="2410a3e9-0f75-49d4-8419-baf7dadb220f" x="164" y="3" width="52" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cardcount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement uuid="49984a2c-4272-4edc-9a1a-8963a409db80" x="116" y="19" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{PAGE_COUNT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d5d45693-cba2-4b5d-8011-8c1981c37b02" x="16" y="19" width="85" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PAGE NO]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

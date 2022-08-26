@@ -1,0 +1,924 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+
+<struts>
+
+
+
+	<constant name="struts.action.excludePattern" value=".*unfiltered.*,.*\\.nofilter" />
+	<constant name="struts.action.extension" value="do" />
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.devMode" value="false" />
+	<package name="sunny1" extends="struts-default">
+		<result-types>
+			<result-type name="tiles"
+				class="org.apache.struts2.views.tiles.TilesResult" />
+			<result-type name="json" class="com.googlecode.jsonplugin.JSONResult" />
+		</result-types>
+
+		<interceptors>
+			<interceptor name="session_interceptor" class="com.ifp.util.SessionInterceptor"></interceptor>
+			<!-- <interceptor name="clickInterceptor" class="com.ifp.util.ClickJackInterceptor"></interceptor>
+			<interceptor name="browserCacheInterceptor" class="com.ifp.util.BrowserClearCacheInterceptor"></interceptor>
+			<interceptor name="NewInter" class="com.ifp.util.NewInter"></interceptor> -->
+
+			<interceptor-stack name="loggingStack">
+				<interceptor-ref name="session_interceptor" />
+				<!-- <interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+				<interceptor-ref name="NewInter"/> -->
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+		
+		<!-- <interceptors>
+    		<interceptor name="session_interceptor" class="com.ifp.util.SessionInterceptor">
+   		 	</interceptor>
+   		 	<interceptor-stack name="loggingStack">
+        			<interceptor-ref name="session_interceptor"/>
+        			<interceptor-ref name="defaultStack"/>
+    		</interceptor-stack>
+		</interceptors> -->
+
+		<!-- <global-results>
+    		<result name="session" type="redirectAction">logoutAction</result>
+			<result name="session" type="tiles">logout</result>
+    		<result name="required_home" type="tiles">required_home</result>	
+    	</global-results> -->
+    	
+    	
+    	
+
+		<global-results>
+			<result name="session" type="redirectAction">logoutAction</result>
+			<result name="session">/jsp/login.jsp</result>
+			<!-- <result name="session" type="tiles">logout</result> -->
+			<result name="required_home" type="tiles">required_home</result>
+			<result name="required_home1" type="tiles">required_home1</result>
+		</global-results>
+
+		<action name="*Link*" method="{1}" class="com.ifp.pages.LinkAction">
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="session_interceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			
+			<!-- <result name="session">/jsp/login.jsp</result> -->
+			
+			<result name="welcome" type="tiles">welcome</result>
+			<result name="login">/jsp/login.jsp</result>
+			<result name="Addprofile" type="tiles">Addprofile</result>
+			<result name="AddPrivilages" type="tiles">AddPrivilages</result>
+			<result name="CardOrder" type="tiles">CardOrderpage</result>
+			<result name="Redirectto" type="tiles">Redirectto</result>
+			<result name="Delinstcardorder" type="tiles">Nonpersonalorderdelelet
+			</result>
+			<result name="editorder" type="tiles">editorder</result>
+		</action>
+
+		<action name="*LogoutCSRF" method="{1}" class="com.ifp.util.LogoutCSRF">
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="csrflogout" type="tiles">csrflogout</result>
+		</action>
+
+		<action name="*LoginAction" class="com.ifg.usermgt.LoginAction" method="{1}">
+			<!-- <interceptor-ref name="clickInterceptor" /> -->
+			<!-- <interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="loglicenceunsucess">/jsp/Loginlicencefail.jsp</result>
+			<result name="sucess" type="redirectAction">instUserHomeAction</result>
+			<result name="changepasswordpage" type="tiles">changepasswordpage
+			</result>
+			<result name="fail" type="tiles">fail</result>
+			<result name="invaliduser" type="redirectAction">loginLink.do
+			</result>
+			<result name="Exception" type="tiles">Exception</result>
+			<result name="pswexppage" type="tiles">pswexppage</result>
+			<result name="adminpage" type="redirectAction">adminPageLoginDetailsAction.do
+			</result>
+			<result name="loginerror" type="tiles">loginerror</result>
+			<result name="forcepasswordpage" type="tiles">forcepasswordpage
+			</result>
+			<result name="forcepasswordsucess" type="tiles">forcepasswordsucess
+			</result>
+			<result name="expired" type="tiles">expired</result>
+			<result name="expiry_warning" type="tiles">expiry_warning</result>
+		</action>
+
+		<action name="*UrlLogin" class="com.ifp.comusermgmt.UrlLoginAction" method="{1}">
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="loglicenceunsucess">/jsp/Loginlicencefail.jsp</result>
+			<result name="sucess" type="redirectAction">instUserHomeAction</result>
+			<result name="changepasswordpage" type="tiles">changepasswordpage
+			</result>
+			<result name="fail" type="tiles">fail</result>
+			<result name="invaliduser" type="redirectAction">loginLink.do
+			</result>
+			<result name="Exception" type="tiles">Exception</result>
+			<result name="pswexppage" type="tiles">pswexppage</result>
+			<result name="adminpage" type="redirectAction">adminPageLoginDetailsAction.do
+			</result>
+			<result name="loginerror" type="tiles">loginerror</result>
+			<result name="forcepasswordpage" type="tiles">forcepasswordpage
+			</result>
+			<result name="forcepasswordsucess" type="tiles">forcepasswordsucess
+			</result>
+			<result name="expired" type="tiles">expired</result>
+			<result name="expiry_warning" type="tiles">expiry_warning</result>
+		</action>
+
+		<action name="*dashboardAction" class="com.ifp.Action.dashboardAction"
+			method="{1}">
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="dashbord" type="tiles">dashbord</result>
+			<result name="frauddashboard" type="tiles">frauddashboard</result>
+		</action>
+
+		<action name="*ChangePasswordAction" class="com.ifg.usermgt.ChangePasswordAction"
+			method="{1}">
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="userchangepassword" type="tiles">userchangepassword
+			</result>
+			<result name="userchngpswresult" type="tiles">userchngpswresult
+			</result>
+		</action>
+
+
+		<action name="*userManagementAction" class="com.ifg.usermgt.userManagementAction"
+			method="{1}">
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="forcepasswordpage" type="tiles">forcepasswordpage
+			</result>
+		</action>
+
+
+		<action name="*Unlockuser" class="com.ifg.usermgt.Unlockuser"
+			method="{1}">
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="unlockuserEntrypage" type="tiles">unlockuserEntrypage
+			</result>
+			<result name="UserUnlockResult" type="redirectAction">viewUnlockuser
+			</result>
+			<result name="loginpageLink" type="redirectAction">loginLink.do
+			</result>
+		</action>
+
+		<action name="*InstAdmin" class="com.ifg.usermgt.InstAdminLoginAction"
+			method="{1}">
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+		</action>
+
+
+		<action name="instUserHomeAction" class="com.ifp.Action.InstUserHomeAction" method="instUserHomeAction">
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<result name="sucess" type="tiles">sucess</result>
+			<result name="sucess" type="tiles">
+				<param name="location">sucess</param>
+				<param name="widthparams">widthparams</param>
+			</result>
+		</action>
+
+		<action name="adminPageLoginDetailsAction" class="com.ifg.usermgt.adminPageLoginDetailsAction"
+			method="adminPage">
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="sucess" type="tiles">sucess</result>
+			<result name="changepasswordpage" type="tiles">changepasswordpage
+			</result>
+			<result name="fail" type="tiles">fail</result>
+			<result name="invaliduser" type="redirectAction">loginLink.do
+			</result>
+			<result name="Exception" type="tiles">Exception</result>
+			<result name="pswexppage" type="tiles">pswexppage</result>
+		</action>
+
+		<action name="logoutAction" class="com.ifg.usermgt.LogoutAction"
+			method="logoutAction">
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="login" type="redirectAction">loginLink.do</result>
+			<result name="fail" type="tiles">fail</result>
+		</action>
+
+		<action name="menuAction" class="sprMenuAction">
+			<result name="sucess" type="tiles">succes</result>
+			<result name="fail" type="tiles">fail</result>
+		</action>
+
+		<action name="menuAction" class="sprMenuAction1">
+			<result name="sucess" type="tiles">succes</result>
+			<result name="fail" type="tiles">fail</result>
+		</action>
+
+		<action name="prevaddAction" class="com.ifg.usermgt.ProfileListAction"
+			method="addPrivelage">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="success" type="tiles">sucess</result>
+			<result name="profilesuccess" type="redirectAction">profileviewUserManagementAction
+			</result>
+			<result name="fail" type="tiles">fail</result>
+			<result name="Exception" type="tiles">Exception</result>
+		</action>
+
+		<action name="updateProfprev" class="com.ifg.usermgt.ProfileListAction"
+			method="updateProfprev">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="AdminInstProfileSuccess" type="redirectAction">editProfileUserManagementAction
+			</result>
+			<result name="Exception" type="tiles">Exception</result>
+		</action>
+
+		<action name="profileAction" class="com.ifg.usermgt.ProfileListAction"
+			method="insertProfile">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="addprevilege" type="tiles">AddPrivilages</result>
+			<result name="fail" type="tiles">fail</result>
+			<result name="addprevilegefailed" type="redirectAction">addProfileUserManagementAction.do
+			</result>
+			<result name="Exception" type="tiles">Exception</result>
+		</action>
+
+		<action name="makerchekstatus" class="com.ifg.usermgt.ProfileListAction"
+			method="makerchekstatus">
+		</action>
+		<action name="makerchekSuperadminstatus" class="com.ifg.usermgt.ProfileListAction"
+			method="makerchekSuperadminstatus">
+		</action>
+		<action name="makercheckerselected" class="com.ifg.usermgt.ProfileListAction"
+			method="selectedMkckcheck">
+		</action>
+
+		<action name="transdesclist" class="com.ifp.Action.AddLimitAction"
+			method="transdesclist">
+
+		</action>
+
+		<action name="adminMenuAction" class="com.ifg.usermgt.adminPageLoginDetailsAction">
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="sucess" type="tiles">succes</result>
+			<result name="fail" type="tiles">fail</result>
+		</action>
+
+
+
+
+		<action name="*CardtopupAction" class="sprCardtopupAction"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/> -->
+			<result name="cardtopup" type="tiles">Cardtopupprocess</result>
+			<result name="reloadsuccess" type="redirectAction">cardtopupCardtopupAction.do
+			</result>
+		</action>
+
+		<action name="ajaxgettingproducttopupamount" class="sprCardtopupAction"
+			method="getCardtopupAmount">
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="success" type="tiles">cardsuccess</result>
+			<result name="fail" type="tiles">fail</result>
+		</action>
+
+
+
+
+		<action name="makercheckerAction" class="sprMakercheckerAction"
+			method="getMenuslist">
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" /> -->
+			<interceptor-ref name="loggingStack" />
+			<!-- <interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="enablemakerchecker" type="tiles">MakerCheckerMenu
+			</result>
+			<result name="fail" type="tiles">fail</result>
+		</action>
+
+		<action name="AddProductAction" class="com.ifp.Action.AddProductAction"
+			method="">
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			
+			<interceptor-ref name="loggingStack" />
+			<result name="SUCCESS" type="tiles">AddLimit</result>
+			<result name="fail" type="tiles">fail</result>
+		</action>
+
+
+
+		<action name="AddSubProductAction" class="com.ifp.Action.AddSubProductAction"
+			method="display">
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" /> -->
+			<interceptor-ref name="loggingStack" />
+	<!-- 		<interceptor-ref name="NewInter"/> -->
+			<!-- <interceptor-ref name="defaultStack" /> -->
+
+			<result name="sucess" type="tiles">AddSubProduct</result>
+			<result name="display" type="tiles">ViewProduct</result>
+			<result name="fail" type="tiles">fail</result>
+		</action>
+
+		<action name="*AjaxSubProduct" class="com.ifp.Action.AddSubProdAction"
+			method="{1}">
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="sucess" type="tiles">AddSubProduct</result>
+		</action>
+
+		<action name="SaveSubProduct" class="com.ifp.Action.AddSubProductAction"
+			method="addproduct">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="sucess" type="tiles">AddSubProduct</result>
+			<result name="display" type="tiles">ViewProduct</result>
+			<result name="check" type="redirectAction">AddSubProductAction.do</result>
+		</action>
+
+		<action name="*ChecksumAction" class="com.ifp.util.ChecksumAction"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="FileuploadHome" type="tiles">FileuploadHome</result>
+		</action>
+
+		<!-- <action name="*KeyChnageProcessAction" class="com.ifg.Config.padss.KeyChnageProcessAction" 
+			method="{1}"> <interceptor-ref name="loggingStack"></interceptor-ref> <result 
+			name="keychangehomepage" type="tiles">keychangehomepage</result> </action> -->
+
+		<action name="callSubProduct" class="com.ifp.Action.AddLimitAction"
+			method="subProduct">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<param name="prodid"></param>
+			<result name="sucess" type="tiles">sucess</result>
+		</action>
+
+		<action name="callReloadcount" class="com.ifp.Action.AddLimitAction"
+			method="reloadCount">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="sucess" type="tiles">sucess</result>
+		</action>
+
+		<action name="SaveLimitAction" class="com.ifp.Action.AddLimitAction"
+			method="addLimitRange">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="success" type="redirectAction">AddLimitAction.do</result>
+		</action>
+
+
+
+		<action name="DeleteMainProduct" class="com.ifd.Product.DeleteMainProduct"
+			method="deleteproduct">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="success" type="redirectAction">ViewmainprodAction.do</result>
+		</action>
+
+		<action name="EditMainProduct" class="com.ifd.Product.DeleteMainProduct"
+			method="editproduct">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="editproduct" type="tiles">editproduct</result>
+		</action>
+
+		<action name="SaveEditProduct" class="com.ifp.Action.SaveEditProduct"
+			method="saveeditproduct">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="saveeditproduct" type="redirectAction">ViewmainprodAction.do
+			</result>
+		</action>
+
+		<action name="ViewsubprodAction" class="com.ifp.Action.AddSubProductAction"
+			method="viewsubProduct">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="viewsubproduct" type="tiles">viewsubproduct</result>
+		</action>
+
+		<action name="DeleteSubProduct" class="com.ifp.Action.DeleteSubProduct"
+			method="deletesubproduct">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="delsubproduct" type="redirectAction">ViewsubprodAction.do
+			</result>
+		</action>
+
+		<action name="EditSubProduct" class="com.ifp.Action.DeleteSubProduct"
+			method="editsubproduct">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="editsubproduct" type="tiles">editsubproduct</result>
+		</action>
+
+		<action name="SaveEditSubProduct" class="com.ifp.Action.SaveEditSubProduct"
+			method="saveeditsubproduct">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="saveeditsubproduct" type="redirectAction">ViewsubprodAction.do
+			</result>
+		</action>
+
+
+
+
+		<action name="*UserManagementAction" class="com.ifg.usermgt.userManagementAction"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="changepasswordpage" type="tiles">changepasswordpage
+			</result>
+			<result name="SuperAdminAddProfile" type="tiles">SuperAdminAddProfile
+			</result>
+			<result name="adminprof" type="redirectAction">adminProfileviewUserManagementAction.do
+			</result>
+			<result name="adminprofilesuccess" type="redirectAction">addProfileUserManagementAction.do
+			</result>
+			<result name="AdminEditProfile" type="tiles">AdminEditProfile</result>
+			<result name="AdminSaveEditDetails" type="tiles">AdminSaveEditDetails
+			</result>
+			<result name="AdminEditProfileSuccess" type="redirectAction">editProfileUserManagementAction.do
+			</result>
+			<result name="SaveAdminUserDet" type="tiles">SaveAdminUserDet</result>
+			<result name="SaveAdminUserDetSucess" type="redirectAction">addUserDetUserManagementAction.do
+			</result>
+			<result name="EditAdminUserDet" type="tiles">EditAdminUserDet</result>
+			<result name="deluserdet" type="tiles">deluserdet</result>
+			<result name="AdminProfileview" type="tiles">AdminProfileview</result>
+			<result name="InstAddprofile" type="redirectAction">profileviewUserManagementAction.do
+			</result>
+			<result name="adminsaveedit" type="tiles">adminsaveedit</result>
+			<result name="InstAdminSaveEditDetails" type="tiles">InstAdminSaveEditDetails
+			</result>
+			<result name="gotoprofiles" type="redirectAction">profileviewUserManagementAction.do
+			</result>
+			<result name="profileview" type="tiles">profileview</result>
+			<result name="adduserdet" type="tiles">adduserdet</result>
+			<result name="adduserdetails" type="tiles">adduserdetails</result>
+			<result name="saveuserdet" type="tiles">saveuserdet</result>
+			<result name="chngpsw" type="tiles">changepsw</result>
+			<result name="mkrchkr" type="tiles">makerchecker</result>
+			<result name="viewuser" type="tiles">viewuser</result>
+			<result name="deleteinstadminuser" type="tiles">deleteinstadminuser
+			</result>
+			<result name="getadmininstuser" type="tiles">getadmininstuser</result>
+			<result name="getinstadminuserdetail" type="tiles">getinstadminuserdetail
+			</result>
+			<result name="edituserdet" type="tiles">edituserdet</result>
+			<result name="editinstuser" type="tiles">editinstuser</result>
+			<result name="getinstuser" type="tiles">getinstuser</result>
+			<result name="getusereditdetails" type="tiles">getusereditdetails
+			</result>
+			<result name="edituserdetails" type="tiles">edituserdetails</result>
+			<result name="viewprofile" type="tiles">viewprofile</result>
+			<result name="getviewprofile" type="tiles">getviewprofile</result>
+			<result name="editprofile" type="tiles">editprofile</result>
+			<result name="saveedit" type="tiles">saveedit</result>
+			<result name="saveeditdetails" type="tiles">saveeditdetails</result>
+			<result name="unblockuser" type="tiles">unblockuser</result>
+			<result name="unblckeduserdetail" type="tiles">unblckeduserdetail
+			</result>
+			<result name="insmkrchkr" type="tiles">insmkrchkr</result>
+			<result name="editInstuserSucess" type="tiles">editInstuserSucess
+			</result>
+			<result name="resetforgotpassword" type="tiles">resetforgotpassword
+			</result>
+			<result name="login" type="redirectAction">loginLink.do</result>
+			<result name="adminsaveview" type="tiles">adminsaveview</result>
+			<result name="AdminSaveViewDetails" type="tiles">AdminSaveViewDetails
+			</result>
+			<result name="InstAdminSaveViewDetails" type="tiles">InstAdminSaveViewDetails
+			</result>
+			<result name="userauth_home" type="tiles">userauth_home</result>
+			<result name="userauth_data" type="tiles">userauth_data</result>
+			<result name="inst_deleteauthhome" type="tiles">inst_deleteauthhome
+			</result>
+			<result name="deleteuser_authhome" type="tiles">deleteuser_authhome
+			</result>
+			<result name="userdetails_deleteview_auth" type="tiles">userdetails_deleteview_auth
+			</result>
+			<result name="viewprofile_view" type="tiles">viewprofile_view</result>
+			<result name="adminsaveview_view" type="tiles">adminsaveview_view
+			</result>
+			<result name="AdminSaveViewDetails_view" type="tiles">AdminSaveViewDetails_view
+			</result>
+
+			<result name="viewprofile_del" type="tiles">viewprofile_del</result>
+			<result name="adminsaveview_del" type="tiles">adminsaveview_del
+			</result>
+			<result name="InstAdminSaveViewDetails_del" type="tiles">InstAdminSaveViewDetails_del
+			</result>
+			<result name="AdminSaveViewDetails_del" type="tiles">AdminSaveViewDetails_del
+			</result>
+
+			<result name="viewprofile_delauth" type="tiles">viewprofile_delauth
+			</result>
+			<result name="adminsaveview_delauth" type="tiles">adminsaveview_delauth
+			</result>
+			<result name="InstAdminSaveViewDetails_delauth" type="tiles">InstAdminSaveViewDetails_delauth
+			</result>
+			<result name="AdminSaveViewDetails_delauth" type="tiles">AdminSaveViewDetails_delauth
+			</result>
+
+			<result name="InstAdminSaveViewDetails_view" type="tiles">InstAdminSaveViewDetails_view
+			</result>
+
+
+
+		</action>
+
+		<action name="*SuperAdminAddProfAction" class="com.ifg.usermgt.superAdminAddProfileAction"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+				<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="SuperAdminProfileAddUnsucces" type="redirectAction">addProfileUserManagementAction.do
+			</result>
+			<result name="SuperAdminAddProfileNext" type="redirectAction">superAddProfilePrevSuperAdminAddProfAction.do
+			</result>
+			<result name="SuperAdminAddProfPrev" type="tiles">SuperAdminAddProfPrev
+			</result>
+			<result name="superAdminProfileAddSuccess" type="redirectAction">addProfileUserManagementAction.do
+			</result>
+		</action>
+
+		<action name="adminProfSubMenuList" class="com.ifg.usermgt.userManagementAction"
+			method="subMenuList">
+			<!-- <interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+				<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+		</action>
+
+		<action name="*pinMailerConfigurationAction" class="com.ifp.Action.pinMailerConfigurationAction"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+				<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="pinmailer" type="tiles">pinmailer</result>
+			<result name="pinmailer_viewhome" type="tiles">pinmailer_viewhome
+			</result>
+			<result name="pinmailer_viewdata" type="tiles">pinmailer_viewdata
+			</result>
+			<result name="pinmailer_authhome" type="tiles">pinmailer_authhome
+			</result>
+			<result name="pinmailerauthdetails" type="tiles">pinmailerauthdetails
+			</result>
+			<result name="pinmailer_edithome" type="tiles">pinmailer_edithome
+			</result>
+			<result name="PinmailerEditDetails" type="tiles">PinmailerEditDetails
+			</result>
+		</action>
+
+		<action name="*LicenceManagerAction" class="com.ifg.Config.Licence.Licensemanager"
+			method="{1}">
+			<!-- <interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+				<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="viewEncrypt" type="tiles">viewEncrypt</result>
+			<result name="encryptSucess" type="redirectAction">viewEncryptLicenceManagerAction
+			</result>
+			<result name="fail" type="tiles">fail</result>
+			<result name="Exception" type="tiles">Exception</result>
+			<result name="sucess" type="tiles">sucessLicense</result>
+			<result name="viewInstDetals" type="tiles">viewInstDetals</result>
+			<result name="SucessInstAdd" type="redirectAction">viewInstAddInstitutionAction.do
+			</result>
+			<result name="delInstDetal" type="redirectAction">viewInstAddInstitutionAction.do
+			</result>
+			<result name="error" type="tiles">error</result>
+		</action>
+
+		<action name="*AddInstitutionAction" class="com.ifg.Config.Institution.addInstitutionAction"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+				<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="diplayinst" type="tiles">diplayinst</result>
+			<result name="SucessInstAdd" type="redirectAction">displayAddInstitutionAction.do
+			</result>
+			<result name="viewInst" type="tiles">viewInst</result>
+			<result name="instdetals" type="tiles">instdetals</result>
+			<result name="insthsmmap_home" type="tiles">insthsmmap_home</result>
+			<result name="editInst" type="tiles">editInst</result>
+			<result name="editinstdetals" type="tiles">editinstdetals</result>
+			<result name="authinstdetals" type="tiles">authinstdetals</result>
+		</action>
+
+
+
+
+		<action name="*HsmAction" class="com.ifg.Config.HSM.HsmAction"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+				<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="addHsm" type="tiles">addHsm</result>
+			<result name="displayHSM" type="tiles">displayHSM</result>
+			<result name="viewHsm" type="tiles">viewHsm</result>
+			<result name="editHsm" type="tiles">editHsm</result>
+			<result name="authdeauthHSM" type="tiles">authdeauthHSM</result>
+			<result name="viewAuth" type="tiles">viewAuth</result>
+		</action>
+
+
+
+		<action name="*ForgetpasswordAction*" class="com.ifg.usermgt.ForgetpasswordAction"
+			method="{1}">
+			<!-- <interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+				<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="forgetpasswordhome" type="tiles">forgetpasswordhome
+			</result>
+		</action>
+
+		<action name="*CommonDesc" class="com.ifp.Action.CommonDesc"
+			method="{1}">
+			<!-- <interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+				<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+		</action>
+
+
+		<action name="*CurrencyAction" class="com.ifg.Config.Currency.CurrencyAction"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+				<!-- <interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="currencyadd_home" type="tiles">currencyadd_home</result>
+			<result name="currencyview" type="tiles">currencyview</result>
+			<result name="editcurrencydetails" type="tiles">editcurrencydetails
+			</result>
+			<result name="viewCurrencyDetail" type="tiles">viewCurrencyDetail
+			</result>
+			<result name="viewCurrency" type="tiles">viewCurrency</result>
+			<result name="currencyviewall" type="tiles">currencyviewall</result>
+			<result name="authorizeCurrency" type="tiles">authorizeCurrency
+			</result>
+		</action>
+
+		<action name="*PadssConfigAction" class="com.ifg.Config.padss.PadssConfigAction"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+				<!-- <interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="padssConfigHome" type="tiles">padssConfigHome</result>
+			<result name="savepadssConfigHome" type="tiles">savepadssConfigHome
+			</result>
+			<result name="padssConfigAuthorizeHome" type="tiles">padssConfigAuthorizeHome
+			</result>
+			<result name="keychangehomepage" type="tiles">keychangehomepage
+			</result>
+			<result name="padssConfigAuthorizeHome1" type="tiles">padssConfigAuthorizeHome1
+			</result>
+			<result name="viewAuthpadssConfig" type="tiles">viewAuthpadssConfig
+			</result>
+			<result name="viewAuthpadssConfig1" type="tiles">viewAuthpadssConfig1
+			</result>
+			<result name="padssConfigViewHome" type="tiles">padssConfigViewHome
+			</result>
+			<result name="padssConfigViewHome1" type="tiles">padssConfigViewHome1
+			</result>
+		</action>
+
+		<action name="*Settings" class="com.ifp.util.Settings" method="{1}">
+			<result name="viewsettings" type="tiles">viewsettings</result>
+		</action>
+
+		<action name="*GLConfigure" class="com.ifp.Action.GLConfigure"
+			method="{1}">
+				<!-- <interceptor-ref name="browserCacheInterceptor" />
+				<interceptor-ref name="NewInter"/> -->
+			<result name="gl_grouop_home" type="tiles">glgrouophome</result>
+			<result name="gl_home" type="tiles">gl_home</result>
+			<result name="gl_scheme_home" type="tiles">gl_scheme_home</result>
+			<result name="gl_map_home" type="tiles">gl_map_home</result>
+			<result name="gl_mapping_config" type="tiles">gl_mapping_config
+			</result>
+			<result name="glgroupview" type="tiles">glgroupview</result>
+			<result name="groupglview" type="tiles">groupglview</result>
+			<result name="glgrpdetails" type="tiles">glgrpdetails</result>
+			<result name="glgroupedit" type="tiles">glgroupedit</result>
+			<result name="gl_auth_home" type="tiles">gl_auth_home</result>
+			<result name="gl_group_auth_home" type="tiles">gl_group_auth_home
+			</result>
+			<result name="editglgroup" type="tiles">editglgroup</result>
+			<result name="glcardview" type="tiles">glcardview</result>
+			<result name="glcard_viewdetails" type="tiles">glcard_viewdetails
+			</result>
+			<result name="editgrpgl" type="tiles">editgrpgl</result>
+			<result name="glschemeview" type="tiles">glschemeview</result>
+			<result name="viewscheme" type="tiles">viewscheme</result>
+			<result name="editscheme" type="tiles">editscheme</result>
+			<result name="cbs_glhome" type="tiles">cbs_glhome</result>
+			<result name="entitymap_viewhome" type="tiles">entitymap_viewhome
+			</result>
+			<result name="entitymap_viewlist" type="tiles">entitymap_viewlist
+			</result>
+		</action>
+
+
+
+		<action name="*AddLimitAction" class="com.ifp.Action.AddLimitAction"
+			method="limitDetals">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+				<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="editlimitpage" type="tiles">editlimitpage</result>
+		</action>
+		<action name="*HostConfigAction" class="com.ifp.Action.HostConfigAction"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="NewInter"/> -->
+			<result name="hostconfig_home" type="tiles">hostconfig_home</result>
+			<result name="hostmoniter_home" type="tiles">hostmoniter_home</result>
+		</action>
+
+		<action name="*AcctRule*" class="com.ifp.acct.AcctRule" method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="NewInter"/> -->
+			<result name="acctrule_home" type="tiles">acctrule_home</result>
+			<result name="view_acctrule_home" type="tiles">view_acctrule_home
+			</result>
+			<result name="view_acctrule_data" type="tiles">view_acctrule_data
+			</result>
+			<result name="editacctrule" type="tiles">editacctrule</result>
+
+		</action>
+		
+		
+		<action name="*AddMailAction*" class="com.ifp.alerts.AddMailAction"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+				<!-- <interceptor-ref name="browserCacheInterceptor" />
+			<interceptor-ref name="clickInterceptor" />
+			<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="addmailactin" type="tiles">addmailactin</result>
+			<result name="addmailaddress" type="tiles">addmailaddress</result>
+			<result name="addmailcontent" type="tiles">addmailcontent</result>
+			<result name="addmailcontentconfig" type="tiles">addmailcontentconfig
+			</result>
+			<result name="display" type="tiles">display</result>
+			<result name="editmailcontentconfig" type="tiles">editmailcontentconfig
+			</result>
+			<result name="editmailcontentdetails" type="tiles">editmailcontentdetails
+			</result>
+		</action>
+
+		<action name="*SMSAction*" class="com.ifp.alerts.SMSAction"
+			method="{1}">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<!-- <interceptor-ref name="clickInterceptor" />
+				<interceptor-ref name="browserCacheInterceptor" />
+				<interceptor-ref name="NewInter"/>
+			<interceptor-ref name="defaultStack" /> -->
+			<result name="smsurl_home" type="tiles">smsurl_home</result>
+		</action>
+		
+		
+		
+	</package>
+
+	<package name="json-default" extends="struts-default">
+		<result-types>
+			<result-type name="json" class="org.apache.struts2.json.JSONResult" />
+		</result-types>
+		<interceptors>
+			<interceptor name="json"
+				class="org.apache.struts2.json.JSONInterceptor" />
+		</interceptors>
+	</package>
+	
+	
+
+
+	<include file="reports.xml"></include>
+	<include file="struts2.xml"></include>
+	<include file="struts-personalize.xml"></include>
+	<include file="struts-instant.xml"></include>
+	<include file="struts-maintain.xml"></include>
+	<include file="struts-merchant.xml"></include>
+	<include file="struts-fraudmgmnt.xml"></include>
+	<include file="struts-recon.xml"></include>
+	<include file="struts-services.xml"></include>
+	<include file="struts-vas.xml"></include>
+	<include file="struts-ussd.xml"></include>
+	<include file="struts-scratch.xml"></include>
+	<include file="struts-credit.xml"></include>
+	<include file="struts-debit.xml"></include>
+</struts>

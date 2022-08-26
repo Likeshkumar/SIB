@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+
+<tiles-definitions> 
+  
+    <definition name="wait" extends="baseLayout">
+  	   <put-attribute name="title"  value="Wait"/> 
+  	   <put-attribute name="body"  value="/jsp/wait.jsp"/>
+  </definition>
+  
+  
+  <definition name="addmerch_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Merchant Configuration"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/addmerch_home.jsp"/>
+  </definition>
+
+  <definition name="addstore_merchhome" extends="baseLayout">
+  	   <put-attribute name="title"  value="Store Configuration"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/addstore_merchhome.jsp"/>
+  </definition>
+  
+  <definition name="addterminal_merchhome" extends="baseLayout">
+  	   <put-attribute name="title"  value="Terminal  Configuration"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/addterminal_merchhome.jsp"/>
+  </definition>
+  
+  
+  <definition name="merchreg_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Merchant Registration"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/merchreg_home.jsp"/>
+  </definition>
+
+  <definition name="authmerchhome" extends="baseLayout">
+  	   <put-attribute name="title"  value="Merchant Authorization"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/merchantauth_home.jsp"/>
+  </definition>
+
+
+  <definition name="merchauth_view" extends="baseLayout">
+  	   <put-attribute name="title"  value="Authorization"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/merchauth_view.jsp"/>
+  </definition> 
+
+  <definition name="merchreg_view" extends="baseLayout">
+  	   <put-attribute name="title"  value=""/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/merchreg_view.jsp"/>
+  </definition> 
+  
+  <definition name="addstore_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Store Info"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/addstore_home.jsp"/>
+  </definition>  
+  
+  <definition name="addterminal_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Terminal Info"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/addterminal_home.jsp"/>
+  </definition>   
+
+  <definition name="merchant_type_home" extends="baseLayout">
+		<put-attribute name="title" value="Add Merchant Type" />
+		<put-attribute name="body" value="/jsp/merchant/merchant_type_home.jsp" />
+   </definition> 
+
+  <definition name="merchant_type_viewhome" extends="baseLayout">
+		<put-attribute name="title" value="Add Merchant Type" />
+		<put-attribute name="body" value="/jsp/merchant/merchant_type_viewhome.jsp" />
+   </definition> 
+
+  <definition name="merchant_type_view" extends="baseLayout">
+		<put-attribute name="title" value="Add Merchant Type view" />
+		<put-attribute name="body" value="/jsp/merchant/merchant_type_view.jsp" />
+   </definition>
+   
+	
+   <definition name="addmcc_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Configuring MCC"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/addmcc_home.jsp"/>
+  </definition>  
+  
+  <definition name="viewmcc_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="View MCC"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/viewmcc_home.jsp"/>
+  </definition>  
+  
+   <definition name="merch_addlimithome" extends="baseLayout">
+  	   <put-attribute name="title"  value="ADD MERCHANT LIMIT"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/merch_addlimithome.jsp"/>
+  </definition>
+  
+   <definition name="addMerchFee_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="ADD MERCHANT FEE"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/addMerchFee_home.jsp"/>
+  </definition>
+    
+   <definition name="addMerchCommission_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="ADD MERCHANT COMMISSION"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/addMerchCommission_home.jsp"/>
+  </definition>
+
+  <definition name="additioncommission" extends="baseLayout">
+  	   <put-attribute name="title"  value="ADDITIONAL COMMISSION"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/pricing/additioncommission.jsp"/>
+  </definition>
+  
+	<definition name="merch_monitering_home" extends="baseLayout">
+		<put-attribute name="title" value="Merchant Monitoring" />
+		<put-attribute name="body" value="/jsp/merchant/merch_monitering_home.jsp" />
+	</definition>  
+	
+	<definition name="merchmonitor_home" extends="baseLayout">
+		<put-attribute name="title" value="Merchant Monitoring" />
+		<put-attribute name="body" value="/jsp/merchant/merchmonitor_home.jsp" />
+	</definition> 
+	
+	<definition name="tree_view" extends="baseLayout">
+		<put-attribute name="title" value="" />
+		<put-attribute name="body" value="/jsp/merchant/horizantal_tree_view.jsp" />
+	</definition> 
+	
+	 <definition name="batchreports" extends="baseLayout">
+  	   <put-attribute name="title"  value="MERCHANT REPORTS"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/batchreports.jsp"/>
+  </definition>
+  
+  <definition name="batchidlist" extends="baseLayout">
+  	   <put-attribute name="title"  value="MERCHANT REPORTS"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/batchidlist.jsp"/>
+  </definition>
+  
+   <definition name="addmerch_acc" extends="baseLayout">
+  	   <put-attribute name="title"  value="MERCHANT ACCOUNT RULE"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/addmerch_acc.jsp"/>
+  </definition>
+	
+<definition name="merchantfee_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="MERCHANT FEE"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/merchantfee_home.jsp"/>
+  </definition>
+  
+  <definition name="registercomplaint" extends="baseLayout">
+  	   <put-attribute name="title"  value="MERCHANT DISPUTE"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/registercomplaint.jsp"/>
+  </definition>
+<!--     <definition name="viewdisputecomplaints" extends="baseLayout">
+  	   <put-attribute name="title"  value="MERCHANT DISPUTE"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/viewdisputecomplaints.jsp"/>
+  </definition> -->
+	<definition name="viewdisputedetails" extends="baseLayout">
+  	   <put-attribute name="title"  value="MERCHANT DISPUTE"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/viewdisputedetails.jsp"/>
+  </definition>  
+  
+  <definition name="addMerchDiscount_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="ADD DISCOUNT"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/addMerchDiscount_home.jsp"/>
+  </definition>
+  <definition name="addScheme_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="ADD Scheme"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/addScheme.jsp"/>
+  </definition>
+  
+  	<definition name="viewMerchDiscount" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Merchant Discount"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/merchant/viewMerchDiscount.jsp"/>      
+	</definition>
+	
+	<definition name="viewMerchant" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Merchant Discount"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/merchant/viewMerchant.jsp"/>      
+	</definition>
+     <definition name="settlement_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="SETTLEMENT CONFIGURATION"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/settlement/settlement_home.jsp"/>
+  </definition>
+
+   <definition name="uploadvisa_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="GENERATE SETTLEMENT DOWNLOAD"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/settlement/uploadvisa_home.jsp"/>
+  </definition>
+
+   <definition name="settlement_home_download" extends="baseLayout">
+  	   <put-attribute name="title"  value="SETTLEMENT FILE DOWNLOAD"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/settlement/settlement_home_download.jsp"/>
+  </definition> 
+
+
+<!-- Sankar Start-->
+	
+	<definition name="storereporthome" extends="baseLayout">
+  	   <put-attribute name="title"  value="STORE WISE REPORT"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/storereporthome.jsp"/>
+	</definition> 
+
+	<definition name="terminalreporthome" extends="baseLayout">
+  	   <put-attribute name="title"  value="TERMINAL WISE REPORT"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/terminalreporthome.jsp"/>
+	</definition> 
+
+	 <definition name="transreport" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Transaction Report "/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/transreports.jsp"/>
+  	</definition>
+
+ 	<definition name="txnfiledown_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Transaction File Download "/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/settlement/txnfiledown_home.jsp"/>
+  	</definition>  
+  
+ 	<definition name="netsettle_downhome" extends="baseLayout">
+  	   <put-attribute name="title"  value="Net Settlement File Download"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/settlement/netsettle_downhome.jsp"/>
+  	</definition> 
+  
+<!-- Sankar End -->
+
+<definition name="merchSettlementreporthome" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Merchant Settlement Report "/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/merchSettlementreporthome.jsp"/>
+  </definition>
+  
+  <definition name="consolidatedreporthome" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Merchant Consolidated Report"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/consolidatedreporthome.jsp"/>
+  </definition>
+  <definition name="merchnettransreporthome" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Merchant Net Transaction Report"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/merchnettransreporthome.jsp"/>
+  </definition>
+
+ <definition name="netsettlementreporthome" extends="baseLayout">
+     <put-attribute name="title"  value=" Net Settlement Report"/> 
+     <put-attribute name="body"  value="/jsp/merchant/netsettlementreporthome.jsp"/>
+  </definition>
+ 
+  <definition name="txnsearch_home" extends="baseLayout">
+     <put-attribute name="title"  value="Transaction Search"/> 
+     <put-attribute name="body"  value="/jsp/merchant/txnsearch_home.jsp"/>
+  </definition>
+  
+  <definition name="compliant_reghome" extends="baseLayout">
+     <put-attribute name="title"  value="Compliant Register"/> 
+     <put-attribute name="body"  value="/jsp/merchant/dispute/compliant_reghome.jsp"/>
+  </definition>
+  
+  <definition name="viewtransdetails" extends="baseLayout">
+     <put-attribute name="title"  value="Transaction Details"/> 
+     <put-attribute name="body"  value="/jsp/merchant/dispute/viewtransdetails.jsp"/>
+  </definition>
+  
+    <definition name="view_compliant_home" extends="baseLayout">
+     <put-attribute name="title"  value="View Compliants"/> 
+     <put-attribute name="body"  value="/jsp/merchant/dispute/view_compliant_home.jsp"/>
+  </definition>
+
+    <definition name="view_compliant_data" extends="baseLayout">
+     <put-attribute name="title"  value="View Compliants"/> 
+     <put-attribute name="body"  value="/jsp/merchant/dispute/view_compliant_data.jsp"/>
+  </definition>
+ <definition name="addMerchCommission_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="ADD MERCHANT COMMISSION"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/addMerchCommission_home.jsp"/>
+  </definition>
+
+  <definition name="nextcommission" extends="baseLayout">
+  	   <put-attribute name="title"  value="Add Commission"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/nextcommission.jsp"/>
+  </definition>
+
+    <definition name="addMerchDiscount_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="ADD DISCOUNT"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/addMerchDiscount_home.jsp"/>
+  </definition>
+
+  <definition name="addmerchdiscounthome" extends="baseLayout">
+     <put-attribute name="title"  value=" ADD DISCOUNT HOME"/> 
+     <put-attribute name="body"  value="/jsp/merchant/addmerchdiscounthome.jsp"/>
+   </definition>  
+ 
+  <definition name="getCommissionviewDetails" extends="baseLayout">
+		<put-attribute name="title"  value=""/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/getCommissionviewDetails.jsp"/>
+  </definition>
+
+   <definition name="showdetaildiscount" extends="baseLayout">
+  	   <put-attribute name="title"  value="View Discount Details"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/showdetaildiscount.jsp"/>
+   </definition>
+   
+   <definition name="blacklisted_upload_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Black Listed Upload"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/BlackList/blacklisted_upload_home.jsp"/>
+   </definition>
+
+   <definition name="blacklisted_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="Black Listed Merchant"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/BlackList/blacklisted_home.jsp"/>
+   </definition>   
+
+   <definition name="blacklisted_list" extends="baseLayout">
+  	   <put-attribute name="title"  value="Black Listed Merchant"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/BlackList/blacklisted_list.jsp"/>
+   </definition>   
+
+   <definition name="blacklisted_data" extends="baseLayout">
+  	   <put-attribute name="title"  value="Black Listed Merchant"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/BlackList/blacklisted_data.jsp"/>
+   </definition>  
+   
+   <!-- settlemt -->
+   <definition name="settle_merch_view" extends="baseLayout">
+  	   <put-attribute name="title"  value="Settlement Process"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/settlement/settle_merch_view.jsp"/>
+   </definition> 
+
+   <definition name="txnlist_setrefno" extends="baseLayout">
+  	   <put-attribute name="title"  value="Settlement Process"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/settlement/txnlist_setrefno.jsp"/>
+   </definition>
+
+  
+
+   <definition name="cbssettle_home" extends="baseLayout">
+  	   <put-attribute name="title"  value="CBS Settlement"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/settlement/cbssettle_home.jsp"/>
+   </definition> 
+   
+   <definition name="cbssettle_view" extends="baseLayout">
+  	   <put-attribute name="title"  value="CBS Settlement"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/settlement/cbssettle_view.jsp"/>
+   </definition> 
+   
+   <!-- settlement -->
+   
+   <definition name="merchantusertype_home" extends="baseLayout">
+  	 	<put-attribute name="title"  value="Terminal Additional User"/>
+  	   <put-attribute name="body"  value="/jsp/merchant/terminaluser/merchantusertype_home.jsp"/>
+   </definition> 
+
+   <definition name="merchantusertype_view" extends="baseLayout">  	    
+  	   <put-attribute name="title"  value="View Terminal User &amp; Re-Print Password"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/terminaluser/merchantusertype_view.jsp"/>
+   </definition> 
+   
+    <definition name="view_additonaluser_list" extends="baseLayout">
+  	   <put-attribute name="title"  value="Terminal Additional User"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/terminaluser/merchantusertype_list.jsp"/>
+   </definition>
+   
+   
+    <definition name="merchantwalletreport" extends="baseLayout">
+  	   <put-attribute name="title"  value="Merchant Wallet Deposite Report"/> 
+  	   <put-attribute name="body"  value="/jsp/merchant/reports/merchantwalletreport.jsp"/>
+   </definition>
+   
+	<definition name="merchantTxnSettle" extends="baseLayout">
+  	   <put-attribute name="title"  value=" Merchant Transaction Settlement Report"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/merchant/merchantTxnSettle.jsp"/>      
+	</definition>
+	
+	<definition name="downloadmerchantList" extends="baseLayout">
+  	   <put-attribute name="title"  value="Download Merchant List"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/merchant/downloadmerchantList.jsp"/>      
+	</definition>
+	<definition name="unblockmerchant" extends="baseLayout">
+  	   <put-attribute name="title"  value="Unblock Merchant"/>
+  	   <put-attribute name="menu"   value="/tiles/menu.jsp"/>
+  	   <put-attribute name="body"  value="/jsp/merchant/unblockmerchantList.jsp"/>      
+	</definition>
+	
+	<definition name="viewnwextpage" extends="baseLayout">
+		<put-attribute name="title" value="View Merchant List"/>
+		<put-attribute name="body" value="/jsp/merchant/viewnwextpage.jsp"/>
+	</definition>
+
+	<definition name="terminalmonitor_home" extends="baseLayout">
+		<put-attribute name="title" value="Terminal Monitoring"/>
+		<put-attribute name="body" value="/jsp/merchant/terminal_monitoring/terminalmonitor_home.jsp"/>
+	</definition>
+
+	<definition name="terminalmonitor_view" extends="baseLayout">
+		<put-attribute name="title" value="Terminal Monitoring"/>
+		<put-attribute name="body" value="/jsp/merchant/terminal_monitoring/terminalmonitor_view.jsp"/>
+	</definition>
+
+	<definition name="terminalmonitoringconfig_home" extends="baseLayout">
+		<put-attribute name="title" value="Terminal Monitoring Config"/>
+		<put-attribute name="body" value="/jsp/merchant/terminal_monitoring/terminalmonitoringconfig_home.jsp"/>
+	</definition>	
+	
+</tiles-definitions>

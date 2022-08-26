@@ -1,0 +1,82 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+		
+<struts>
+	<constant name="struts.action.excludePattern" value=".*unfiltered.*,.*\\.nofilter"/>
+	<constant name="struts.action.extension" value="do" />
+	<constant name="struts.ui.theme" value="simple" /> 		
+	<constant name="struts.devMode" value="false" />
+	  <package name="credit" extends="struts-default" >
+			<result-types>
+				<result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult"/>
+				<result-type name="json" class="com.googlecode.jsonplugin.JSONResult"/>
+			</result-types>
+					
+			<interceptors>
+	    		<interceptor name="session_interceptor" class="com.ifp.util.SessionInterceptor">
+	   		 	</interceptor>
+	   		 	<interceptor name="NewInter" class="com.ifp.util.NewInter"></interceptor>
+	   		 	<interceptor-stack name="loggingStack">
+	   		 	<interceptor-ref name="NewInter"/>
+	        			<interceptor-ref name="session_interceptor"/>
+	        			<interceptor-ref name="defaultStack"/>
+	    		</interceptor-stack>
+			</interceptors>
+						
+			<global-results>
+	    		<result name="session" type="redirectAction">logoutAction</result>
+				<result name="session" type="tiles">logout</result>
+	    		<result name="required_home" type="tiles">required_home</result>	
+	    	</global-results>	 
+		    
+		   <action name="*CreditCustRegisteration" class="com.ifc.custinfo.CreditCustRegisteration" method="{1}">			
+		   		<interceptor-ref name="loggingStack"></interceptor-ref> 
+		   		<interceptor-ref name="NewInter"/>
+		   		<result name="cr_customeradd_home" type="tiles">cr_customeradd_home</result> 
+		   		<result name="customerentry_form" type="tiles">customerentry_form</result>
+		   		<result name="customer_search_home" type="tiles">customer_search_home</result>
+		   		<result name="customerentry_view" type="tiles">customerentry_view</result>
+		   		<result name="customerentry_form_edit" type="chain">customerloadedvalue</result>
+		    </action>
+		    
+		    <action class="com.ifc.custinfo.CreditCustRegisteration" name="customerloadedvalue" method="getcustomerData">
+		    <interceptor-ref name="NewInter"/>
+		  		 <param name="doact">EDIT</param>
+                <result name="customerentry_form" type="tiles" >customerentry_form</result> 
+    		</action>
+		    
+		    <action name="getListOfSubProduct" class="com.ifc.custinfo.CreditProductLimit" method="getSubProductList" >
+		    <interceptor-ref name="NewInter"/>
+			</action>
+		
+		     <action name="*CreditProductLimit" class="com.ifc.custinfo.CreditProductLimit" method="{1}">		
+		     <interceptor-ref name="NewInter"/>
+		     	<interceptor-ref name="loggingStack"></interceptor-ref> 	
+		   		<result name="assignproduct_home" type="tiles">assignproduct_home</result>  
+		   		<result name="assignproduct_view" type="tiles">assignproduct_view</result>
+		   		<result name="assignproduct_edithome" type="tiles">assignproduct_edithome</result>
+		   		<result name="asignproduct_editview" type="tiles">asignproduct_editview</result>
+		   		<result name="assignedproduct_authhome" type="tiles">assignedproduct_authhome</result>
+		   		<result name="asignproduct_authview" type="tiles">asignproduct_authview</result>
+		   		<result name="assignedproduct_viewhome" type="tiles">assignedproduct_viewhome</result>
+		   		<result name="asignproduct_view" type="tiles">asignproduct_view</result>
+		    </action>
+		    
+		     <action name="*CreditIssuance" class="com.ifc.custinfo.CreditIssuance" method="{1}">		
+		     <interceptor-ref name="NewInter"/>	
+		   		<interceptor-ref name="loggingStack"></interceptor-ref> 
+		   		<result name="creditissuance_home" type="tiles">creditissuance_home</result>  
+		   		<result name="creditissuance_list" type="tiles">creditissuance_list</result>
+		   		<result name="creditissuance_view" type="tiles">creditissuance_view</result>
+		   		<result name="creditissuance_authlist" type="tiles">creditissuance_authlist</result>
+		   		<result name="creditissuance_authview" type="tiles">creditissuance_authview</result>
+		    </action>
+		    
+		     
+		    
+		    
+	</package>
+		
+</struts>

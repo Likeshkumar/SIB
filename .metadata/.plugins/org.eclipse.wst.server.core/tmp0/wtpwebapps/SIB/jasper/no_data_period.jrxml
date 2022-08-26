@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MerchBatch_Report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="23ce5eba-8be8-45a8-a6fc-fe502744cdaf">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="819"/>
+	<property name="ireport.layers" value="##Fri May 31 11:59:57 GMT+05:30 2013\nlayer.1.name=Layer 1\nlayer.1.visible=true\nlayer.1.id=1\nlayer.0.name=Background\nlayer.0.visible=true\nlayer.0.id=0"/>
+	<style name="Title" fontName="Verdana" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#C3F4E8"/>
+		</conditionalStyle>
+	</style>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="MerchDataset" uuid="92ac2d02-871b-494e-812a-f6d24a07a7e8"/>
+	<parameter name="reportParams.logo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\IFP_PREPAID_20MAY\\IFP_30_11_2012_FOR_CHANGING\\WebContent\\jasper\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="reportParams.reporttitle" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="report_name" class="java.lang.String"/>
+	<field name="message" class="java.lang.String"/>
+	<variable name="watermaker" class="java.lang.String" resetType="Page">
+		<variableExpression><![CDATA["EZMMS"]]></variableExpression>
+		<initialValueExpression><![CDATA["EZMMS"]]></initialValueExpression>
+	</variable>
+	<background>
+		<band height="802" splitType="Stretch">
+			<textField>
+				<reportElement uuid="9a109f20-a961-4c41-8e91-0fa40930e629" x="-28" y="612" width="100" height="0">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="26" y="570" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="126" y="646" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="224" y="701" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="310" y="762" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="158" y="502" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="236" y="562" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="-1" y="377" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="72" y="445" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="243" y="397" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="336" y="465" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="65" y="268" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="158" y="336" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="313" y="612" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="178" y="177" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="269" y="237" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="24" y="69" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="92" y="127" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="357" y="299" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="453" y="377" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="-1" y="217" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="211" y="0" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="286" y="69" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="368" y="137" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="446" y="197" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="-151" y="417" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="-51" y="502" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="50" y="721" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="124" y="782" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="-151" y="588" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="13" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="-32" y="646" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca9e5147-7383-4796-a5e7-4e050580b042" x="411" y="0" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="495" y="69" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="429" y="542" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="407" y="666" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="03980329-1625-4a33-89b7-19e9c688d005" x="522" y="279" width="100" height="20" forecolor="#E3DFDF">
+					<property name="ireport.layer" value="1"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Verdana" size="10" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{watermaker}]]></textFieldExpression>
+			</textField>
+		</band>
+	</background>
+	<title>
+		<band height="78" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="651ec3df-1a6c-4bbf-9208-6ab41785d9f7" style="Column header" x="0" y="0" width="110" height="20" forecolor="#FF6600"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" size="6" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement uuid="94e6338c-0484-42a1-b561-15a35ef3f817" x="407" y="-1" width="148" height="44"/>
+				<imageExpression><![CDATA[$P{reportParams.logo}]]></imageExpression>
+			</image>
+			<line>
+				<reportElement uuid="22d5b90f-a54d-45b5-9c4e-29d0b205df32" x="1" y="68" width="555" height="1" forecolor="#666666"/>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="a26dc690-5767-40b3-b0fa-2c7382289f5a" x="150" y="7" width="236" height="27" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" size="14" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{report_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="39"/>
+	</columnHeader>
+	<detail>
+		<band height="116" splitType="Stretch">
+			<textField>
+				<reportElement uuid="329d6637-b4fc-4f67-8b5f-e60c859414de" mode="Transparent" x="180" y="48" width="194" height="20" forecolor="#CC0A01"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{message}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="104" splitType="Stretch">
+			<frame>
+				<reportElement uuid="6fa139c8-45b4-42e4-a21e-3109bbc4a983" mode="Transparent" x="-6" y="80" width="568" height="24" forecolor="#D0B48E" backcolor="#ECE9D8"/>
+				<textField evaluationTime="Report">
+					<reportElement uuid="38fde73a-9f40-4c19-94d2-c6df30f12227" style="Column header" x="521" y="0" width="40" height="20" forecolor="#FF6600"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" size="5" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="138c6f52-30da-47bd-93e0-f3b1b295a33b" style="Column header" x="441" y="0" width="80" height="20" forecolor="#FF6600"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="5" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="79" splitType="Stretch"/>
+	</summary>
+</jasperReport>

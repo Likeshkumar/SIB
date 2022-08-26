@@ -1,0 +1,1753 @@
+package com.ifp.personalize;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.CopyOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
+
+import jxl.write.WriteException;
+
+import oracle.sql.ARRAY;
+import oracle.sql.ArrayDescriptor;
+
+import org.apache.commons.io.FileUtils;
+//import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionException;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+
+import com.ifg.Config.padss.PadssSecurity;
+import com.ifp.Action.BaseAction;
+import com.ifp.beans.AuditBeans;
+import com.ifp.instant.InstCardPREProcess;
+import com.ifp.util.CommonDesc;
+import com.ifp.util.ExcelGenerator;
+import com.ifp.util.IfpTransObj;
+
+import connection.Dbcon;
+
+
+
+
+public class PreprocessAction extends BaseAction 
+{
+	private static final long serialVersionUID = 1L;
+	CommonDesc commondesc = new CommonDesc( );
+	JdbcTemplate jdbctemplate = new JdbcTemplate();
+	
+	public final  String Appid = "Rupaiya";
+	private PlatformTransactionManager  txManager=new DataSourceTransactionManager();
+	AuditBeans auditbean = new AuditBeans();
+	
+	public AuditBeans getAuditbean() {
+		return auditbean;
+	}
+
+	public void setAuditbean(AuditBeans auditbean) {
+		this.auditbean = auditbean;
+	}
+	
+	public PlatformTransactionManager getTxManager() {
+		return txManager;
+	}
+	public void setTxManager(PlatformTransactionManager txManager) {
+		this.txManager = txManager;
+	}
+	public JdbcTemplate getJdbctemplate() {
+		return jdbctemplate;
+	}
+
+	public void setJdbctemplate(JdbcTemplate jdbctemplate) {
+		this.jdbctemplate = jdbctemplate;
+	}
+
+	public CommonDesc getCommondesc() {
+		return commondesc;
+	}
+
+	public void setCommondesc(CommonDesc commondesc) {
+		this.commondesc = commondesc;
+	}
+
+	public String comInstId(){
+		HttpSession session = getRequest().getSession();
+		String instid = (String)session.getAttribute("Instname"); 
+		return instid;
+	}
+	
+	public String comUserId(){
+		HttpSession session = getRequest().getSession();
+		String userid = (String)session.getAttribute("USERID"); 
+		return userid;
+	}
+	public String comBranchId(){
+		HttpSession session = getRequest().getSession();
+		String br_id = (String)session.getAttribute("BRANCHCODE"); 
+		return br_id;
+	}
+	public String comuserType(){
+		HttpSession session = getRequest().getSession();
+		String usertype = (String)session.getAttribute("USERTYPE"); 
+		return usertype;
+	}
+	public String comUsername(){
+		HttpSession session = getRequest().getSession();
+		String username = (String)session.getAttribute("USERNAME"); 
+		return username;
+	}
+	
+	
+	private String act;
+	public String getAct() {
+		return act;
+	}
+
+	public void setAct(String act) {
+		this.act = act;
+	}
+
+	
+	private List branchlist;
+	
+	
+	public List getBranchlist() {
+		return branchlist;
+	}
+
+	public void setBranchlist(List branchlist) {
+		this.branchlist = branchlist;
+	}
+
+
+	private List personalproductlist;
+	public List getPersonalproductlist() {
+		return personalproductlist;
+	}
+
+	public void setPersonalproductlist(List personalproductlist) {
+		this.personalproductlist = personalproductlist;
+	}
+	
+	PersionalizedcardCondition brcodecon = new PersionalizedcardCondition();
+	
+	public String personalPregenerationhome()
+	{
+		List pers_prodlist=null,br_list=null;
+		String inst_id =comInstId();
+		String usertype = comuserType();
+		String branch = comBranchId();
+		HttpSession session = getRequest().getSession();
+		String cardStatus="02",mkrstatus="P";
+		act = getRequest().getParameter("act");
+		trace("act value : " + act);
+		if( act != null ){
+			session.setAttribute("PREGEN_ACT", act);
+		}
+		String session_act = (String) session.getAttribute("PREGEN_ACT");
+		System.out.println("session_act " + session_act);
+		try {
+			System.out.println("Inst Id===>"+inst_id+"  Branch Code ===>"+branch);
+			if (usertype.equals("INSTADMIN")) {
+				System.out.println("Branch list start");
+				br_list = brcodecon.getBranchCodefmProcess(inst_id, cardStatus, mkrstatus, jdbctemplate) ;      
+				System.out.println("Branch list "+br_list);
+				if(!(br_list.isEmpty())){
+					setBranchlist(br_list);
+					System.out.println("Branch list is not empty");
+					
+				}
+				    
+			}
+			pers_prodlist=commondesc.getProductListBySelected(inst_id, cardStatus, mkrstatus, jdbctemplate);
+			if (!(pers_prodlist.isEmpty())){
+				setPersonalproductlist(pers_prodlist);
+				session.setAttribute("curerr", "S");
+				session.setAttribute("curmsg","");
+				System.out.println("Product List is ===> "+pers_prodlist);
+				//setCardgenstatus('Y');
+			} else{
+				System.out.println("No Product Details Found ");
+				/*session.setAttribute("curerr", "E");
+				session.setAttribute("curmsg","<br> No Product Details Found ");*/
+				//setCardgenstatus('N');
+			}
+
+		} catch (Exception e) {
+			session.setAttribute("curerr", "E");
+			session.setAttribute("curmsg","Error While Fetching The Product Details");
+			trace("Error While Fetching The Product Details  "+ e.getMessage());
+			e.printStackTrace();
+			//setCardgenstatus('N');
+		}
+		
+		return "pregenerationhome";
+	}
+	
+	private List perspregenauthlist;
+	
+
+	public List getPerspregenauthlist() {
+		return perspregenauthlist;
+	}
+
+	public void setPerspregenauthlist(List perspregenauthlist) {
+		this.perspregenauthlist = perspregenauthlist;
+	}
+
+	public String preGenerationorder()
+	{
+		trace("******** preGenerationorder ********* ");enctrace( "******** preGenerationorder *********  ");
+		HttpSession session = getRequest().getSession();
+		
+		
+		try {
+			String branch = getRequest().getParameter("branchcode");
+			String cardtype = getRequest().getParameter("cardtype");
+			String fromdate = getRequest().getParameter("fromdate");
+			String todate = getRequest().getParameter("todate");
+			String instid = comInstId();
+			
+			String cardstatus = "02";
+			String mkckstatus = "P";  
+			
+			
+			trace("Branch : "+branch+" Card Type : "+cardtype+" From Date : "+fromdate+"  To Date : "+todate);
+			List authcardorder = null;
+			String dateflag="PIN_DATE";
+			
+			
+			String condition = commondesc.filterCondition(cardtype, branch, fromdate, todate, dateflag);
+			trace("Condition Value : "+condition);
+			authcardorder = commondesc.personaliseCardauthlist( instid,cardstatus, mkckstatus,condition, jdbctemplate);
+			
+			this.fromdate = fromdate ;
+			this.todate  = todate;
+			
+			trace("authcardorder : "+authcardorder);
+			if(authcardorder.isEmpty())
+			{
+				session.setAttribute("preverr", "E");
+				session.setAttribute("prevmsg", "No Orders Found");
+				trace("No Orders Found");
+				return personalPregenerationhome();
+			}
+			else
+			{
+				setPerspregenauthlist(authcardorder);
+				session.setAttribute("curerr", "S");
+			}
+		} catch (Exception e) {
+			session.setAttribute("curerr", "E");
+			session.setAttribute("curmsg", "Error :Could not continue the process..");
+			trace("Exception : " + e.getMessage() );
+			e.printStackTrace();
+		}
+		trace ( "\n\n" );enctrace( "\n\n " );
+		
+		return "pregenerationorders";
+	}
+	
+	public String deleteInstPreFile(){
+		trace("******* Delete personalization file begiin********");
+		enctrace("******* Delete personalization file begin********");
+		HttpSession session = getRequest().getSession();
+		IfpTransObj transact = commondesc.myTranObject("DELINSTPRE", txManager);
+		
+		String instid = comInstId();
+		String prefilename = getRequest().getParameter("prefilename");
+		try{
+			trace("Getting downloaded count for the file : " + prefilename );
+			int checkdowncnt = this.checkDownloadCount(instid, prefilename, jdbctemplate );
+			trace( "Got : checkdowncnt " + checkdowncnt );
+			if( checkdowncnt <= 0 ){
+				session.setAttribute("preverr", "E");
+				session.setAttribute("prevmsg", "Could not delete. Download personalization file and then delete...");
+				trace("Personalization file deleted successfully..got committed");
+				return this.personalPredownloadhome();
+			}
+			
+			trace("Deleting the personalization file...");
+			int deletepre = this.delelePreFile(instid, prefilename, jdbctemplate);
+			trace("Got deletepre : " + deletepre );
+			if( deletepre < 0 ){
+				//commondesc.rollbackTxn(jdbctemplate);
+				txManager.rollback(transact.status);
+				session.setAttribute("preverr", "E");
+				session.setAttribute("prevmsg", "Could not delte the file ");
+				trace("Could not delte the file ..got rolled back");
+				return this.personalPredownloadhome();
+			}
+			
+			
+		 
+			
+			//commondesc.commitTxn(jdbctemplate);
+			//txManager.commit(transact.status);
+			txManager.commit(transact.status);
+			session.setAttribute("preverr", "S");
+			session.setAttribute("prevmsg", "Personalization file deleted successfully");
+			trace("Personalization file deleted successfully..got committed");
+			
+		}catch(Exception e){
+			//commondesc.rollbackTxn(jdbctemplate);
+			//txManager.rollback(transact.status);
+			txManager.rollback(transact.status);
+			session.setAttribute("preverr", "E");
+			session.setAttribute("prevmsg", "Exception : Could not delete file");
+			trace("Exception : could not delete : " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		trace("******* Delete personalization file end********\n\n");
+		enctrace("******* Delete personalization file end********\n\n");
+		
+		return this.personalPredownloadhome();
+	}
+ 
+	public int checkDownloadCount(String instid, String prefilename, JdbcTemplate jdbctemplate ) throws Exception {
+		int x = -1;
+		try {
+			String downcntqry = "SELECT DOWN_CNT FROM PERS_PRE_DATA WHERE INST_ID='"+instid+"' AND PRE_NAME='"+prefilename+"' AND ROWNUM<=1";
+			enctrace(downcntqry);
+			x = jdbctemplate.queryForInt(downcntqry);
+		} catch (EmptyResultDataAccessException e) {}
+		return x; 
+	}
+
+	public int delelePreFile(String instid, String prefilename, JdbcTemplate jdbctemplate ) throws Exception {
+		int x = -1;
+		String delteqry = "DELETE FROM PERS_PRE_DATA WHERE INST_ID='"+instid+"' AND PRE_NAME='"+prefilename+"'";
+		enctrace(delteqry);
+		x = jdbctemplate.update(delteqry);
+		return x; 
+	}
+	
+	public String preGenerationprocess() throws Exception{
+		trace("******* Persionalize preGenerationprocess *******\n");
+		enctrace("******* Persionalize preGenerationprocess  *******\n");
+		
+		//IfpTransObj insertpre = commondesc.myTranObject();
+		
+		
+		 IfpTransObj transact = commondesc.myTranObject("GENPRE", txManager);
+		
+		HttpSession session = getRequest().getSession();	
+		
+		String order_refnum[] = getRequest().getParameterValues("personalrefnum");
+		System.out.println("Total Orders Selected ===> "+order_refnum.length+order_refnum[0]);
+		
+		  
+		String instid =  comInstId(); 
+		String usercode = comUserId();
+		String username = comUsername();
+		trace("Total Orders Selected : " +order_refnum.length); 
+		String productcode = getRequest().getParameter("binno");
+		String bin = commondesc.getBin(instid, productcode, jdbctemplate);
+		String branchcode = getRequest().getParameter("branchcode"); 
+		String Embosingname = getRequest().getParameter("Embosingname"); 
+		
+		
+		trace ("productcode{"+productcode+"}--"+"bin{"+bin+"}branchcode{"+branchcode+"}");
+		String track1="";
+		String track2="";
+		try{    
+			String makerid = "",checkerid="",makerdate="",checkerdate="", mkckflag="", ckdate="",authmsg="";
+			String act = getRequest().getParameter("act");
+			
+			if ( act.equals("M")){ 
+				System.out.println( "act value " + act); 
+				 makerid = usercode; 
+			     mkckflag = "M";
+				 ckdate = commondesc.default_date_query;
+			     makerdate = "SYSDATE";
+			     authmsg = " and Waiting for Authorization ........";
+			}else {  // D 
+				System.out.println( "act value " + act);
+				makerid = usercode;
+				checkerid = makerid;
+				mkckflag = "P";
+				ckdate = "sysdate";
+				makerdate = "SYSDATE";
+			}
+			  
+			String table = "PERS_CARD_PROCESS";
+			int status = 0,prestatus = 0;
+			DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy_HHmmss");
+			Date date = new Date();
+		 
+			//String userdesc = commondesc.getUserName(instid, usercode, jdbctemplate); 
+			
+			String downproductname = commondesc.getProductdesc(instid, productcode, jdbctemplate);
+			String prename = downproductname+"_"+Embosingname+"_"+dateFormat.format(date);
+			
+			trace("prename : "+prename);
+			String cardnum="X",expiry_1="X",enc_name="X",expiry_2="X",cvv1="X",cvv2="X",icvv="",servicecode="",cardref_no="";
+			int ordercount = order_refnum.length; 
+			 
+			int process_count = 0;
+			Boolean presuc = true;
+			int ordercnt = 0;
+			
+			String padssenable = commondesc.checkPadssEnable(instid, jdbctemplate);
+			String keyid = commondesc.getSecurityKeyid(instid, jdbctemplate);
+			PadssSecurity padsssec = new PadssSecurity();
+			List secList = commondesc.getPADSSDetailById(keyid, jdbctemplate);
+			String eDMK = "",eDPK="";
+			Iterator secitr = secList.iterator();
+				while(secitr.hasNext())
+				{
+					Map map = (Map) secitr.next(); 
+					eDMK = ((String)map.get("DMK"));
+					eDPK = ((String)map.get("DPK"));
+				}    
+			    
+			for ( int i=0; i<order_refnum.length;i++){				
+				String refnum = order_refnum[i].toString().trim();				 
+				trace("File generation started Ref Num : "+refnum);
+				String prodcode = commondesc.getProductCode(instid, refnum, jdbctemplate);	
+				trace("Getting card list for the order-ref-no [ "+refnum+" ] ");
+				
+				List chnlist = commondesc.getCardsFromOrder( instid, refnum, "PERSONAL","P","02", jdbctemplate ); 
+				if( ! chnlist.isEmpty() ){ 
+					Iterator itr = chnlist.iterator();
+					List carddetails = null,cvvdata = null;
+					
+					while( itr.hasNext() ){
+						Map temp = (Map)itr.next(); 
+						String cardno =  (String)temp.get("CARD_NO");  
+						trace("Getting card details .... for the cardno[ "+cardno+" ] ");
+						carddetails = commondesc.getCarddetails(table, instid, cardno,padssenable,keyid,secList, jdbctemplate);
+						if(!(carddetails.isEmpty()))
+						{
+							Iterator crdItr = carddetails.iterator();
+							 
+							while(crdItr.hasNext())
+							{
+								Map crdmap = (Map)crdItr.next();
+								cardnum = ((String)crdmap.get("CARD_NO"));
+								expiry_1 = ((String)crdmap.get("EXP_1"));
+								enc_name = ((String)crdmap.get("ENCNAME"));
+								expiry_2 = ((String)crdmap.get("EXP_2")); 
+								cvv1 = ((String)crdmap.get("CVV1"));
+								cvv2  = ((String)crdmap.get("CVV2"));
+								icvv  = ((String)crdmap.get("ICVV"));
+								servicecode = ((String)crdmap.get("SERVICE_CODE"));
+								branchcode = (String)crdmap.get("BRANCH_CODE"); 
+								cardref_no = (String)crdmap.get("CARD_REF_NO");
+								track1 =   (String)crdmap.get("TRACK1");
+								track2 =   (String)crdmap.get("TRACK2");
+							}
+							
+							
+							String validfrom = commondesc.getDate("MM/YY");
+							String validto = expiry_1;
+							if( enc_name == null ){
+								System.out.println( " Enc / Emb name empty ");
+								status = -5;
+								break;
+							}
+							String encode_name = commondesc.formateEncodingname(enc_name);
+							
+							String countrycode = commondesc.getCountryCode(instid, jdbctemplate);
+							if( countrycode == null ){
+								session.setAttribute("preverr", "E");	session.setAttribute("prevmsg",  "Could not get country code...." );
+								return "required_home";
+							}
+							
+							String cardcurrency =  commondesc.getCardCurrencyCode(instid, "PERS", cardno, jdbctemplate );
+							if( cardcurrency == null ){
+								cardcurrency = "";
+								/*session.setAttribute("preverr", "E");	session.setAttribute("prevmsg",  "Could not get card currecny code ["+cardno+"] ...." );
+								return "required_home";*/
+							}
+							
+							String appname = "IFD";
+							String panseqno = "01";
+							String printdata = "";
+							
+							System.out.println("keyid::"+keyid);
+							String dcardno="";
+							
+									dcardno = padsssec.getCHN(eDMK, eDPK, cardno);
+								
+							
+							
+							String embossingcardno ="";
+							if(padssenable.equals("Y"))
+							{
+							embossingcardno = commondesc.embossingCardNumber(dcardno);	
+							printdata = dcardno+expiry_1+encode_name;
+							}
+							else   
+							{
+								printdata = cardno+expiry_1+encode_name;
+							}
+							
+			//				String predata = cvv2+Trk1_StartSentinel+Trk1_Formatecode+cardnum+Trk1_Separator+encode_name;
+							String predata = track1+track2;
+							   
+							 
+							String prerecord = printdata+predata+track1+track2;
+					
+							
+							
+							
+							trace("Inserting pre data....");
+							String preinst_qury = "INSERT INTO PERS_PRE_DATA ( INST_ID,BIN, PRODUCT_CODE, CARD_NO,ORDER_REF_NO,BRANCH_CODE,GENERATED_DATE,PRE_NAME,TRACK_DATA,USER_CODE, ";
+							preinst_qury += " EMB_NAME, ENC_NAME, TRACK1, TRACK2, CVV1, CVV2, ICVV, COUNTRY_CODE, CURRENCY_CODE, EXPDATE, APP_NAME, PAN_SEQNO, SERVICE_CODE,VALID_FROM, VALID_TO, CARD_REFNO, EMB_CARDNO ) VALUES "  ;
+							preinst_qury += "('"+instid+"', '"+bin+"', '"+productcode+"', '"+cardnum+"', '"+order_refnum[i]+"', '"+branchcode+"', SYSDATE, '"+prename+"', '"+prerecord+"', '"+usercode+"',  ";
+							preinst_qury += " '"+encode_name+"','"+encode_name+"','"+track1+"','"+track2+"','"+cvv1+"','"+cvv2+"','"+icvv+"','"+countrycode+"','"+cardcurrency+"',to_date('"+expiry_1+"','mm/yy'),'"+appname+"', '"+panseqno+"', '"+servicecode+"','"+validfrom+"','"+validto+"', '"+cardref_no+"', '"+embossingcardno+"' ) ";
+							enctrace("preinst_qury : " + preinst_qury );
+							int insrt_status = commondesc.executeTransaction(preinst_qury, jdbctemplate);
+							trace("Got...." + preinst_qury);
+							
+							trace("updating pre status....");
+							String pre_upd_qury = "UPDATE PERS_CARD_PROCESS SET CARD_STATUS='03', PRE_DATE=sysdate,PRE_FILE='"+prename+"', MAKER_DATE= "+makerdate+", MKCK_STATUS = '"+mkckflag+"' WHERE INST_ID='"+instid+"' AND CARD_NO='"+cardnum+"'";
+							enctrace("update_qury : "+pre_upd_qury);							
+							int update_status = commondesc.executeTransaction(pre_upd_qury, jdbctemplate);
+							trace("got :" + update_status  ) ;  
+							if(insrt_status == 1 && update_status == 1)
+							{
+								process_count = process_count + 1;	
+							}      
+							else{
+								status = -4;
+								break;
+							}
+							
+							
+						}else{
+							trace("No Card Details Found for the " + cardno);
+							status = -2;
+							break;
+						}  
+					} 
+				}else{
+				 	session.setAttribute("preverr", "E");
+					session.setAttribute("prevmsg",  "No Cards data found the the Ref no  " + refnum );  
+					trace("No Cards data found the the Ref no  " + refnum );
+				}
+				
+				session.setAttribute("preverr", "E");
+				
+
+				if(status == -1) {
+					
+					session.setAttribute("prevmsg",  "Card Numbers List is Empty===> For the order"+order_refnum[i] );  
+					trace("Card Numbers List is Empty For the order : "+order_refnum[i]);
+					presuc = false;
+					break;
+				}
+				if(status == -2) {
+					session.setAttribute("prevmsg",  "Card Numbers List is Empty===> For the order"+order_refnum[i] ); 
+					trace("Card Numbers List is Empty : "+order_refnum[i]);
+					presuc = false;
+					break;
+				}
+				if(status == -3) {
+					session.setAttribute("prevmsg",  "CVV Data List is Empty===> For the order"+order_refnum[i] ); 
+					trace("CVV Data List is Empty For the order : " + order_refnum[i]);
+					presuc = false;
+					break;
+				}
+				if(status == -4) {
+					session.setAttribute("prevmsg", "Error While Insert The PRE Data "+order_refnum[i]); 
+					trace("Error While Insert The PRE Data : "+order_refnum[i]);
+					presuc = false;
+					break;
+				}
+				
+				if(status == -5) { 
+					session.setAttribute("prevmsg",  "Encoding / Embossing name should not be empty " );  
+					trace("Encoding / Embossing name should not be empty");
+					presuc = false;
+					break;
+				}
+				
+				ordercnt ++ ;
+			}
+			
+			if( presuc ){
+				transact.txManager.commit(transact.status);
+				trace ( ordercnt + " Ordered PRE Files Generated..got committed");
+				session.setAttribute("preverr", "S");
+				session.setAttribute("prevmsg",  ordercnt + " Ordered PRE Files Generated " +authmsg);  
+				/*** MAIL BLOCK ****/
+				/*IfpTransObj transactmail = commondesc.myTranObject(); 
+				try {
+					String alertid = this.parentid; 
+					if( alertid != null && ! alertid.equals("000")){
+						String keymsg = "Instant PRE Files Generated For " + ordercnt + " Ordere(s) ";
+						int mail = comutil.sendMail( instid, alertid, keymsg, jdbctemplate, session, getMailSender() );
+						System.out.println( "mail return__" + mail);
+					} 
+				} catch (Exception e) {  e.printStackTrace(); }
+				  finally{
+					transactmail.txManager.commit(transactmail.status);
+					System.out.println( "mail commit successfully");
+				} */
+				/*** MAIL BLOCK ****/
+				
+				
+				try{
+					
+					String mcardno = commondesc.getMaskedCardNo(instid, cardnum,"C", jdbctemplate);
+					auditbean.setActmsg(" Personalization Card Number [ "+mcardno+" ] "+ authmsg);
+					auditbean.setUsercode(username);
+					auditbean.setAuditactcode("0104"); 
+					auditbean.setCardno(mcardno);
+					//auditbean.setCardnumber(cardnum);
+					//commondesc.insertAuditTrail(instid, userid, auditbean, jdbctemplate, txManager);
+					commondesc.insertAuditTrailPendingCommit(instid, username, auditbean, jdbctemplate, txManager);
+				 }catch(Exception audite ){ trace("Exception in auditran : "+ audite.getMessage()); }
+								
+			
+			}else{
+				transact.txManager.rollback(transact.status);
+				trace( "PRE insert got failed...got rolledback.");
+			}
+			
+			
+			
+			
+		}catch (  Exception e ){
+			session.setAttribute("preverr", "E");
+			session.setAttribute("prevmsg",  "Exception : Could not continue the Personalization process "); 
+			transact.txManager.rollback(transact.status);
+			trace( "Exception : could not continue the PRE Process " + e.getMessage() ); 
+			e.printStackTrace();
+		} 
+		
+		
+		return personalPregenerationhome();
+	}
+	
+	
+	public String personalPregenerationauthhome()
+	{
+		trace("******** personalPregenerationauthhome ********* ");enctrace( "******** personalPregenerationauthhome *********  ");
+		List pers_prodlist=null,br_list=null;
+		String inst_id =comInstId();
+		String usertype = comuserType();
+		String branch = comBranchId();
+		HttpSession session = getRequest().getSession();
+		String cardStatus="03",mkrstatus="M";
+		try {
+			System.out.println("Inst Id===>"+inst_id+"  Branch Code ===>"+branch);
+			if (usertype.equals("INSTADMIN")) {
+				System.out.println("Branch list start");
+				br_list = brcodecon.getBranchCodefmProcess(inst_id, cardStatus, mkrstatus, jdbctemplate) ; 
+				System.out.println("Branch list "+br_list);
+				if(!(br_list.isEmpty())){
+					setBranchlist(br_list);
+					}
+				  
+			}
+			pers_prodlist=commondesc.getProductListBySelected(inst_id, cardStatus, mkrstatus, jdbctemplate);
+			if (!(pers_prodlist.isEmpty())){
+				setPersonalproductlist(pers_prodlist);
+				session.setAttribute("curerr", "S");
+				session.setAttribute("curmsg","");
+				trace("Product List is : "+pers_prodlist.size());
+				//setCardgenstatus('Y');
+			} else{
+				System.out.println("No Product Details Found ");
+				/*session.setAttribute("curerr", "E");
+				session.setAttribute("curmsg"," No Product Details Found ");*/
+				trace(" No Product Details Found ");
+				//setCardgenstatus('N');
+			}
+
+		} catch (Exception e) {
+			session.setAttribute("curerr", "E");
+			session.setAttribute("curmsg","Error While Fetching The Product Details  ");
+			trace("Error While Fetching The Product Details  "+ e.getMessage());
+			//setCardgenstatus('N');
+		}
+		trace ( "\n\n" );enctrace( "\n\n " );
+		return "preauthorizehome";
+	}
+	
+	
+	private List preauthorderlist;
+	
+	public List getPreauthorderlist() {
+		return preauthorderlist;
+	}
+
+	public void setPreauthorderlist(List preauthorderlist) {
+		this.preauthorderlist = preauthorderlist;
+	}
+
+	public String getPreauthorizeorders()
+	{
+		System.out.println("################# Auth Rize Order LIST ########################");
+		HttpSession session = getRequest().getSession();
+		
+		
+		String instid = comInstId();
+		String branch = getRequest().getParameter("branchcode");
+		String bin = getRequest().getParameter("cardtype");
+		String fromdate = getRequest().getParameter("fromdate");
+		String todate = getRequest().getParameter("todate");
+		System.out.println("Branch===>"+branch+"\n Card Type ===> "+bin+"\n From Date===>"+fromdate+"\n To Date===> "+todate);
+		String dateflag="PRE_DATE",cardstatus="03",mkckstatus="M";
+		List preauthlist =null;
+		try
+		{
+			
+			String condition = commondesc.filterCondition(bin, branch, fromdate, todate, dateflag);
+			System.out.println("Condition Value----->  "+condition);
+			preauthlist = commondesc.personaliseCardauthlist( instid,cardstatus, mkckstatus,condition, jdbctemplate);
+			
+			
+			if(!(preauthlist.isEmpty()))
+			{
+				setPreauthorderlist(preauthlist);
+				session.setAttribute("curerr", "S");
+			}
+			else{
+				session.setAttribute("preverr", "E");
+				session.setAttribute("prevmsg", "No Orders Found");
+				return personalPregenerationauthhome();
+			}
+		}
+		catch (Exception e) 
+		{
+			session.setAttribute("preverr", "E");
+			session.setAttribute("prevmsg", "Error While Getting the Orders , Error :"+e.getMessage());
+			return personalPregenerationauthhome();
+		}
+		
+		return "preauthorders";
+	}
+	
+	public String authPregeneration() throws WriteException, IOException
+	{
+		
+		HttpSession session = getRequest().getSession();
+		IfpTransObj transact = commondesc.myTranObject("AUTHPRE", txManager);
+	//-------------added by sardar on 11-12-15---------//	 
+		String username=comUsername();
+		
+		
+		//-------------ended by sardar on 11-12-15---------//	  
+		Personalizeorderdetails persorderdetails,bindetails,extradetails;
+		String remarks = getRequest().getParameter("reason");
+		String instid = comInstId();
+		String usercode = comUserId();		
+		String authstatus = "";
+		String statusmsg = "";
+		String err_msg="";
+		String order_refnum[] = getRequest().getParameterValues("personalrefnum");
+		System.out.println("Total Orders Selected ===> "+order_refnum.length);
+		if (  getRequest().getParameter("authorize") != null ){
+			System.out.println( "AUTHORIZE..........." );
+			authstatus = "P";
+			statusmsg = " Authorized ";
+			err_msg="Authorize";
+		}else  if (  getRequest().getParameter("deauthorize") != null  ){
+			System.out.println( "DE AUTHORIZE..........." );
+			authstatus = "D";
+			statusmsg = " De-Authorized ";
+			err_msg="De-Authorize";
+		}
+//----------------Audit Trails Edited By sardar on 11-12-15-----------------------//		
+		
+		/*try{ 
+			for(int j=0;j<order_refnum.length;j++) { 
+				trace("---------------"+ (j+1) +" Card Processing..... Processing order [ customer id ] : " + order_refnum[j] );  
+				persorderdetails = commondesc.gettingOrderdetailsByCin(instid,order_refnum[j].trim(),jdbctemplate);
+		
+		
+		try{
+			
+			String mcardno = commondesc.getMaskedCardNo(instid, order_refnum[j], jdbctemplate);
+			if(mcardno==null){mcardno=order_refnum[j];}
+			auditbean.setActmsg("card  "+statusmsg  + "  Card Number [ "+mcardno+" ]");
+			auditbean.setUsercode(username);
+			auditbean.setAuditactcode("0104"); 
+			auditbean.setCardno(mcardno);
+			auditbean.setRemarks(remarks);			
+		    auditbean.setProduct(persorderdetails.product_code);
+		    auditbean.getCardnumber(order_refnum[j].toString());
+			//commondesc.insertAuditTrail(instid, userid, auditbean, jdbctemplate, txManager);
+			commondesc.insertAuditTrailPendingCommit(instid, username, auditbean, jdbctemplate, txManager);
+		 }catch(Exception audite ){ trace("Exception in auditran : "+ audite.getMessage()); }
+		
+		
+			}}
+			catch(Exception e){
+				
+			}*/
+		
+		
+		//----------------Audit Trails Edit Ended  By sardar on 11-12-15-----------------------//		
+		
+		
+		
+		
+		
+		
+		/*try {
+			
+			String tablename = "PERS_PRE_DATA";	
+			InstCardPREProcess instprocess = new InstCardPREProcess();
+			
+			String bin="",prefilename="";
+			
+			int cardcount = 0;			
+			int cardtoprocesscnt = order_refnum.length;
+			
+			for(int i=0;i<order_refnum.length;i++)
+			{
+				int update_result=0;
+				//trace("GEnerating Pre Sequence no");
+				//int preSeqNo = this.sequencePREFILE(instid, jdbctemplate);
+				//trace("Generating presonalization file....");
+				
+				String preDetailsQry = "SELECT PRODUCT_CODE,PRE_NAME FROM PERS_PRE_DATA WHERE INST_ID='"+instid+"' AND CARD_NO='"+order_refnum[i]+"' ORDER BY GENERATED_DATE DESC";
+				trace("preDetailsQry ....."+preDetailsQry);
+				enctrace("preDetailsQry ....."+preDetailsQry);
+				List<Map<String,Object>> list =jdbctemplate.queryForList(preDetailsQry);
+				bin = (String) list.get(0).get("PRODUCT_CODE");
+				prefilename = (String) list.get(0).get("PRE_NAME");
+				
+				int x = generatePRE(instid, bin, prefilename, tablename, preSeqNo, session, jdbctemplate, commondesc );
+				trace("Generating presonalization file....got : " + x);
+				if( x < 0 ){ 
+					
+					addActionError("unable to proceess could not genereate pre file");					
+					return "required_home";
+				}
+				
+				
+				
+				
+				System.out.println("Selected Refnums ==>"+order_refnum[i]);
+				String update_authdeauth_qury = "UPDATE PERS_CARD_PROCESS SET CHECKER_ID='"+userid+"',CHECKER_DATE=(sysdate),MKCK_STATUS='"+authstatus+"' WHERE INST_ID='"+instid+"' AND CARD_NO='"+order_refnum[i]+"'";
+				System.out.println(" UPdate Queyr ====> "+update_authdeauth_qury);
+				update_result = jdbctemplate.update(update_authdeauth_qury);
+				
+				update_authdeauth_qury = "UPDATE PERS_PRE_DATA SET AUTH_CODE='1', AUTH_BY='"+userid+"', AUTH_DATE=SYSDATE WHERE INST_ID='"+instid+"' AND CARD_NO='"+order_refnum[i]+"'";
+				System.out.println(" UPdate Queyr ====> "+update_authdeauth_qury);
+				update_result = jdbctemplate.update(update_authdeauth_qury);
+				
+				System.out.println(" update_result =====>"+update_result);
+				 
+				if(update_result > 0 && jdbctemplate.update(update_authdeauth_qury)>0)
+				{
+					//updatecount = updatecount + 1;
+					cardcount++;
+					System.out.println("Current Count is =====> "+cardcount);
+				}
+				 
+				
+				 
+				
+				*//************* AUDIT BLOCK**************//* 
+				try{ 
+					String mcardno = commondesc.getMaskedCardNo(instid, order_refnum[i],"C", jdbctemplate);
+					if(mcardno==null){mcardno=order_refnum[i];}
+					auditbean.setActmsg("Personalize File "+statusmsg+"  [ "+mcardno+" ]");
+					auditbean.setUsercode(username);
+					auditbean.setAuditactcode("0104");  
+					auditbean.setCardno(mcardno);
+					//auditbean.setCardnumber(order_refnum[i].toString());
+					//commondesc.insertAuditTrail(in_name, Maker_id, auditbean, jdbctemplate, txManager);
+					commondesc.insertAuditTrailPendingCommit(instid, username, auditbean, jdbctemplate, txManager);
+				 }catch(Exception audite ){ trace("Exception in auditran : "+ audite.getMessage()); }
+				
+				
+				*//************* AUDIT BLOCK**************//*
+				}			
+			trace("checking process result cnt" +cardtoprocesscnt);
+			trace("checking order cnt" +cardcount);
+			if(cardtoprocesscnt== cardcount){			
+				session.setAttribute("preverr", "S");
+				session.setAttribute("prevmsg", cardcount + "  Cards Authorized Successfully and Waiting for Personalization File Download ... " ); 
+				txManager.commit(transact.status);
+				System.out.println( " Committed success "  );
+			}
+			else{
+				addActionError("Unable to continue Pre Authorization process");
+				txManager.rollback(transact.status);
+				trace("Unable to continue Pre Authorization process");
+				
+			}
+			
+			       
+		} catch (TransactionException e) {
+			session.setAttribute("preverr", "E");
+			session.setAttribute("prevmsg", " Unable to "+err_msg+" The Cards " + e.getMessage());
+			//commondesc.rollbackTxn(jdbctemplate);
+			txManager.rollback(transact.status);
+			System.out.println( " Rollback success "  );
+		}*/
+		
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+		TransactionStatus status = txManager.getTransaction(def);
+		try{
+			String columns = "", condition = "", table = "", result = "";
+				Connection conn = null;
+				Dbcon dbcon = new Dbcon(); 
+				conn = dbcon.getDBConnection();
+				CallableStatement cstmt = null;
+				cstmt = conn.prepareCall("call SP_PERS_PRE_UPDATE(?,?,?,?,?,?,?,?)");
+			    trace("procedure--->call SP_PERS_PRE_UPDATE(?,?,?,?,?,?,?)");
+		        ArrayDescriptor arrDesc =  ArrayDescriptor.createDescriptor("TVARCHAR2ARRAY", conn);
+		        System.out.println("check");
+		        ARRAY array = new ARRAY(arrDesc, conn, order_refnum);
+		        trace("proc args-->"+array+"--"+instid+"--"+usercode);
+		        cstmt.setString(1, table);
+		        cstmt.setArray(2, array);
+		        cstmt.setString(3, instid);
+		        columns = " ";
+		        condition = " WHERE INST_ID='"+instid+"' AND CARD_NO IN";
+		        cstmt.setString(4, columns);
+		        cstmt.setString(5, condition);
+		        cstmt.setString(6, usercode);
+		        cstmt.setString(7, authstatus);
+		        cstmt.registerOutParameter(8,java.sql.Types.VARCHAR);
+		        cstmt.execute();
+		        result=cstmt.getString(8);
+				trace("result--->"+result);
+			
+			/*************AUDIT BLOCK**************/
+			try{ 
+				auditbean.setActmsg("Card  [ "+order_refnum.length+" ] Authorized Successfully ");
+				auditbean.setActiontype("IC");
+				auditbean.setUsercode(usercode);
+				auditbean.setAuditactcode("0102");		
+				commondesc.insertAuditTrail(instid, usercode, auditbean, jdbctemplate, txManager);
+			 }catch(Exception audite ){ trace("Exception in auditran : "+ audite.getMessage()); }
+			 /*************AUDIT BLOCK**************/
+			
+			
+			if(result.contains("successfully")){
+				addActionMessage("PRE "+result);
+			}else{
+				addActionError("unable to continue the process");
+			}
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			/*session.setAttribute("preverr", "E");
+			session.setAttribute("prevmsg", " Exception: Unable to continue the process " );*/
+			addActionError("Unable to continue the process !!!");
+			txManager.rollback( status ); 
+			trace( "Could not insert the order details " + e.getMessage());
+			
+		}
+		
+		return personalPregenerationauthhome();
+	}
+	public String personalPredownloadhome()
+	{
+		List pers_prodlist=null,br_list=null;
+		String inst_id =comInstId();
+		String usertype = comuserType();
+		String branch = comBranchId();
+		HttpSession session = getRequest().getSession();
+		
+		try {
+			System.out.println("Inst Id===>"+inst_id+"  Branch Code ===>"+branch);
+			if (usertype.equals("INSTADMIN")) {
+				System.out.println("Branch list start");
+				br_list = commondesc.generateBranchList(inst_id, jdbctemplate);
+				System.out.println("Branch list "+br_list);
+				if(!(br_list.isEmpty())){
+					setBranchlist(br_list);
+					session.setAttribute("curerr", "S");
+					session.setAttribute("curmsg","");
+					System.out.println("Branch list is not empty");
+				}
+				else{
+					setBranchlist(br_list);
+					session.setAttribute("curerr", "E");
+					session.setAttribute("curmsg"," No Branch Details Found ");
+					System.out.println("Branch List is empty ");
+				}
+			}
+			pers_prodlist=commondesc.getProductList(inst_id,jdbctemplate, session);
+			if (!(pers_prodlist.isEmpty())){
+				setPersonalproductlist(pers_prodlist);
+				session.setAttribute("curerr", "S");
+				session.setAttribute("curmsg","");
+				System.out.println("Product List is ===> "+pers_prodlist);
+			} else{
+				System.out.println("No Product Details Found ");
+				session.setAttribute("curerr", "E");
+				session.setAttribute("curmsg"," No Product Details Found ");
+			}
+
+		} catch (Exception e) {
+			session.setAttribute("curerr", "E");
+			session.setAttribute("curmsg"," Error While Fetching The Product Details  "+ e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return "predownloadhome";
+	}
+	
+	public void getPREFiles() 
+	{
+		String instid = comInstId();
+		
+		
+		String bin = getRequest().getParameter("prodid");
+		String branch = getRequest().getParameter("branchcode");
+		String filetype = getRequest().getParameter("filetype");
+		System.out.println("bin__"+bin+"_instid_"+instid+" Branch===>"+branch);
+		String opt="";
+		try{
+		
+			int predispdays = commondesc.getPREDisplayDays(instid, jdbctemplate); 
+			trace(" Display timer intervel on days : " + predispdays );
+			
+			List  prenamelist = commondesc.getPersonalPREList(instid,branch, bin, predispdays, filetype, jdbctemplate);
+			System.out.println(prenamelist);
+			opt ="<option value='-1'> -SELECT- </option>";
+			if ( prenamelist.isEmpty() ) {
+				opt = "<option value='-1'> No Files found </option>";
+			}else{
+				Iterator  itr = prenamelist.iterator();
+				while( itr.hasNext() ){ 
+					Map temp = (Map)itr.next(); 
+					String prename = (String)temp.get("PRE_NAME");
+					opt += "<option value='"+prename+"'>"+prename+".mc</option>";
+				} 
+			}
+				getResponse().getWriter().write(opt);
+		}
+		catch (Exception e) 
+		{
+			System.out.println("Exception===> "+e.getMessage());
+			opt = "<option value='-1'> -ERROR- </option>";
+			try{
+				getResponse().getWriter().write(opt);
+			}
+			catch (Exception ex) 
+			{
+				
+			}
+		}
+		
+	}
+
+
+
+	
+	public int updatePreFileDownloadCnt(String instid, String prefilename, JdbcTemplate jdbctemplate) throws Exception {
+		int x = -1;
+		String delteqry = "UPDATE PERS_PRE_DATA SET DOWN_CNT=DOWN_CNT+1 WHERE INST_ID='"+instid+"' AND PRE_NAME='"+prefilename+"'";
+		enctrace(delteqry);
+		x = jdbctemplate.update(delteqry);
+		return x; 
+	}
+	
+	
+	public void getPREFileList() throws Exception {
+		String instid =comInstId();
+		String filename = getRequest().getParameter("filename");
+		String cardlist = "";
+		try{
+			String previewqry = "SELECT CARD_NO FROM PERS_PRE_DATA WHERE INST_ID='"+instid+"' AND  PRE_NAME='"+filename+"'";
+			List previewqryview = jdbctemplate.queryForList( previewqry );
+			if( !previewqryview.isEmpty() ){
+				Iterator itr = previewqryview.iterator();
+				cardlist += "!!! Card Number List !!! \n\n";
+				while( itr.hasNext() ){
+					Map mp = (Map)itr.next();
+					cardlist += (String)mp.get("CARD_NO") + "\n";
+				}
+			}
+		}catch(Exception e ){
+			trace( "Exception : " + e.getMessage() );
+			 cardlist = "COULD NOT GET CARDNUMBER LIST";
+		}
+		getResponse().getWriter().write(cardlist);
+	}
+	
+	public void getPREFilesDetails() throws Exception {
+		String instid = getRequest().getParameter("instid");
+		String filename = getRequest().getParameter("filename");
+		String product = getRequest().getParameter("prodid");
+		JSONObject prejson = new JSONObject();
+		try{
+			String previewqry = "SELECT DOWN_CNT, PRE_NAME, COUNT(*) AS CARDCOUNT  FROM PERS_PRE_DATA WHERE PRODUCT_CODE='"+product+"' AND  PRE_NAME='"+filename+"'  GROUP BY PRE_NAME,DOWN_CNT";
+			List previewqryview = jdbctemplate.queryForList( previewqry );
+			if( !previewqryview.isEmpty() ){
+				
+				Iterator itr = previewqryview.iterator();
+				
+				while( itr.hasNext() ){
+					Map mp = (Map)itr.next();
+					prejson.put("DOWNCNT", (String)(Object)mp.get("DOWN_CNT").toString() );
+					prejson.put("PRENAME", (String)mp.get("PRE_NAME") );
+					prejson.put("CARDCOUNT", (String)(Object)mp.get("CARDCOUNT").toString() );
+				}
+				
+				String[] filearray = filename.split("_");
+				String usercode = (String)filearray[1];
+				String gendate1 = (String)filearray[2].substring(0, 2) + "-" + (String)filearray[2].substring(2, 4)+ "-" + (String)filearray[2].substring(4, 8);
+				String gendate = gendate1+ " " +filearray[3];
+				
+				//String username = commondesc.getUserName(instid, usercode, jdbctemplate);
+				//System.out.println("username---> "+username);
+				prejson.put("USERNAME", usercode );
+				prejson.put("GENDATE", gendate ); 
+				prejson.put("RESP", 0);
+			}
+			
+		}catch(Exception e){
+			prejson.put("RESPREASON", "Could not get filename view" );
+			prejson.put("RESP", 1);
+			trace("Exception Pre view : " + e.getMessage() );
+			e.printStackTrace();
+		}
+		getResponse().getWriter().write(prejson.toString() );
+	}
+	
+	public String prefileDownload()
+	{
+		String actname = getRequest().getParameter("submit");
+		System.out.println( "action name is " + actname );
+		String instid =  comInstId(); 
+		String usercode = comUserId();
+		String bin = getRequest().getParameter("cardtype");
+		String prefilename = getRequest().getParameter("prefilename");
+		HttpSession session = getRequest().getSession();	
+		String tablename = "PERS_PRE_DATA";
+		IfpTransObj transact = commondesc.myTranObject("PREDOWNLOAD", txManager);
+		
+		/*JSONObject listofpreheaders = this.generatePREHeader();
+		JSONObject predbfields = this.generatePREFDBFields();
+		ExcelGenerator excelgen = new ExcelGenerator();*/
+		try{
+			int preSeqNo = this.sequencePREFILE(instid, jdbctemplate);
+			if( actname.equals("Delete"))
+			{
+				String delmsg = null;
+				int predel;
+				try 
+				{
+					predel = commondesc.deletePREFiles(instid, bin, prefilename, tablename, jdbctemplate);
+					if( predel < 0    ) {
+						session.setAttribute("preverr", "E");
+						delmsg = "No Records Deleted";
+					}else if( predel == 0   ) {
+						session.setAttribute("preverr", "E");
+						delmsg = "Download the file atleast one time. Then try again to delete";
+					}else if( predel > 0 ) {
+						delmsg = predel +" Records Deleted successfully ";
+						session.setAttribute("preverr", "S");
+					}
+					System.out.println( "delete rec count is " + predel );
+				} catch (Exception e)  {
+					session.setAttribute("preverr", "E");
+					delmsg = "Error while delete Records " + e ;
+					e.printStackTrace();
+				}  
+				session.setAttribute("prevmsg",  delmsg ); 
+				return personalPredownloadhome();
+			} 
+			
+			
+			trace("Generating presonalization file....");
+			
+			int x = generatePRE(instid, bin, prefilename, tablename, preSeqNo, session, jdbctemplate, commondesc );
+			trace("Generating presonalization file....got : " + x);
+			if( x < 0 ){ 
+				return "required_home";
+			}
+			
+			
+			int downcnt = updatePreFileDownloadCnt(instid, prefilename, jdbctemplate);
+			if( downcnt  < 0 ){
+				//commondesc.rollbackTxn(jdbctemplate);
+				txManager.rollback(transact.status);
+				session.setAttribute("preverr", "E");
+				session.setAttribute("prevmsg", "Could not continue the download process..");
+				trace("Could not update the download count. got rolled back");
+			}
+			//commondesc.commitTxn(jdbctemplate);
+			txManager.commit(transact.status);
+			session.setAttribute("preverr", "S");
+			String filename = "<span style='color:maroon'>"+session.getAttribute("PRENAME")+"</span>";
+			
+			session.setAttribute("prevmsg", "Persionalization file generated successfully under the specified folder.File name : <br/> "+filename+"  ");
+			trace("Persionalization file generated successfully under the specified folder.File name[ "+filename+" ].");
+			
+		}catch(Exception e){ 
+			//commondesc.rollbackTxn(jdbctemplate);
+			txManager.rollback(transact.status);
+			session.setAttribute("preverr", "E");
+			session.setAttribute("prevmsg", "Exception : could not continue the download proces...");
+			trace("Exception : could not continue the dowload process : " + e.getMessage());				
+			e.printStackTrace();
+		} 
+		
+		return this.prefileDownload();
+		
+		 //IfpTransObj transObj = commondesc.myTranObject();
+}
+	private JSONObject generatePREFDBFields()  {
+		JSONObject jsonpre = new JSONObject(); 
+		jsonpre.put("H1", "SLNO");
+		jsonpre.put("H2", "CARD_NO");
+		jsonpre.put("H3", "EMB_NAME");
+		jsonpre.put("H4", "ENC_NAME");
+		jsonpre.put("H5", "TRACK1");
+		jsonpre.put("H6", "TRACK2");
+		jsonpre.put("H7", "CVV2");
+		jsonpre.put("H8", "ICVV");
+		jsonpre.put("H9", "SERVICE_CODE");
+		jsonpre.put("H10", "EXPDATE");
+		jsonpre.put("H11", "COUNTRY_CODE");
+		jsonpre.put("H12", "CURRENCY_CODE");
+		jsonpre.put("H13", "CURRENCY_EXPONENET");
+		jsonpre.put("H14", "VALID_FROM");
+		jsonpre.put("H15", "VALID_TO");
+		jsonpre.put("H16", "APP_NAME");
+		jsonpre.put("H17", "PAN_SEQNO"); 
+		jsonpre.put("H18", "CARD_REFNO"); 
+		jsonpre.put("H19", "EMB_CARDNO");
+		return jsonpre;
+	}
+	
+	/*public String downloadFilePreFormat()
+	{
+		trace("***************** downloadFilePreFormat is begin ****************** \n\n");
+		enctrace("******************** downloadFilePreFormat is begin ****************** \n\n");
+		String actname = getRequest().getParameter("submit");
+		trace( "action name is " + actname );
+		String instid =  comInstId(); 
+		String usercode = comUserId();
+		String bin = getRequest().getParameter("cardtype");
+		String prefilename = getRequest().getParameter("prefilename");
+		HttpSession session = getRequest().getSession();	
+		String tablename = "PERS_PRE_DATA";	
+		InstCardPREProcess instprocess = new InstCardPREProcess();
+		JSONObject listofpreheaders = this.generatePREHeader();
+		JSONObject predbfields = this.downloadFilePreBDField();
+		//ExcelGenerator excelgen = new ExcelGenerator();
+		IfpTransObj transact = commondesc.myTranObject("PREDONW", txManager);
+		try{
+			
+			if( actname.equals("Delete"))
+			{
+				String delmsg = null;
+				int predel;
+				try 
+				{
+					predel = commondesc.deletePREFiles(instid, bin, prefilename, tablename, jdbctemplate);
+					if( predel < 0    ) {
+						session.setAttribute("preverr", "E");
+						delmsg = "No Records Deleted";
+					}else if( predel == 0   ) {
+						session.setAttribute("preverr", "E");
+						delmsg = "Download the file atleast one time. Then try again to delete";
+					}else if( predel > 0 ) {
+						txManager.commit(transact.status);
+						delmsg = predel +" Records Deleted successfully ";
+						session.setAttribute("preverr", "S");
+					}
+					System.out.println( "delete rec count is " + predel );
+				} catch (Exception e)  {
+					txManager.rollback(transact.status);
+					session.setAttribute("preverr", "E");
+					delmsg = "Error while delete Records " + e ;
+					e.printStackTrace();
+				}  
+				session.setAttribute("prevmsg",  delmsg ); 
+				return personalPredownloadhome();
+			} 
+			
+			//Changed the PREFile generated flow for Orient Bank Requirement
+			
+			trace("GEnerating Pre Sequence no");
+			int preSeqNo = this.sequencePREFILE(instid, jdbctemplate);
+			
+			
+			trace("Generating presonalization file....");
+			int x = generatePRE(instid, bin, prefilename, tablename, preSeqNo, session, jdbctemplate, commondesc );
+			trace("Generating presonalization file....got : " + x);
+			if( x < 0 ){ 
+				
+				
+				return "required_home";
+			}
+			Properties prop = commondesc.getCommonDescProperty();
+			String prefilelocation = prop.getProperty("PREFILELOCATION");
+			//fileName = prefilename.replaceAll(" ", "_");
+			String predtls[] = prefilename.split("_");
+			String predate = predtls[2];
+			String datesplit = predate.substring(0,4);
+			String year =  predate.substring(6,8);
+			predate = datesplit+year;
+			enctrace("prefilename--->"+prefilename);
+			String username=comUsername();
+			inputStream = new FileInputStream(new File(prefilelocation.trim()+"/"+predate.trim()+"/"+prefilename.trim()+".mc"));
+			trace("file locaiot"+inputStream);
+			int downcnt =instprocess.updatePersonalizePreFileDownloadCnt(instid, prefilename, jdbctemplate);
+			if( downcnt  < 0 ){
+				txManager.rollback(transact.status);
+				session.setAttribute("preverr", "E");
+				session.setAttribute("prevmsg", "Could not continue the download process..");
+				trace("Could not update the download count. got rolled back");
+			}
+			
+			trace("update PRE seqno ...");
+			int preseq = jdbctemplate.update(this.updatePRESEQNO(instid));
+			
+			if( preseq  < 0 ){
+				txManager.rollback(transact.status);
+				session.setAttribute("preverr", "E");
+				session.setAttribute("prevmsg", "Could not continue the download process..");
+				trace("Could not update the PRE SEQ NO got rolled back");
+			}
+			 
+			session.setAttribute("preverr", "S");
+			String filename = "<span style='color:maroon'>"+session.getAttribute("PRENAME")+"</span>";
+			
+			
+			
+			
+			txManager.commit(transact.status);
+			
+			*//*************AUDIT BLOCK Edited by sardar on 11-12-15**************//* 
+			try{ 
+				auditbean.setActmsg("Personalization File [ "+prefilename+" ] Downloaded");
+				auditbean.setUsercode(username);
+				auditbean.setAuditactcode("0104"); 
+				auditbean.setPrefilename((String)session.getAttribute("PRENAME"));
+				auditbean.setProduct(bin);
+				//commondesc.insertAuditTrail(instid, username, auditbean, jdbctemplate, txManager);
+				commondesc.insertAuditTrailPendingCommit(instid, usercode, auditbean, jdbctemplate, txManager);
+				
+				
+				//session.setAttribute("prevmsg", "Personalization file downloaded successfully  <br/> "+filename+"  ");
+				trace("Persionalization file generated successfully under the specified folder.File name[ "+prefilename+" ].");
+									
+				
+				addActionMessage("Persionalization file generated successfully under the specified folder.File name : <br/> "+prefilename+"  ");
+				
+			 }catch(Exception audite ){ trace("Exception in auditran : "+ audite.getMessage()); }
+			 *//*************AUDIT BLOCK Ended By sardar on 11-12-15**************//*
+			
+		}catch(Exception e){ 
+			txManager.rollback(transact.status);
+			session.setAttribute("preverr", "E");
+			session.setAttribute("prevmsg", "Exception : could not continue the download proces...");
+			trace("Exception : could not continue the dowload process : " + e.getMessage());				
+			e.printStackTrace();
+		} 
+		
+		return this.personalPredownloadhome();		
+		 //IfpTransObj transObj = commondesc.myTranObject();
+		
+	}*/
+	
+	
+	public String downloadFilePreFormat()
+	{
+		String actname = getRequest().getParameter("submit");
+		System.out.println( "action name is " + actname );
+		String instid =  comInstId(); 
+		String usercode = comUserId();
+		String bin = getRequest().getParameter("cardtype");
+		String prefilename = getRequest().getParameter("prefilename");
+		HttpSession session = getRequest().getSession();	
+		String tablename = "PERS_PRE_DATA";
+		IfpTransObj transact = commondesc.myTranObject("PREDOWNLOAD", txManager);
+		
+		/*JSONObject listofpreheaders = this.generatePREHeader();
+		JSONObject predbfields = this.generatePREFDBFields();
+		ExcelGenerator excelgen = new ExcelGenerator();*/
+		try{
+			int preSeqNo = this.sequencePREFILE(instid, jdbctemplate);
+			if( actname.equals("Delete"))
+			{
+				String delmsg = null;
+				int predel;
+				try 
+				{
+					predel = commondesc.deletePREFiles(instid, bin, prefilename, tablename, jdbctemplate);
+					if( predel < 0    ) {
+						session.setAttribute("preverr", "E");
+						delmsg = "No Records Deleted";
+					}else if( predel == 0   ) {
+						session.setAttribute("preverr", "E");
+						delmsg = "Download the file atleast one time. Then try again to delete";
+					}else if( predel > 0 ) {
+						delmsg = predel +" Records Deleted successfully ";
+						session.setAttribute("preverr", "S");
+					}
+					System.out.println( "delete rec count is " + predel );
+				} catch (Exception e)  {
+					session.setAttribute("preverr", "E");
+					delmsg = "Error while delete Records " + e ;
+					e.printStackTrace();
+				}  
+				session.setAttribute("prevmsg",  delmsg ); 
+				return personalPredownloadhome();
+			} 
+			
+			
+			trace("Generating presonalization file....");
+			
+			int x = generatePRE(instid, bin, prefilename, tablename, preSeqNo, session, jdbctemplate, commondesc );
+			trace("Generating presonalization file....got : " + x);
+			if( x < 0 ){ 
+				return "required_home";
+			}
+			
+			
+			int downcnt = updatePreFileDownloadCnt(instid, prefilename, jdbctemplate);
+			if( downcnt  < 0 ){
+				//commondesc.rollbackTxn(jdbctemplate);
+				txManager.rollback(transact.status);
+				session.setAttribute("preverr", "E");
+				session.setAttribute("prevmsg", "Could not continue the download process..");
+				trace("Could not update the download count. got rolled back");
+			}
+			//commondesc.commitTxn(jdbctemplate);
+			
+			try{ 
+				auditbean.setActmsg("Instant File [ "+prefilename+" ] Downloaded");
+				auditbean.setUsercode(usercode);
+				auditbean.setAuditactcode("0104"); 
+				auditbean.setPrefilename((String)session.getAttribute("PRENAME"));
+				auditbean.setProduct(bin);
+				//commondesc.insertAuditTrail(instid, username, auditbean, jdbctemplate, txManager);
+				commondesc.insertAuditTrailPendingCommit(instid, usercode, auditbean, jdbctemplate, txManager);
+			 }catch(Exception audite ){ trace("Exception in auditran : "+ audite.getMessage()); }
+			 /*************AUDIT BLOCK Ended By sardar on 11-12-15**************/
+			
+			txManager.commit(transact.status);
+			session.setAttribute("preverr", "S");
+			String filename = "<span style='color:maroon'>"+session.getAttribute("PRENAME")+"</span>";
+			
+			session.setAttribute("prevmsg", "Persionalization file generated successfully under the specified folder.File name : <br/> "+filename+"  ");
+			trace("Persionalization file generated successfully under the specified folder.File name[ "+filename+" ].");
+			
+		}catch(Exception e){ 
+			//commondesc.rollbackTxn(jdbctemplate);
+			txManager.rollback(transact.status);
+			session.setAttribute("preverr", "E");
+			session.setAttribute("prevmsg", "Exception : could not continue the download proces...");
+			trace("Exception : could not continue the dowload process : " + e.getMessage());				
+			e.printStackTrace();
+		} 
+		
+		return this.personalPredownloadhome();
+		
+		 //IfpTransObj transObj = commondesc.myTranObject();
+}
+	
+	
+	public int sequencePREFILE(String inst_id,JdbcTemplate jdbctemplate) {
+		int x = -1;
+		String AccoutSubtypeseq = "SELECT PREFILE_SEQ FROM SEQUENCE_MASTER WHERE INST_ID='"+inst_id+"'";
+		enctrace("getting sequence master values" + AccoutSubtypeseq);
+		x = jdbctemplate.queryForInt(AccoutSubtypeseq);
+		return x;
+	}
+	   
+	public synchronized String updatePRESEQNO(String instid)
+	{
+		return "update SEQUENCE_MASTER set PREFILE_SEQ=PREFILE_SEQ+1 where INST_ID='"+instid+"'";
+	}
+	
+	private JSONObject generatePREHeader()  {
+		JSONObject jsonpre = new JSONObject();
+		jsonpre.put("H1", "SerialNo");
+		jsonpre.put("H2", "CardNo");
+		jsonpre.put("H3", "EmbName");
+		jsonpre.put("H4", "EncName");
+		jsonpre.put("H5", "Track1");
+		jsonpre.put("H6", "Track2");
+		jsonpre.put("H7", "CVV2");
+		jsonpre.put("H8", "ICVV");
+		jsonpre.put("H9", "ServiceCode");
+		jsonpre.put("H10", "ExpiryDate");
+		jsonpre.put("H11", "CountryCode");
+		jsonpre.put("H12", "CurrencyCode");
+		jsonpre.put("H13", "CurrencyExponent");
+		jsonpre.put("H14", "ValidFrom");
+		jsonpre.put("H15", "ToDate");
+		jsonpre.put("H16", "AppName");
+		jsonpre.put("H17", "PANSeqNo"); 
+		jsonpre.put("H18", "CardRefNumber"); 
+		jsonpre.put("H19", "EmbCardno");
+		return jsonpre;
+	}	
+
+	private JSONObject downloadFilePreBDField()  {
+		JSONObject jsonpre = new JSONObject(); 
+		jsonpre.put("H1", "EXPDATE");
+		jsonpre.put("H2", "CARD_NO");
+		jsonpre.put("H3", "EMB_NAME");
+		jsonpre.put("H4", "ENC_NAME");
+		jsonpre.put("H5", "TRACK1");
+		jsonpre.put("H6", "TRACK2");
+		jsonpre.put("H7", "CVV2");
+		jsonpre.put("H8", "CVV1");
+		jsonpre.put("H9", "SERVICE_CODE");		
+		jsonpre.put("H10", "ICVV");
+		return jsonpre;
+	}	
+	
+	public int generatePRE(String instid, String productcode, String prefilename, String tablename, int seqNo , HttpSession session, JdbcTemplate jdbctemplate, CommonDesc commondesc ) throws Exception {
+		
+		int x=1;
+		Properties prop = commondesc.getCommonDescProperty();
+		String prefilelocation = prop.getProperty("PREFILELOCATION");
+		String photolocation = prop.getProperty("PHOTOFILELOCATION");
+		String today = commondesc.getDatetimeDDMMYY();
+		prefilelocation = prefilelocation+"/"+today;
+		String ext="";
+		//this.setOutputFile(prefilelocation);		
+		//String prodname = commondesc.getProductdesc(instid, productcode, jdbctemplate) ;
+		String bin = commondesc.getBin(instid,productcode,jdbctemplate);
+		 String bintype = commondesc.getBinType(instid, bin, jdbctemplate);
+		if(bintype.equalsIgnoreCase("C")){
+			ext = ".mc";
+		}else{
+			ext = ".pre";
+		}
+		
+		//String prodkeyname = prodname.replace(" ", "_");
+		String downprefilename = prefilename+ext;// productcode+"["+prodkeyname+"]"+"_"+commondesc.getDateTimeStamp()+".pre"; 
+		trace("PRE Filename : " + downprefilename);
+		File nwfile = new File( prefilelocation+"/"+downprefilename);  
+		session.setAttribute("PRENAME", downprefilename);
+		File prefiledir = new File( prefilelocation );
+		if( !prefiledir.isDirectory() ){
+			trace("Checking Pre File Available....or Not...Directory Created");
+			prefiledir.mkdir();
+		}
+		
+		
+		File prephotoloc = new File ( prefilelocation+"/"+prefilename );
+		if( !prephotoloc.exists() ){
+			prephotoloc.mkdir();
+		}
+		if( prefiledir.exists() ){  
+			if(!nwfile.exists()) {
+				nwfile.createNewFile();
+			}
+		}else{
+			trace( "COULD NOT UNDERSTAND THE PRE FILE PATH SPECIEFIED [ "+prefiledir+" ] ");
+			session.setAttribute("preverr", "E");
+			session.setAttribute("prevmsg", "COULD NOT UNDERSTAND THE PERSONALIZATION FILE PATH SPECIEFIED [ "+prefiledir+" ]");
+			return x;
+		} 
+	    trace("PRE FILE CREATED teststs....");
+	    FileWriter writer = new FileWriter(nwfile);	  
+	    try {	    	
+			x = createPREContent(writer,instid, productcode, prefilename, tablename, seqNo , jdbctemplate);
+			if (x < 0){
+				trace("unable to process could not generate  pre content" + x);
+				return x;
+				
+			}
+			trace("content generated...."+x);
+			
+		} catch (Exception e) {
+			writer.close();
+			session.setAttribute("preverr", "E");
+			session.setAttribute("prevmsg", "COULD NOT BE DOWNLOADED "+e.getMessage());
+			trace("Exception ..generating pre file : " + e.getMessage() );
+			e.printStackTrace();
+			return x;
+		} finally {
+	    	writer.close();
+	    }
+	    trace("Check the result file under  " + nwfile); 
+	
+	    return x;
+	} 
+	
+	public int createPREContent(FileWriter writer,String instid, String productcode, String prefilename, String tablename, int seqNo, JdbcTemplate jdbctemplate ) throws Exception {
+		 	
+			 int x= 1;
+			 String bin = commondesc.getBin(instid,productcode,jdbctemplate);
+			 String bintype = commondesc.getBinType(instid, bin, jdbctemplate);
+			 trace("getting bin type values " + bintype);
+		     trace("createPREContent method called ........");
+		     trace("instid{"+instid+"}productcode{"+productcode+"}prefilename{"+prefilename+"}tablename"+tablename);
+			 
+		     String preData = "";
+		     char appendvalue ='"';
+		     StringBuilder wrPre = new StringBuilder();
+		     try {
+		     
+		     if (bintype.equals("C")){
+		    	
+				 wrPre.append("select ");
+				 
+				 wrPre.append(" LPAD('"+seqNo+"','5','0')||");
+
+				 wrPre.append("'$'||EMB_CARDNO||'$'||RPAD(EMB_NAME,'25',' ')||");
+				 wrPre.append("'$'||substr(valid_from,1,2)||substr(valid_from,4,2)||'$'||substr(valid_to,1,2)||");
+				 wrPre.append("substr(valid_to,4,2)||'$'||substr(EMB_CARDNO,3,2)||substr(EMB_CARDNO,6,4)||");
+				 wrPre.append(" substr(EMB_CARDNO,11,4)||substr(EMB_CARDNO,16,4)||'$'||decode(CVV2,'null','000',CVV2)||'"+appendvalue+"%B'");
+				 wrPre.append("||substr(EMB_CARDNO,1,4)||substr(EMB_CARDNO,6,4)||substr(EMB_CARDNO,11,4)||"); 
+				 wrPre.append("substr(EMB_CARDNO,16,4)||'^'||RPAD(EMB_NAME,'25',' ')||'/^'||substr(valid_to,4,2)||");
+				 wrPre.append("substr(valid_to,1,2)||trim(service_code)||decode(CVV1,'null','000',CVV1)||'A00000000000000000000?'||';'||");
+				 wrPre.append("substr(EMB_CARDNO,1,4)||substr(EMB_CARDNO,6,4)||substr(EMB_CARDNO,11,4)||");
+				 wrPre.append("substr(EMB_CARDNO,16,4)||'='||substr(valid_to,4,2)||substr(valid_to,1,2)||");
+				 wrPre.append("trim(service_code)||decode(CVV1,'null','000',CVV1)||'0000000000?+1~'||");
+				 wrPre.append("decode(ICVV,'null','000',ICVV)||'~'||RPAD(EMB_NAME,'81',' ')||'~'||RPAD(NVL(ADDRESS1,' '),45)||");
+				 wrPre.append("'~'||RPAD(NVL(ADDRESS2,' '),45)||'~'||RPAD(NVL(ADDRESS3,' '),45)||'~'||");
+				 wrPre.append("RPAD(NVL(ADDRESS4,' '),45)||'~'||RPAD(NVL(ADDRESS5,' '),45)||'~'||RPAD(NVL(PHONENO,' '),20)||");
+				 wrPre.append("'~'||RPAD(NVL(PHONENO,' '),20)||'~'||substr(EMB_CARDNO,1,4)||' '||substr(EMB_CARDNO,6,4)||");
+				 wrPre.append("' '||substr(EMB_CARDNO,11,3)||' '||substr(EMB_CARDNO,14,1)||substr(EMB_CARDNO,16,2)||");
+				 wrPre.append("' '||substr(EMB_CARDNO,18,2)||'~'||substr(EMB_CARDNO,3,2)||substr(EMB_CARDNO,6,4)||");
+				 wrPre.append("substr(EMB_CARDNO,11,4)||substr(EMB_CARDNO,16,4)||'~'||substr(EMB_CARDNO,6,4)||");
+				 wrPre.append("substr(EMB_CARDNO,11,4)||substr(EMB_CARDNO,16,4)||'~'||substr(EMB_CARDNO,8,2)||");
+				 wrPre.append("substr(EMB_CARDNO,11,4)||substr(EMB_CARDNO,16,4)||'~Branch-'||RPAD(substr(branch_code,2,4),'23',' ')||'&'||ORDER_REF_NO ");
+				 wrPre.append("TRACKDATA ");
+				 wrPre.append("from "+tablename+" WHERE PRE_NAME = '"+prefilename+"' AND PRODUCT_CODE = '"+productcode+"'ORDER BY ORDER_REF_NO  ");		    	 
+		    
+		     }
+		     
+		     else if(bintype.equals("M")){
+      if(instid.equalsIgnoreCase("IBA")){
+    	  wrPre.append("select ");
+	    	 wrPre.append("substr(EMB_CARDNO,1,4)||substr(EMB_CARDNO,6,4)||substr(EMB_CARDNO,11,4)||substr(EMB_CARDNO,16,4)||'#'||trim(valid_from)||'&'");
+	    	 wrPre.append("||trim(valid_to)||RPAD(EMB_NAME,'26',' ')||decode(CVV2,'null','000')||'%B'");
+	    	 wrPre.append("||substr(EMB_CARDNO,1,4)||substr(EMB_CARDNO,6,4)||substr(EMB_CARDNO,11,4)||substr(EMB_CARDNO,16,4)||'^'||RPAD(EMB_NAME,'26',' ')||'^'||");
+	    	 wrPre.append("to_char(expdate,'YYMM')||trim(service_code)||decode(CVV1,'null','000')||'000000000000000'||'000000  '||substr(EMB_CARDNO,1,4)||");
+	    	 wrPre.append("substr(EMB_CARDNO,6,4)||substr(EMB_CARDNO,11,4)||substr(EMB_CARDNO,16,4)||'='||to_char(expdate,'YYMM')||trim(service_code)||");
+	    	 wrPre.append("decode(CVV1,'null','000')||'0000000000' TRACKDATA from "+tablename+" WHERE PRE_NAME = '"+prefilename+"' AND PRODUCT_CODE = '"+productcode+"'ORDER BY ORDER_REF_NO ");
+ 
+			     }
+      else{
+		    	 wrPre.append("select ");
+		    	 wrPre.append("substr(EMB_CARDNO,1,4)||substr(EMB_CARDNO,6,4)||substr(EMB_CARDNO,11,4)||substr(EMB_CARDNO,16,4)||'#'||trim(valid_from)||'&'");
+		    	 wrPre.append("||trim(valid_to)||RPAD(EMB_NAME,'26',' ')||decode(CVV2,'null','000')||'%B'");
+		    	 wrPre.append("||substr(EMB_CARDNO,1,4)||substr(EMB_CARDNO,6,4)||substr(EMB_CARDNO,11,4)||substr(EMB_CARDNO,16,4)||'^'||RPAD(EMB_NAME,'26',' ')||'^'||");
+		    	 wrPre.append("to_char(expdate,'YYMM')||trim(service_code)||decode(CVV1,'null','000')||'000000000000000'||'000000'||'?0'||';'||substr(EMB_CARDNO,1,4)||");
+		    	 wrPre.append("substr(EMB_CARDNO,6,4)||substr(EMB_CARDNO,11,4)||substr(EMB_CARDNO,16,4)||'='||to_char(expdate,'YYMM')||trim(service_code)||");
+		    	 wrPre.append("decode(CVV1,'null','000')||'0000000000'||'?0' TRACKDATA from "+tablename+" WHERE PRE_NAME = '"+prefilename+"' AND PRODUCT_CODE = '"+productcode+"'ORDER BY ORDER_REF_NO ");
+      
+      
+      } 
+		     }
+		     else{
+		    	 
+		    	 trace("Could not bin category in product table" + x);
+		    	 return x;
+		     }
+			 
+			 enctrace("getting values from wre append" + wrPre);
+		     List wrPreList = jdbctemplate.queryForList(wrPre.toString());
+				if(!(wrPreList.isEmpty()))
+				{
+					Iterator pre_itr = wrPreList.iterator();
+					while(pre_itr.hasNext())
+					{
+						Map map = (Map)pre_itr.next();
+						preData = ((String)map.get("TRACKDATA"));
+						writer.write(preData+"\n");
+					}
+				}
+		     }catch (Exception e)
+		     {
+		    	 trace("Exception in PRE FILE Generation "+e);
+		     }
+			 //row++;
+				
+		trace( " PRE  File generated successfullyyyyy........ ");
+		return x;
+	 }
+	
+	public List getneratePREList(String instid, String productcode, String prefilename, String query, JdbcTemplate jdbctemplate ){
+		 List predata = null ;
+		 String predataqry = query + " WHERE INST_ID='"+instid+"' AND PRODUCT_CODE='"+productcode+"' AND PRE_NAME='"+prefilename+"'";
+		 enctrace( "pre gen predataqry: " + predataqry );
+		 predata = jdbctemplate.queryForList(predataqry);
+		 return predata;
+	 }
+	
+	 
+	private InputStream inputStream;
+
+	
+
+
+	public InputStream getInputStream() {
+		return inputStream;
+	}
+
+	public void setInputStream(InputStream inputStream) {
+		this.inputStream = inputStream;
+	}
+
+
+	private String fileName;
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	public String fromdate;
+	public String todate;
+	
+	public String getFromdate() {
+		return fromdate;
+	}
+
+	public void setFromdate(String fromdate) {
+		this.fromdate = fromdate;
+	}
+
+	public String getTodate() {
+		return todate;
+	}
+
+	public void setTodate(String todate) {
+		this.todate = todate;
+	}
+	
+}
+
+	
+	
+	
+
